@@ -1,6 +1,86 @@
 package helpers
 
+import models.{Casting, KaggleInput, Movie, Rating}
+
+import scala.io.Source
+
 trait ReadCsvHelper {
+
+  val bufferedSource = Source.fromFile("/sideproject/pop-the-corn/app/resources/movie_metadata.csv")
+
+  val csv: Seq[Array[String]] = for {
+    lines <- bufferedSource.getLines().drop(1).toVector
+    values = lines.split(",").map(_.trim)
+  } yield {
+    values
+  }
+
+  val kaggleInput: Seq[KaggleInput] = csv.map { line =>
+    KaggleInput(
+      line(0),
+      line(1),
+      castToInt(line(2)),
+      castToInt(line(3)),
+      castToInt(line(4)),
+      castToInt(line(5)),
+      line(6),
+      castToInt(line(7)),
+      castToDouble(line(8)),
+      line(9),
+      line(10),
+      line(11),
+      castToInt(line(12)),
+      castToInt(line(13)),
+      line(14),
+      castToInt(line(15)),
+      line(16),
+      line(17),
+      castToInt(line(18)),
+      line(19),
+      line(20),
+      castToInt(line(21)),
+      castToDouble(line(22)),
+      line(23),
+      castToInt(line(24)),
+      castToDouble(line(25)),
+      line(26),
+      castToInt(line(27))
+    )
+  }
+
+  val movies: Seq[Movie] = kaggleInput.map { movie =>
+
+    val casting = Seq(
+      Casting(Casting.Role.Director, movie.directorName, movie.directorFacebookLikes),
+      Casting(Casting.Role.ActorPrincipal, movie.actor1Name, movie.actor1FacebookLikes),
+      Casting(Casting.Role.ActorSecondary, movie.actor2Name, movie.actor2FacebookLikes),
+      Casting(Casting.Role.ActorOther, movie.actor3Name, movie.actor3FacebookLikes)
+    )
+
+    val rating = Rating(movie.imdbScore, movie.numUserForReviews, movie. numVotedUser, movie. numCriticForReviews)
+
+    Movie(
+      title =  movie.movieTitle.dropRight(1),
+      color = movie.color,
+      duration = movie.duration,
+      budget = movie.budget,
+      gross = movie.gross,
+      genres = movie.genres.split('|'),
+      contentRating = movie.contentRating,
+      faceNumbersInPoster = movie.faceNumberInPoster,
+      language = movie.language,
+      country = movie.country,
+      titleYear = movie.titleYear,
+      aspectRatio = movie.aspectRatio,
+      castTotalFacebookLikes = movie.castTotalFacebookLikes,
+      plotKeywords = movie.plotKeywords.split('|'),
+      movieLink = movie.movieLink,
+      casting,
+      rating
+    )
+  }
+
+
 
   //  color,director_name,num_critic_for_reviews,duration,director_facebook_likes,actor_3_facebook_likes,actor_2_name,actor_1_facebook_likes,gross,genres,actor_1_name,movie_title,num_voted_users,cast_total_facebook_likes,actor_3_name,facenumber_in_poster,plot_keywords,movie_imdb_link,num_user_for_reviews,language,country,content_rating,budget,title_year,actor_2_facebook_likes,imdb_score,aspect_ratio,movie_facebook_likes
 

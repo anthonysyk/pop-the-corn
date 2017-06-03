@@ -1,23 +1,27 @@
 package models
 
+import play.api.libs.json.Json
+
 case class Movie(
                 title: String,
                 color: String,
-                duration: String,
-                budget: Float,
-                gross: Float,
+                duration: Option[Int],
+                budget: Option[Double],
+                gross: Option[Double],
                 genres: Seq[String],
-                contentRating: String,
-                faceNumbersInPoster: String,
+                contentRating: Option[Int],
+                faceNumbersInPoster: Option[Int],
                 language: String,
                 country: String,
                 titleYear: String,
                 aspectRatio: String,
-                castTotalFacebookLikes: String,
-                plotKeywords: String,
+                castTotalFacebookLikes: Option[Int],
+                plotKeywords: Seq[String],
                 movieLink: String,
                 casting: Seq[Casting],
                 rating: Rating
                 )
 
-object
+object Movie {
+  implicit val formatMovie = Json.format[Movie]
+}

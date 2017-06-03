@@ -4,7 +4,6 @@ import javax.inject.{Inject, Singleton}
 
 import play.api.mvc._
 import services.ElasticsearchService
-import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
 class ElasticsearchController @Inject()(
@@ -12,11 +11,8 @@ class ElasticsearchController @Inject()(
                                        ) extends Controller {
 
 
-  def indexMovies = Action.async{
-
-    val futureResult = elasticsearchService.indexMovies
-
-    futureResult.map(Ok(_))
+  def indexMovies = Action {
+    Ok
   }
 
 }
