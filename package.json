@@ -1,0 +1,44 @@
+{
+  "name": "pop-the-corn",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sideproject to apply what I learned",
+  "scripts": {
+    "start-dev": "npm-run-all --parallel start-dev:*",
+    "start-dev:front": "npm run clean && NODE_ENV=development webpack-dev-server",
+    "start-dev:api": "activator ~run",
+    "build": "webpack -p",
+    "clean": "npm-run-all clean:*",
+    "clean:js": "rm -rf public/javascripts/*",
+    "clean:css": "rm -rf public/stylesheets/*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anthonysyk/pop-the-corn.git"
+  },
+  "author": "anthonysyk <anthony.ssiyk@gmail.com> (https://sykanthony.wordpress.com/)",
+  "bugs": {
+    "url": "https://github.com/anthonysyk/pop-the-corn/issues"
+  },
+  "homepage": "https://github.com/anthonysyk/pop-the-corn#readme",
+  "dependencies": {
+    "axios": "^0.16.1",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.24.0",
+    "babel-loader": "^6.4.0",
+    "babel-preset-es2015": "^6.24.0",
+    "babel-preset-react": "^6.23.0",
+    "css-loader": "^0.28.4",
+    "extract-text-webpack-plugin": "^2.1.0",
+    "file-loader": "^0.11.1",
+    "node-sass": "^4.5.3",
+    "resolve-url-loader": "^2.0.2",
+    "sass-loader": "^6.0.5",
+    "style-loader": "^0.18.1",
+    "webpack": "^2.6.1",
+    "webpack-dev-server": "^2.4.5"
+  }
+}
