@@ -1,0 +1,19 @@
+.search-container {
+  text-align: center;
+
+  #search-form {
+    display: inline-flex;
+    width: 60%;
+
+    .search-input {
+      border-bottom-right-radius: 0px;
+      border-top-right-radius: 0px;
+    }
+    .search-button {
+      width: 7%;
+      border-bottom-left-radius: 0px;
+      border-top-left-radius: 0px;
+
+    }
+  }
+}

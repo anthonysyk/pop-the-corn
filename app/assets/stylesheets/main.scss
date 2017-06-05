@@ -1,0 +1,24 @@
+@import "./bootstrap/css/bootstrap.css";
+@import "./font-awesome/scss/font-awesome";
+
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+.main-title {
+  text-align: center;
+}
+
+#app-container,
+[data-reactroot] {
+  width: 100%;
+  height: 100%;
+}
+
+#wrapper,
+#page-wrapper {
+  height: 100%;
+}
