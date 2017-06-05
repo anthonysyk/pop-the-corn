@@ -1,33 +1,23 @@
 package indexer
 
 import com.sksamuel.elastic4s.ElasticDsl._
+import com.sksamuel.elastic4s._
 import com.sksamuel.elastic4s.mappings.FieldType._
 import com.sksamuel.elastic4s.source.JsonDocumentSource
-import com.sksamuel.elastic4s.{ElasticClient, ElasticsearchClientUri}
 import helpers.ReadCsvHelper
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse
-import org.elasticsearch.common.settings.ImmutableSettings
 import play.api.libs.json.Json
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
-
-
-case class Artist(name: String)
-
-trait EsClient {
-  val settings = ImmutableSettings.settingsBuilder().put("cluster.name", "elasticsearch_Anthony").build()
-  val uri = ElasticsearchClientUri("localhost:9300")
-  val client = ElasticClient.remote(settings, uri)
-}
 
 object CreateIndex extends App with EsClient {
 
   val createIndexAction: Future[CreateIndexResponse] = client execute {
     create index "movies_index" mappings {
       mapping("movie") as(
-        "id" typed LongType,
-        "title" typed StringType index "not_analyzed",
+        "id" typed IntegerType,
+        "title" typed StringType analyzer "default",
         "color" typed StringType index "not_analyzed",
         "duration" typed IntegerType,
         "budget" typed DoubleType,
@@ -54,7 +44,13 @@ object CreateIndex extends App with EsClient {
           "numberOfCriticsForReviews" typed IntegerType
         )
       )
-    }
+    } analysis (
+      CustomAnalyzerDefinition(
+        "default",
+        WhitespaceTokenizer,
+        LowercaseTokenFilter,
+        AsciiFoldingTokenFilter)
+    )
   }
 
   val await = Await.result(createIndexAction, 10.seconds)

@@ -1,4 +1,4 @@
-package models
+package models.kaggle
 
 case class KaggleInput(
                         color: String,
@@ -29,6 +29,11 @@ case class KaggleInput(
                         imdbScore: Option[Double],
                         aspectRatio: String,
                         movieFacebookLikes: Option[Int]
-                      )
+                      ) {
+
+  //"http://www.imdb.com/title/tt0848228/?ref_=fn_tt_tt_1"
+  lazy val imdbId = movieLink.replaceAll("^http?:\\/\\/www.imdb.com/title/", "").replaceAll(".\\?ref_=fn_tt_tt_1$", "")
+
+}
 
 

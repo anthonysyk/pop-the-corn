@@ -1,6 +1,6 @@
 package helpers
 
-import models.{Casting, KaggleInput, Movie, Rating}
+import models.kaggle.{Casting, KaggleInput, MovieData, Rating}
 
 import scala.io.Source
 
@@ -48,7 +48,7 @@ trait ReadCsvHelper {
     )
   }
 
-  val movies: Seq[Movie] = kaggleInput.map { movie =>
+  val movies: Seq[MovieData] = kaggleInput.map { movie =>
 
     val casting = Seq(
       Casting(Casting.Role.Director, movie.directorName, movie.directorFacebookLikes),
@@ -59,7 +59,8 @@ trait ReadCsvHelper {
 
     val rating = Rating(movie.imdbScore, movie.numUserForReviews, movie. numVotedUser, movie. numCriticForReviews)
 
-    Movie(
+    MovieData(
+      id = movie.imdbId,
       title =  movie.movieTitle.dropRight(1),
       color = movie.color,
       duration = movie.duration,

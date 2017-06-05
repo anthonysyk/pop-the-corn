@@ -1,4 +1,4 @@
-package models
+package models.kaggle
 
 import play.api.libs.json.Json
 

@@ -1,27 +1,9 @@
 package models
 
-import play.api.libs.json.Json
+import models.kaggle.MovieData
+import models.themoviedb.TMDBMovie
 
 case class Movie(
-                title: String,
-                color: String,
-                duration: Option[Int],
-                budget: Option[Double],
-                gross: Option[Double],
-                genres: Seq[String],
-                contentRating: Option[Int],
-                faceNumbersInPoster: Option[Int],
-                language: String,
-                country: String,
-                titleYear: String,
-                aspectRatio: String,
-                castTotalFacebookLikes: Option[Int],
-                plotKeywords: Seq[String],
-                movieLink: String,
-                casting: Seq[Casting],
-                rating: Rating
+                  movieData: MovieData,
+                  movieDetails: Seq[TMDBMovie]
                 )
-
-object Movie {
-  implicit val formatMovie = Json.format[Movie]
-}
