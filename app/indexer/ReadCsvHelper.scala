@@ -1,21 +1,32 @@
-package helpers
+package indexer
+
+import java.io.File
 
 import models.kaggle.{Casting, KaggleInput, MovieData, Rating}
 
 import scala.io.Source
+import com.github.tototoshi.csv._
 
 trait ReadCsvHelper {
 
   val bufferedSource = Source.fromFile("/sideproject/pop-the-corn/app/resources/movie_metadata.csv")
+  val file = new File("/sideproject/pop-the-corn/app/resources/movie_metadata.csv")
 
+  @deprecated("Use reader because parsing is better", "1.0")
   val csv: Seq[Array[String]] = for {
     lines <- bufferedSource.getLines().drop(1).toVector
-    values = lines.split(",").map(_.trim)
+    values = lines.split(",")
   } yield {
     values
   }
 
-  val kaggleInput: Seq[KaggleInput] = csv.map { line =>
+  val reader = CSVReader
+    .open(file)
+    .all()
+    .drop(1)
+
+
+  val kaggleInput: Seq[KaggleInput] = reader.map { line =>
     KaggleInput(
       line(0),
       line(1),
@@ -75,7 +86,7 @@ trait ReadCsvHelper {
       aspectRatio = movie.aspectRatio,
       castTotalFacebookLikes = movie.castTotalFacebookLikes,
       plotKeywords = movie.plotKeywords.split('|'),
-      movieLink = movie.movieLink,
+      movieUrl = movie.movieUrl,
       casting,
       rating
     )

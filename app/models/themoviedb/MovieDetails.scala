@@ -1,32 +1,51 @@
 package models.themoviedb
 
-case class TMDBMovie(
+import play.api.libs.functional.syntax._
+import play.api.libs.json.Reads._
+import play.api.libs.json.{JsPath, Json, Reads}
+
+
+case class MovieDetails(
                       adult: Option[Boolean],
-                      backdropPath: Option[String],
-                      belongsToCollection: Option[BelongsToCollection],
+//                      backdrop_path: Option[String],
+                      belongs_to_collection: Option[BelongsToCollection],
                       budget: Option[Float],
                       genres: Seq[Genre],
-                      homepage: Option[String],
+//                      homepage: Option[String],
                       id: Option[Int],
-                      imdbId: Option[String],
-                      originalLanguage: Option[String],
-                      originalTitle: Option[String],
+                      imdb_id: Option[String],
+                      original_language: Option[String],
+                      original_title: Option[String],
                       overview: Option[String],
                       popularity: Option[Float],
-                      posterPath: Option[String],
-                      productionCompanies: Seq[ProductionCompany],
-                      productionCountries: Seq[ProductionCountry],
-                      releaseDate: Option[String],
+                      poster_path: Option[String],
+                      production_companies: Seq[ProductionCompany],
+                      production_countries: Seq[ProductionCountry],
+                      release_date: Option[String],
                       revenue: Option[Int],
                       runtime: Option[Int],
-                      spokenLanguages: Seq[SpokenLanguage],
+                      spoken_languages: Seq[SpokenLanguage],
                       status: Option[String],
                       tagline: Option[String],
                       title: Option[String],
-                      video: Option[Boolean],
-                      voteAverage: Option[Float],
-                      voteCount: Option[Integer]
+//                      video: Option[Boolean],
+                      vote_average: Option[Float],
+                      vote_count: Option[Int]
                     )
+
+object MovieDetails {
+  implicit val movieDetailsFormats = Json.format[MovieDetails]
+
+//  implicit val tMDBMovieReads : Reads[TMDBMovie] = (
+//    (JsPath \ "adult").readNullable[Boolean] and
+//      (JsPath \ "backdrop_path").readNullable[String] and
+//      (JsPath \ "belongs_to_collection").readNullable[BelongsToCollection] and
+//      (JsPath \ "budget").readNullable[Int] and
+//      (JsPath \ "genres").readNullable[Seq[Genre]] and
+//      (JsPath \ "homepage").readNullable[String] and
+//      (JsPath \ "id").readNullable[Int]
+//  )(TMDBMovie.apply _)
+}
 
 //{
 //  adult: false,

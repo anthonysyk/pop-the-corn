@@ -19,12 +19,13 @@ class SearchController @Inject()(
     for {
       searchResult <- eventuallySearchResult
     } yield {
-      val fullMovies: Seq[JsValue] = (searchResult \ "hits" \\ "_source")
+      val fullMovies: Seq[JsValue] = searchResult \ "hits" \\ "_source"
       val movies = fullMovies.map { fullMovie =>
         Json.obj(
           "id" -> (fullMovie \ "id").as[String],
           "title" -> (fullMovie \ "title").as[String],
-          "genres" -> (fullMovie \ "genres").as[String]
+          "genres" -> (fullMovie \\ "genres"),
+          "year" -> (fullMovie \ "titleYear").as[String]
         )
       }
       Ok(Json.toJson(movies))

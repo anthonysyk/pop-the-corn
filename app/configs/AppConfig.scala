@@ -9,13 +9,13 @@ class AppConfig @Inject()(
                          config: Configuration
                          ) {
 
-  val tmdbFindBaseUri = config.getString("tmdb_find_base_uri")
+  val tmdbFindBaseUri = config.getString("tmdb_find_base_uri").get
 
-  val tmdbFindParameters = config.getString("tmdb_find_parameters")
+  val tmdbFindParameters = config.getString("tmdb_find_parameters").get
 
-  val tmdbSearchBaseUri = config.getString("tmdb_search_base_uri")
+  val tmdbSearchBaseUri = config.getString("tmdb_search_base_uri").get
 
-  val tmdbSearchParameters = config.getString("tmdb_search_parameters")
+  val tmdbSearchParameters = config.getString("tmdb_search_parameters").get
 
 
 

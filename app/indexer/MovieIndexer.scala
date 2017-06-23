@@ -4,7 +4,6 @@ import com.sksamuel.elastic4s.ElasticDsl._
 import com.sksamuel.elastic4s._
 import com.sksamuel.elastic4s.mappings.FieldType._
 import com.sksamuel.elastic4s.source.JsonDocumentSource
-import helpers.ReadCsvHelper
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse
 import play.api.libs.json.Json
 
@@ -16,7 +15,7 @@ object CreateIndex extends App with EsClient {
   val createIndexAction: Future[CreateIndexResponse] = client execute {
     create index "movies_index" mappings {
       mapping("movie") as(
-        "id" typed IntegerType,
+        "id" typed StringType index "not_analyzed",
         "title" typed StringType analyzer "default",
         "color" typed StringType index "not_analyzed",
         "duration" typed IntegerType,
@@ -31,7 +30,7 @@ object CreateIndex extends App with EsClient {
         "aspectRatio" typed StringType index "not_analyzed",
         "castTotalFacebookLikes" typed IntegerType,
         "plotKeywords" typed StringType index "not_analyzed",
-        "movieLink" typed StringType index "not_analyzed",
+        "movieUrl" typed StringType index "not_analyzed",
         nestedField("casting") as(
           "role" typed StringType index "not_analyzed",
           "name" typed StringType index "not_analyzed",
@@ -44,13 +43,14 @@ object CreateIndex extends App with EsClient {
           "numberOfCriticsForReviews" typed IntegerType
         )
       )
-    } analysis (
+    } analysis {
       CustomAnalyzerDefinition(
         "default",
         WhitespaceTokenizer,
         LowercaseTokenFilter,
         AsciiFoldingTokenFilter)
-    )
+    }
+
   }
 
   val await = Await.result(createIndexAction, 10.seconds)
@@ -60,7 +60,7 @@ object CreateIndex extends App with EsClient {
 
 object IndexMovies extends App with EsClient with ReadCsvHelper {
 
-  val indexMoviesAction = movies.foreach{ movie =>
+  val indexMoviesAction = movies.foreach { movie =>
     val movieString = Json.stringify(Json.toJson(movie))
 
     client execute {

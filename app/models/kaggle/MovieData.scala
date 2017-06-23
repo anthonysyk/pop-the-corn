@@ -18,7 +18,7 @@ case class MovieData(
                 aspectRatio: String,
                 castTotalFacebookLikes: Option[Int],
                 plotKeywords: Seq[String],
-                movieLink: String,
+                movieUrl: String,
                 casting: Seq[Casting],
                 rating: Rating
                 )

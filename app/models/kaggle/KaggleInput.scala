@@ -18,7 +18,7 @@ case class KaggleInput(
                         actor3Name: String,
                         faceNumberInPoster: Option[Int],
                         plotKeywords: String,
-                        movieLink: String,
+                        movieUrl: String,
                         numUserForReviews: Option[Int],
                         language: String,
                         country: String,
@@ -32,8 +32,7 @@ case class KaggleInput(
                       ) {
 
   //"http://www.imdb.com/title/tt0848228/?ref_=fn_tt_tt_1"
-  lazy val imdbId = movieLink.replaceAll("^http?:\\/\\/www.imdb.com/title/", "").replaceAll(".\\?ref_=fn_tt_tt_1$", "")
-
+  lazy val imdbId = movieUrl.replaceAll("^http?:\\/\\/www.imdb.com/title/", "").replaceAll(".\\?ref_=fn_tt_tt_1$", "")
 }
 
 
