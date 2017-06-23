@@ -1,17 +1,25 @@
-import React from 'react';
+import React, {Component} from 'react';
 import "./searchBar.scss";
+import {Button} from 'react-bootstrap';
 
-const SearchBar = props => {
-
-    return (
-        <div className="col-md-12 form-group search-container">
-            <form id="search-form">
-                    <input className="form-control search-input" name="searchInput"  placeholder="Avengers ..." value={props.keywords}/>
-                    <button className="btn btn-success search-button" type="submit"><i className="fa fa-search"/></button>
-            </form>
-        </div>
-    );
-
-};
+class SearchBar extends Component {
+    render() {
+        const {handleSubmit} = this.props;
+        return (
+            <div className="col-md-12 form-group search-container">
+                <form id="search-form" onSubmit={handleSubmit}>
+                    <input className="form-control search-input"
+                           name="searchInput"
+                           placeholder="Avengers ..."/>
+                    <Button className="btn btn-success search-button"
+                            type="submit"
+                            onClick="">
+                        <i className="fa fa-search"/>
+                    </Button>
+                </form>
+            </div>
+        );
+    }
+}
 
 export default SearchBar;
