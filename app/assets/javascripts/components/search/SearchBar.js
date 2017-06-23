@@ -12,8 +12,7 @@ class SearchBar extends Component {
                            name="searchInput"
                            placeholder="Avengers ..."/>
                     <Button className="btn btn-success search-button"
-                            type="submit"
-                            onClick="">
+                            type="submit">
                         <i className="fa fa-search"/>
                     </Button>
                 </form>
