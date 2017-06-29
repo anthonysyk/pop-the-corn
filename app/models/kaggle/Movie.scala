@@ -2,8 +2,9 @@ package models.kaggle
 
 import play.api.libs.json.Json
 
-case class MovieData(
-                id: String,
+case class Movie(
+                externalId: String,
+                id: Option[Int] = None,
                 title: String,
                 color: String,
                 duration: Option[Int],
@@ -23,6 +24,6 @@ case class MovieData(
                 rating: Rating
                 )
 
-object MovieData {
-  implicit val formatMovie = Json.format[MovieData]
+object Movie {
+  implicit val formatMovie = Json.format[Movie]
 }

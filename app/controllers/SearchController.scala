@@ -32,4 +32,11 @@ class SearchController @Inject()(
     }
   }
 
+  def countMovies = Action.async {
+
+    searchService.countMovies.map { counter =>
+      Ok(s"Il y a $counter films indexés")
+    }
+
+  }
 }

@@ -4,7 +4,7 @@ import javax.inject.{Inject, Singleton}
 
 import com.sksamuel.elastic4s.ElasticDsl._
 import indexer.EsClient
-import models.kaggle.MovieData
+import models.kaggle.Movie
 import play.api.libs.json.{JsValue, Json}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -26,16 +26,15 @@ class SearchService @Inject()() extends EsClient {
     }
   }.map(searchResult => Json.parse(searchResult.toString))
 
-  def getMoviesExternalIds: Future[Seq[String]] = {
+  def getMoviesExternalIds(from: Int, size: Int): Future[Seq[String]] = {
     client execute {
-      search in "movies_index" -> "movie" limit 3000
+      search in "movies_index" -> "movie" from from size size
     }
+  }.map { searchResult =>
+    val test = Json.parse(searchResult.toString) \ "hits" \ "hits" \\ "_source"
+    test.map(movie =>
+      movie.as[Movie].externalId
+    )
   }
-    .map{searchResult =>
-      val test = (Json.parse(searchResult.toString) \ "hits" \ "hits" \\ "_source")
-      test.map(movie =>
-        movie.as[MovieData].id
-        )
-    }
 
 }
