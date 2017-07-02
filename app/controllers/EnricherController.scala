@@ -3,13 +3,12 @@ package controllers
 import javax.inject.{Inject, Named, Singleton}
 
 import akka.actor.{ActorRef, ActorSystem}
-import indexer.MovieEnricher.{RequestNextBatch, StartEnrichment}
-import indexer.MovieIndexer.{StartIndexing, RequestNextBatch}
+import indexer.MovieEnricher.StartEnrichment
+import indexer.MovieIndexer.StartIndexing
 import indexer.{MovieEnricher, MovieIndexer}
 import play.api.mvc.{Action, Controller}
 import services.EnricherService
 
-import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
@@ -36,7 +35,7 @@ class EnricherController @Inject()(@Named(MovieEnricher.Name) movieEnricher: Act
     )
 
     system.scheduler.schedule(
-      10 seconds, 10 seconds, movieEnricher, MovieEnricher.RequestNextBatch
+      10 seconds, 10 seconds, movieEnricher, MovieEnricher.FetchNextBatch
     )
     Ok("Starting Enrichment")
   }

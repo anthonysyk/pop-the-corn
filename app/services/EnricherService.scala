@@ -32,33 +32,26 @@ class EnricherService @Inject()(
           (result \ "id").as[Int]
         }
       }.recover {
-      case e =>
-        Logger.error(s" Une erreur est survenue : ${e.getMessage}")
+      case error =>
+        Logger.error(s" Une erreur est survenue : ${error.getMessage}")
         None
     }
   }
 
-  def getMovieDetailsFromId(id: Int): Future[MovieDetails] = {
+  def getMovieDetailsFromId(id: Int): Future[Option[MovieDetails]] = {
 
     val tmdbSearchUrl: String = appConfig.tmdbSearchBaseUri + id + appConfig.tmdbSearchParameters
 
-    wSClient.url(tmdbSearchUrl).get
-      .map(_.json.as[MovieDetails])
+    wSClient.url(tmdbSearchUrl)
+      .get
+      .map(_.json.asOpt[MovieDetails])
+      .recover {
+        case error =>
+          Logger.error(s"Une erreur est survenue : ${error.getMessage}")
+          None
+      }
 
   }
-
-  private def getMovieDetails(externalId: String): Future[Seq[MovieDetails]] = {
-    val eventuallyIds = Future.successful(Seq.empty)
-    for {
-      ids <- eventuallyIds
-    } yield {
-      Future.sequence(
-        ids.map { id =>
-          getMovieDetailsFromId(id)
-        }
-      )
-    }
-  }.flatMap(identity)
 
   def getAllIds: Future[Seq[Option[Int]]] = {
     val eventuallyExternalIds: Future[Seq[String]] = searchService.getMoviesExternalIds(0, 6000)

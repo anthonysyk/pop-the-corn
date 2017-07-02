@@ -24,6 +24,7 @@ class MovieIndexer @Inject()(
   val workers: Seq[ActorRef] = createWorkers(1)
   var errors = 0
   val config: String = configuration.getString("my.config").getOrElse("none")
+  val Index: String = "movies_index"
 
   private def startWorkers() = workers.foreach(_ ! StartWorking)
 
@@ -35,9 +36,9 @@ class MovieIndexer @Inject()(
     case StartIndexing =>
       Logger.info("Retrieving Movies from csv source")
       for {
-        indexExists <- ensureIndexExists
-        _ <- if (indexExists) eventuallyDeleteIndex.map(_ => ()) else Future.successful(())
-        _ <- eventuallyCreateIndexWithMapping
+        indexExists <- ensureIndexExists(Index)
+        _ <- if (indexExists) eventuallyDeleteIndex(Index).map(_ => ()) else Future.successful(()) // Todo add case index exists
+        _ <- eventuallyCreateIndexWithMapping(MovieMapping)
         movies <- serializeMoviesFromCsv
       } yield {
         data = movies.toVector
@@ -108,6 +109,9 @@ object MovieIndexer {
                                enricherService: EnricherService
                              ) extends Actor with EsClient with ActorLogging {
 
+    val index: String = "movies_index"
+    val EsType: String = "movie"
+
     def waiting: Receive = {
       case StartWorking =>
         log.info("Indexing Movies Started ...")
@@ -125,7 +129,7 @@ object MovieIndexer {
       case IndexElement(movie) =>
         Logger.info(s"Indexing movie: ${movie.title}")
         for {
-          hasFailure <- bulkIndexMovie(movie).map(response => response.hasFailures)
+          hasFailure <- bulkIndex(index, EsType, movie).map(response => response.hasFailures)
         } yield {
           if (hasFailure) {
             Logger.info("Too many tries, moving on ...")

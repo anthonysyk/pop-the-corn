@@ -31,10 +31,19 @@ class SearchService @Inject()() extends EsClient {
       search in "movies_index" -> "movie" from from size size
     }
   }.map { searchResult =>
-    val test = Json.parse(searchResult.toString) \ "hits" \ "hits" \\ "_source"
-    test.map(movie =>
-      movie.as[Movie].externalId
-    )
+    (Json.parse(searchResult.toString) \ "hits" \ "hits" \\ "_source").map { source =>
+      (source \ "externalId").as[String]
+    }
+  }
+
+  def getMoviesIds(from: Int, size: Int): Future[Seq[Option[Int]]] = {
+    client execute {
+      search in "movies_index" -> "movie" from from size size
+    }
+  }.map { searchResult =>
+    (Json.parse(searchResult.toString) \ "hits" \ "hits" \\ "_source").map { source =>
+      (source \ "id").asOpt[Int]
+    }
   }
 
 }
