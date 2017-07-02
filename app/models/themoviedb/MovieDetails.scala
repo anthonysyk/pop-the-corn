@@ -7,7 +7,7 @@ import play.api.libs.json.{JsPath, Json, Reads}
 
 case class MovieDetails(
                       adult: Option[Boolean],
-//                      backdrop_path: Option[String],
+                      backdrop_path: Option[String],
                       belongs_to_collection: Option[BelongsToCollection],
                       budget: Option[Float],
                       genres: Seq[Genre],
@@ -26,12 +26,14 @@ case class MovieDetails(
                       runtime: Option[Int],
                       spoken_languages: Seq[SpokenLanguage],
                       status: Option[String],
-                      tagline: Option[String],
+//                      tagline: Option[String],
                       title: Option[String],
 //                      video: Option[Boolean],
                       vote_average: Option[Float],
                       vote_count: Option[Int]
-                    )
+                    ) {
+  lazy val poster_url = "https://image.tmdb.org/t/p/w1280" + poster_path
+}
 
 object MovieDetails {
   implicit val movieDetailsFormats = Json.format[MovieDetails]

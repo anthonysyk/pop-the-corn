@@ -1,24 +1,53 @@
 package controllers
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.{Inject, Named, Singleton}
 
+import akka.actor.{ActorRef, ActorSystem}
+import indexer.MovieEnricher.StartEnrichment
+import indexer.MovieIndexer.StartIndexing
+import indexer.{MovieEnricher, MovieIndexer}
 import play.api.mvc.{Action, Controller}
 import services.EnricherService
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration._
 
 
 @Singleton
-class EnricherController @Inject()(
-                                    enricherService: EnricherService
-                                  ) extends Controller {
+class EnricherController @Inject()(@Named(MovieEnricher.Name) movieEnricher: ActorRef,
+                                   @Named(MovieIndexer.Name) movieIndexer: ActorRef,
+                                   enricherService: EnricherService,
+                                   system: ActorSystem) extends Controller {
 
-  // For tests : avengers id = 24428 ou imdbid = tt0399877
-
-
-  def enrichMovies = Action.async {
-    enricherService.getAllIds.map(ids => Ok(ids.toString))
+  def enrichMovies = Action {
+    enricherService.getAllIds
+    Ok("Enriching without backpressure")
   }
 
+  def enrichBlocking = Action {
+    enricherService.getAllIdsBlocking
+    Ok("Enriching without backpressure")
+  }
+
+  def startEnrichment = Action {
+    system.scheduler.scheduleOnce(
+      5 seconds, movieEnricher, StartEnrichment
+    )
+
+    system.scheduler.schedule(
+      10 seconds, 10 seconds, movieEnricher, MovieEnricher.FetchNextBatch
+    )
+    Ok("Starting Enrichment")
+  }
+
+  def startIndexing = Action {
+    system.scheduler.scheduleOnce(
+      5 seconds, movieIndexer, StartIndexing
+    )
+    system.scheduler.schedule(
+      10 seconds, 1 seconds, movieIndexer, MovieIndexer.RequestNextBatch
+    )
+    Ok("Starting Indexing")
+  }
 
 }

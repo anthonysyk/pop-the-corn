@@ -13,6 +13,8 @@ class SearchController @Inject()(
                                 searchService: SearchService
                                 ) extends Controller {
 
+  lazy val Movies_Index = "movies_index"
+
   def searchMovie(q: String) = Action.async{
     val eventuallySearchResult = searchService.searchMovie(q)
 
@@ -32,4 +34,11 @@ class SearchController @Inject()(
     }
   }
 
+  def countMovies = Action.async {
+
+    searchService.countMovies(Movies_Index).map { counter =>
+      Ok(s"Il y a $counter films indexés")
+    }
+
+  }
 }
