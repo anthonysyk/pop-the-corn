@@ -24,8 +24,10 @@ class SearchController @Inject()(
     for {
       searchResponse <- eventuallySearchResult
     } yield {
-      Json.parse(searchResponse.toString) \ "hits" \\ "_source" map (_.as[Movie])
-      Ok
+      val fullMovies = Json.parse(searchResponse.toString) \ "hits" \\ "_source" map (_.as[FullMovie])
+      Ok(Json.toJson(fullMovies))
+
+      // TODO create a json object for display
     }
   }
 

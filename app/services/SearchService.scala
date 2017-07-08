@@ -6,7 +6,7 @@ import com.sksamuel.elastic4s.ElasticDsl._
 import indexer.EsClient
 import models.kaggle.Movie
 import org.elasticsearch.action.search.SearchResponse
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -17,7 +17,7 @@ class SearchService @Inject()() extends EsClient {
 
   def searchMovie(q: String): Future[SearchResponse] = {
     client execute {
-      search in "movies_index" -> "movie" query {
+      search in "full_movie" -> "movie" query {
         bool {
           must(
             termQuery("title", q)

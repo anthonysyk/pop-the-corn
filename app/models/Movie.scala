@@ -10,8 +10,6 @@ case class FullMovie(
                     )
 
 object FullMovie {
-
   implicit val formatFullMovie = Json.format[FullMovie]
-
 }
 
