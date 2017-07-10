@@ -1,5 +1,7 @@
 @import "./font-awesome/scss/font-awesome";
 @import "./modules/search";
+@import "./modules/utils";
+@import "./modules/variables";
 
 
 html,
@@ -10,6 +12,7 @@ body {
 
 .main-title {
   text-align: center;
+  background-color: white;
 }
 
 #app-container,

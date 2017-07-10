@@ -26,7 +26,6 @@ const Main = (props) => (
             <p className="lead">Get me the movie, I'm making popcorn !</p>
         </div>
 
-
         <div id="page-wrapper">
             <div className="container-fluid">
                 { props.children }
