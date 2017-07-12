@@ -2,6 +2,15 @@
 @import "./modules/search";
 @import "./modules/utils";
 @import "./modules/variables";
+@import "./loaders.css/src/animations/pacman";
+
+.loader-hidden {
+  display: none;
+}
+
+.loader-active {
+  display: block;
+}
 
 
 html,

@@ -78,7 +78,7 @@ class MovieEnricher @Inject()(
         unindexedElements = unindexedElements + 1
         Logger.error(s"Movie Not Indexed, Error ... Moving On ...")
       }
-      incompleteTasks = incompleteTasks - 1
+      incompleteTasks = incompleteTasks + 1
     case GetMovieDetails =>
       batches.next.fold({
         Logger.info(s"No more movie to enrich")

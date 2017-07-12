@@ -24,7 +24,7 @@ module.exports = {
                 use: 'babel-loader'
             },
             {
-                test: /\.scss$/,
+                test: /\.scss$|.css$/,
                 use: extractSass.extract({
                     use: [
                         {loader: 'css-loader'},
@@ -49,6 +49,7 @@ module.exports = {
         ]
     },
     plugins: [extractSass],
+    sassResources: [ '../node_modules/loaders.css/src/animations/pacman'],
     devtool: "source-map",
     devServer: {
         compress: true,
