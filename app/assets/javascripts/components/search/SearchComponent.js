@@ -13,15 +13,21 @@ import {Loader} from 'react-loaders';
 
 class SearchComponent extends Component {
     render() {
-        const { dispatch, moviesData} = this.props;
+        const {dispatch, moviesData} = this.props;
+
         function handleSubmit(keywords) {
             dispatch(searchMovies(keywords));
         }
+
         return (
             <div>
-                <Loader type="pacman" />
-                <SearchBar onSubmit={ handleSubmit } />
-                <SearchResult movies={ moviesData.movies }/>
+                <SearchBar onSubmit={ handleSubmit }/>
+                { moviesData.isLoading ?
+                    <div className="loader-container">
+                        <Loader type="ball-scale-ripple-multiple" active/>
+                    </div>
+                    : < SearchResult movies={ moviesData.movies }/>
+                }
             </div>
         );
     }

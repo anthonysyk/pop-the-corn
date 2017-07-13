@@ -49,7 +49,6 @@ module.exports = {
         ]
     },
     plugins: [extractSass],
-    sassResources: [ '../node_modules/loaders.css/src/animations/pacman'],
     devtool: "source-map",
     devServer: {
         compress: true,

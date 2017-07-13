@@ -3,7 +3,7 @@ import { LOAD_MOVIES, RECEIVE_MOVIES, ERROR_RECEIVE_MOVIES } from '../actions/ty
 const initialState = {
     movies: [],
     hits: 0,
-    isLoading: true,
+    isLoading: false,
     error: null
 };
 

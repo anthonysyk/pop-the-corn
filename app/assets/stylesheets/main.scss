@@ -2,7 +2,7 @@
 @import "./modules/search";
 @import "./modules/utils";
 @import "./modules/variables";
-@import "./loaders.css/src/animations/pacman";
+@import "./loaders.css/src/animations/ball-scale-ripple-multiple";
 
 .loader-hidden {
   display: none;
@@ -10,6 +10,11 @@
 
 .loader-active {
   display: block;
+}
+
+.loader-container {
+  margin: 10% 50%;
+  width:10px;
 }
 
 
