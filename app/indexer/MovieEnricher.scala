@@ -5,13 +5,13 @@ import javax.inject.{Inject, Singleton}
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import indexer.MovieEnricher._
 import indexer.MovieEnricherWorker._
-import models.themoviedb.MovieDetails
+import models.FullMovie
+import models.kaggle.Movie
 import play.api.libs.ws.WSClient
 import play.api.{Configuration, Logger}
 import services.{EnricherService, SearchService}
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 
 @Singleton
@@ -24,12 +24,12 @@ class MovieEnricher @Inject()(
 
   var incompleteTasks = 0
   var failures = 0
-  var batches: Batches[Int] = Batches.empty[Int]
+  var batches: Batches[Movie] = Batches.empty[Movie]
   val workers: Seq[ActorRef] = createWorkers(3)
   var from = 0
   var unindexedElements = 0
   val size = 38
-  val Index = "movies_details"
+  val Index = "full_movie"
 
   def createWorkers(numberOfWorkers: Int): Seq[ActorRef] = {
     (0 until numberOfWorkers) map (_ => context.actorOf(Props(new MovieEnricherWorker(self, enricherService))))
@@ -44,10 +44,10 @@ class MovieEnricher @Inject()(
 
       for {
         indexExists <- ensureIndexExists(Index)
-        _ <- if (indexExists) eventuallyDeleteIndex(Index).map( _ => ()) else Future.successful(()) // Todo add case index exists
-        ids <- searchService.getMoviesIds(from, size)
+        _ <- if (indexExists) eventuallyDeleteIndex(Index).map(_ => ()) else eventuallyCreateIndexWithMapping(FullMovieMapping).map(_ => ())
+        movies <- searchService.getMovies(from, size)
       } yield {
-        batches = Batches(ids.flatten.toVector)
+        batches = Batches(movies.toVector)
         incompleteTasks = batches.size
         context.become(busy)
 
@@ -56,9 +56,9 @@ class MovieEnricher @Inject()(
     case FetchNextBatch =>
       from = from + size
       for {
-        maybeIds <- searchService.getMoviesIds(from, 30)
+        movies <- searchService.getMovies(from, 30)
       } yield {
-        batches = Batches(maybeIds.flatten.toVector)
+        batches = Batches(movies.toVector)
         context.become(busy)
         if (!batches.isDone) startWorkers()
         else {
@@ -68,19 +68,17 @@ class MovieEnricher @Inject()(
         }
       }
 
-
-
   }
 
   def busy: Receive = {
-    case MovieDetailsIndexed(indexed, totalRetries) =>
+    case FullMovieIndexed(indexed, totalRetries) =>
       failures = totalRetries
-      if (indexed) Logger.info(s"Movie details indexed. Remaining movies : $incompleteTasks")
+      if (indexed) Logger.info(s"Full Movie indexed. Remaining movies : $incompleteTasks")
       else {
         unindexedElements = unindexedElements + 1
         Logger.error(s"Movie Not Indexed, Error ... Moving On ...")
       }
-      incompleteTasks = incompleteTasks - 1
+      incompleteTasks = incompleteTasks + 1
     case GetMovieDetails =>
       batches.next.fold({
         Logger.info(s"No more movie to enrich")
@@ -109,9 +107,9 @@ object MovieEnricher {
 
   case object FetchNextBatch
 
-  case class MovieDetailsIndexed(indexed: Boolean, totalRetries: Int)
+  case class FullMovieIndexed(indexed: Boolean, totalRetries: Int)
 
-  case class FetchMovieDetails(id: Int)
+  case class FetchMovieDetails(movie: Movie)
 
   @Singleton
   class MovieEnricherWorker @Inject()(
@@ -121,17 +119,28 @@ object MovieEnricher {
 
     var retry = 0
     implicit var totalRetries = 0
-    val Index = "movies_details"
+    val Index = "full_movie"
     val EsType = "movie"
 
-    def onFailureRetry(retryMessage: Object, notifyFailureMessage: Object, nextElementMessage: Object): Unit = {
+    def onFailureEnrichmentRetry(retryMessage: Object, indexElementWithoutEnrichment: Object): Unit = {
       if (retry <= 5) {
         retry = retry + 1
         totalRetries = totalRetries + 1
         self ! retryMessage
       } else {
         retry = 0
-        indexer ! notifyFailureMessage
+        self ! indexElementWithoutEnrichment
+      }
+    }
+
+    def onFailureIndexingRetry(retryMessage: Object, notifySupervisorMessage: Object, nextElementMessage: Object): Unit = {
+      if (retry <= 5) {
+        retry = retry + 1
+        totalRetries = totalRetries + 1
+        self ! retryMessage
+      } else {
+        retry = 0
+        indexer ! notifySupervisorMessage
         indexer ! nextElementMessage
       }
     }
@@ -144,28 +153,33 @@ object MovieEnricher {
     }
 
     def working: Receive = {
-      case FetchMovieDetails(id) =>
-        Logger.info(s"Fetching extra details for movie: $id")
-        for {
-          maybeMovieDetails <- enricherService.getMovieDetailsFromId(id)
-        } yield {
-          maybeMovieDetails.fold({
-            onFailureRetry(FetchMovieDetails(id), MovieDetailsIndexed(indexed = false, totalRetries), GetMovieDetails)
-          }) {
-            case (movieDetails) =>
-              Logger.info(s"SUCCESS on retrieving extra details for movie ${movieDetails.original_title}")
-              self ! IndexMovieDetails(movieDetails)
+      case FetchMovieDetails(movie) =>
+        Logger.info(s"Fetching extra details for movie: ${movie.title}")
+        movie.id.fold({
+          Logger.info(s"NO_ID_FOUND on retrieving extra details for movie ${movie.title}")
+          self ! IndexFullMovie(FullMovie(movie))
+        })(
+          (id) => for {
+            maybeMovieDetails <- enricherService.getMovieDetailsFromId(id)
+          } yield {
+            maybeMovieDetails.fold({
+              onFailureEnrichmentRetry(FetchMovieDetails(movie), IndexFullMovie(FullMovie(movie)))
+            }) {
+              case (movieDetails) =>
+                Logger.info(s"SUCCESS on retrieving extra details for movie ${movieDetails.original_title}")
+                self ! IndexFullMovie(FullMovie(movie, Seq(movieDetails)))
+            }
           }
-        }
-      case IndexMovieDetails(movieDetails) =>
-        Logger.info(s"Indexing Movie ${movieDetails.original_title}")
+        )
+      case IndexFullMovie(fullMovie) =>
+        Logger.info(s"Indexing Movie ${fullMovie.movie.title}")
         for {
-          hasFailure <- bulkIndex(Index, EsType, movieDetails).map(response => response.hasFailures)
+          hasFailure <- bulkIndex(Index, EsType, fullMovie).map(response => response.hasFailures)
         } yield {
           if (hasFailure) {
-            onFailureRetry(IndexMovieDetails(movieDetails), MovieDetailsIndexed(indexed = false, totalRetries), GetMovieDetails)
+            onFailureIndexingRetry(IndexFullMovie(fullMovie), FullMovieIndexed(indexed = false, totalRetries), GetMovieDetails)
           } else {
-            indexer ! MovieDetailsIndexed(indexed = true, totalRetries)
+            indexer ! FullMovieIndexed(indexed = true, totalRetries)
             indexer ! GetMovieDetails
           }
         }
@@ -186,6 +200,6 @@ object MovieEnricherWorker {
 
   case object StartWorkingAgain
 
-  case class IndexMovieDetails(movieDetails: MovieDetails)
+  case class IndexFullMovie(fullMovie: FullMovie)
 
 }

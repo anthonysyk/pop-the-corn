@@ -1,0 +1,5 @@
+export const LOAD_MOVIES = "LOAD_MOVIES";
+
+export const RECEIVE_MOVIES = "RECEIVE_MOVIES";
+
+export const ERROR_RECEIVE_MOVIES = "ERROR_RECEIVE_MOVIES";

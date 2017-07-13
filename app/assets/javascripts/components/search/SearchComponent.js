@@ -1,26 +1,33 @@
 import React, {Component} from 'react';
 import SearchBar from './SearchBar';
 import SearchResult from './SearchResult';
+import {connect} from 'react-redux'
+import {searchMovies} from '../../actions/search';
+import {Loader} from 'react-loaders';
+
+@connect(
+    state => ({
+        moviesData: state.moviesData
+    })
+)
 
 class SearchComponent extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            movies: []
-        }
-    }
-
     render() {
-        const { movies } = this.state.movies;
+        const {dispatch, moviesData} = this.props;
 
-        function submit(values) {
-            console.log(values);
+        function handleSubmit(keywords) {
+            dispatch(searchMovies(keywords));
         }
 
         return (
             <div>
-                <SearchBar onSubmit={ submit } />
-                <SearchResult movies={ movies }/>
+                <SearchBar onSubmit={ handleSubmit }/>
+                { moviesData.isLoading ?
+                    <div className="loader-container">
+                        <Loader type="ball-scale-ripple-multiple" active/>
+                    </div>
+                    : < SearchResult movies={ moviesData.movies }/>
+                }
             </div>
         );
     }

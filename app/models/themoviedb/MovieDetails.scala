@@ -32,7 +32,7 @@ case class MovieDetails(
                       vote_average: Option[Float],
                       vote_count: Option[Int]
                     ) {
-  lazy val poster_url = "https://image.tmdb.org/t/p/w1280" + poster_path
+  lazy val poster_url: Option[String] = poster_path.map(url => "https://image.tmdb.org/t/p/w1280" + url)
 }
 
 object MovieDetails {
