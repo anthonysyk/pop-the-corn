@@ -47,4 +47,8 @@ class SearchController @Inject()(
       Ok(s"Il y a $counter films indexés")
     }
   }
+
+  def suggestMovies(q: String) = Action.async {
+    searchService.suggest(q).map(suggestions => Ok(Json.toJson(suggestions)))
+  }
 }
