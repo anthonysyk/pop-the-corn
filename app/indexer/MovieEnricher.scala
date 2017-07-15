@@ -2,12 +2,12 @@ package indexer
 
 import javax.inject.{Inject, Singleton}
 
-import akka.actor.{Actor, ActorLogging, ActorRef, Props}
+import akka.actor.{Actor, ActorRef, Props}
 import indexer.MovieEnricher._
 import indexer.MovieEnricherWorker._
+import indexer.mapping.FullMovieIndexDefinition
 import models.FullMovie
 import models.kaggle.Movie
-import play.api.libs.ws.WSClient
 import play.api.{Configuration, Logger}
 import services.{EnricherService, SearchService}
 
@@ -16,11 +16,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
 class MovieEnricher @Inject()(
-                               wSClient: WSClient,
                                searchService: SearchService,
-                               configuration: Configuration,
                                enricherService: EnricherService
-                             ) extends Actor with EsClient with ActorLogging {
+                             ) extends Actor with EsClient {
 
   var incompleteTasks = 0
   var failures = 0
@@ -43,8 +41,7 @@ class MovieEnricher @Inject()(
       Logger.info("Start enriching movies ...")
 
       for {
-        indexExists <- ensureIndexExists(Index)
-        _ <- if (indexExists) eventuallyDeleteIndex(Index).map(_ => ()) else eventuallyCreateIndexWithMapping(FullMovieMapping).map(_ => ())
+        _ <- upsertIndex(FullMovieIndexDefinition.esIndexConfiguration)
         movies <- searchService.getMovies(from, size)
       } yield {
         batches = Batches(movies.toVector)
@@ -115,7 +112,7 @@ object MovieEnricher {
   class MovieEnricherWorker @Inject()(
                                        indexer: ActorRef,
                                        enricherService: EnricherService
-                                     ) extends Actor with EsClient with ActorLogging {
+                                     ) extends Actor with EsClient {
 
     var retry = 0
     implicit var totalRetries = 0
@@ -147,7 +144,7 @@ object MovieEnricher {
 
     def waiting: Receive = {
       case StartWorking =>
-        log.info(s"Indexing movie details started ...")
+        Logger.info(s"Indexing movie details started ...")
         context.become(working)
         indexer ! GetMovieDetails
     }
@@ -174,7 +171,7 @@ object MovieEnricher {
       case IndexFullMovie(fullMovie) =>
         Logger.info(s"Indexing Movie ${fullMovie.movie.title}")
         for {
-          hasFailure <- bulkIndex(Index, EsType, fullMovie).map(response => response.hasFailures)
+          hasFailure <- bulkIndex(Index, EsType, fullMovie).map(_.hasFailures)
         } yield {
           if (hasFailure) {
             onFailureIndexingRetry(IndexFullMovie(fullMovie), FullMovieIndexed(indexed = false, totalRetries), GetMovieDetails)

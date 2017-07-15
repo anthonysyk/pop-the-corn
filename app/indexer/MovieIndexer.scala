@@ -5,17 +5,16 @@ import javax.inject.{Inject, Singleton}
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import indexer.MovieIndexer._
 import indexer.MovieWorker._
+import indexer.mapping.MovieIndexDefinition
 import models.kaggle.Movie
-import play.api.{Configuration, Logger}
+import play.api.{Logger}
 import services.EnricherService
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 @Singleton
 class MovieIndexer @Inject()(
-                              enricherService: EnricherService,
-                              configuration: Configuration
+                              enricherService: EnricherService
                             ) extends Actor with EsClient with ReadCsvHelper with ActorLogging {
 
   var incompleteTasks = 0
@@ -23,7 +22,6 @@ class MovieIndexer @Inject()(
   var batches: Batches[Movie] = Batches.empty[Movie]
   val workers: Seq[ActorRef] = createWorkers(1)
   var errors = 0
-  val config: String = configuration.getString("my.config").getOrElse("none")
   val Index: String = "movies_index"
 
   private def startWorkers() = workers.foreach(_ ! StartWorking)
@@ -36,9 +34,7 @@ class MovieIndexer @Inject()(
     case StartIndexing =>
       Logger.info("Retrieving Movies from csv source")
       for {
-        indexExists <- ensureIndexExists(Index)
-        _ <- if (indexExists) eventuallyDeleteIndex(Index).map(_ => ()) else Future.successful(()) // Todo add case index exists
-        _ <- eventuallyCreateIndexWithMapping(MovieMapping)
+        _ <- upsertIndex(MovieIndexDefinition.esIndexConfiguration)
         movies <- serializeMoviesFromCsv
       } yield {
         data = movies.toVector
