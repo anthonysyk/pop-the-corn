@@ -22,7 +22,7 @@ class MovieEnricher @Inject()(
 
   var incompleteTasks = 0
   var failures = 0
-  var batches: Batches[Movie] = Batches.empty[Movie]
+  var batch: Batch[Movie] = Batch.empty[Movie]
   val workers: Seq[ActorRef] = createWorkers(3)
   var from = 0
   var unindexedElements = 0
@@ -44,20 +44,20 @@ class MovieEnricher @Inject()(
         _ <- upsertIndex(FullMovieIndexDefinition.esIndexConfiguration)
         movies <- searchService.getMovies(from, size)
       } yield {
-        batches = Batches(movies.toVector)
-        incompleteTasks = batches.size
+        batch = Batch(movies.toVector)
+        incompleteTasks = batch.size
         context.become(busy)
 
-        if (!batches.isDone) startWorkers()
+        if (!batch.isDone) startWorkers()
       }
     case FetchNextBatch =>
       from = from + size
       for {
         movies <- searchService.getMovies(from, 30)
       } yield {
-        batches = Batches(movies.toVector)
+        batch = Batch(movies.toVector)
         context.become(busy)
-        if (!batches.isDone) startWorkers()
+        if (!batch.isDone) startWorkers()
         else {
           Logger.warn("System Shutting Down")
           Logger.error(s"Total failures : $failures")
@@ -77,7 +77,7 @@ class MovieEnricher @Inject()(
       }
       incompleteTasks = incompleteTasks + 1
     case GetMovieDetails =>
-      batches.next.fold({
+      batch.next.fold({
         Logger.info(s"No more movie to enrich")
         context.become(waiting)
         sender() ! StartWorkingAgain
@@ -85,7 +85,7 @@ class MovieEnricher @Inject()(
         case (id, nextIds) =>
           Logger.info(s"Sending id $id to worker")
           sender() ! FetchMovieDetails(id)
-          batches = nextIds
+          batch = nextIds
       }
   }
 

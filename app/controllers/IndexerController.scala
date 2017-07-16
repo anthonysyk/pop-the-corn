@@ -25,35 +25,30 @@ class IndexerController @Inject()(@Named(MovieEnricher.Name) movieEnricher: Acto
     Ok("Enriching without backpressure")
   }
 
-  def enrichBlocking = Action {
-    enricherService.getAllIdsBlocking
-    Ok("Enriching without backpressure")
-  }
-
   def startEnrichingMovies = Action {
     system.scheduler.scheduleOnce(
-      5 seconds, movieEnricher, StartEnrichment
+      5.seconds, movieEnricher, StartEnrichment
     )
 
     system.scheduler.schedule(
-      10 seconds, 10 seconds, movieEnricher, MovieEnricher.FetchNextBatch
+      15.seconds, 10.seconds, movieEnricher, MovieEnricher.FetchNextBatch
     )
     Ok("Starting Enrichment")
   }
 
   def startIndexingMovies = Action {
     system.scheduler.scheduleOnce(
-      5 seconds, movieIndexer, StartIndexing
+      5.seconds, movieIndexer, StartIndexing
     )
     system.scheduler.schedule(
-      10 seconds, 1 seconds, movieIndexer, MovieIndexer.RequestNextBatch
+      10.seconds, 1.seconds, movieIndexer, MovieIndexer.RequestNextBatch
     )
     Ok("Starting Indexing")
   }
 
   def startIndexingSuggestions = Action {
     system.scheduler.scheduleOnce(
-      5 seconds, movieSuggestionIndexer, MovieSuggestionIndexer.StartIndexing
+      5.seconds, movieSuggestionIndexer, MovieSuggestionIndexer.StartIndexing
     )
 
     Ok("Starting Indexing Suggestions")

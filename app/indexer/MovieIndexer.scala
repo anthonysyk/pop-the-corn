@@ -19,7 +19,7 @@ class MovieIndexer @Inject()(
 
   var incompleteTasks = 0
   var data = Vector.empty[Movie]
-  var batches: Batches[Movie] = Batches.empty[Movie]
+  var batch: Batch[Movie] = Batch.empty[Movie]
   val workers: Seq[ActorRef] = createWorkers(1)
   var errors = 0
   val Index: String = "movies_index"
@@ -38,21 +38,21 @@ class MovieIndexer @Inject()(
         movies <- serializeMoviesFromCsv
       } yield {
         data = movies.toVector
-        batches = Batches(data.take(3))
-        incompleteTasks = batches.size
+        batch = Batch(data.take(3))
+        incompleteTasks = batch.size
         context.become(busy)
         Logger.warn(s"MOVIES TO INDEX : $incompleteTasks ")
-        if (!batches.isDone) startWorkers()
+        if (!batch.isDone) startWorkers()
       }
     case RequestNextBatch =>
       Logger.info("Fetching next batch")
       Logger.warn(s"$errors for the moment")
       data = data.drop(3)
-      batches = Batches(data.take(3))
-      incompleteTasks = batches.size
+      batch = Batch(data.take(3))
+      incompleteTasks = batch.size
       context.become(busy)
 
-      if (!batches.isDone) startWorkers()
+      if (!batch.isDone) startWorkers()
       else {
         Logger.warn("System shutting down ... All data processed")
         context.system.terminate()
@@ -69,7 +69,7 @@ class MovieIndexer @Inject()(
       else Logger.error(s"Movie NOT indexed. Moving on Remaining Movies : $incompleteTasks")
       incompleteTasks = incompleteTasks - 1
     case GetMovie =>
-      batches.next.fold({
+      batch.next.fold({
         Logger.info("No more movies to index")
         context.become(waiting)
         sender() ! StartWorkingAgain
@@ -77,7 +77,7 @@ class MovieIndexer @Inject()(
         case (movie, remainingMovies) =>
           Logger.info(s"Sending movie ${movie.title} to a worker")
           sender() ! EnrichElement(movie)
-          batches = remainingMovies
+          batch = remainingMovies
       }
   }
 

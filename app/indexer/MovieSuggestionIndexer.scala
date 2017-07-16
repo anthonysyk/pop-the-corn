@@ -2,7 +2,7 @@ package indexer
 
 import javax.inject.{Inject, Singleton}
 
-import akka.actor.{Actor, ActorRef}
+import akka.actor.{Actor, ActorRef, Props}
 import indexer.MovieSuggestionIndexer.{FetchNextBatch, GetElement, MovieSuggestionWorker, NotifySupervisor, StartIndexing}
 import indexer.MovieSuggestionWorker.{IndexSuggestion, StartWorking, StartWorkingAgain}
 import indexer.mapping.SuggestIndexDefinition
@@ -17,14 +17,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
 @Singleton
 class MovieSuggestionIndexer @Inject()(
                                         searchService: SearchService
-                                      ) extends Actor with EsClient with AkkaHelper {
+                                      ) extends Actor with EsClient {
   var incompleteTasks = 0
   var completeTasks = 0
-  var failures = 0
-  var batches: Batches[FullMovie] = Batches.empty[FullMovie]
-  val workers: Seq[ActorRef] = createWorkers[MovieSuggestionWorker](context, 3, { () => new MovieSuggestionWorker(self) })
   var from = 0
   val size = 1000
+  var batch: Batch[FullMovie] = Batch.empty[FullMovie]
+  val workers: Seq[ActorRef] = createWorkers(3)
 
   override def receive: Receive = waiting
 
@@ -35,9 +34,9 @@ class MovieSuggestionIndexer @Inject()(
         _ <- upsertIndex(SuggestIndexDefinition.esIndexConfiguration)
         movies <- fetchNextBatch(from, size)
       } yield {
-        batches = Batches(movies.toVector)
+        batch = Batch(movies.toVector)
         context.become(working)
-        if (!batches.isDone) startWorkers()
+        if (!batch.isDone) startWorkers()
       }
   }
 
@@ -51,29 +50,29 @@ class MovieSuggestionIndexer @Inject()(
         Logger.info(s"SUCCESS: $completeTasks elements indexed")
       }
     case GetElement =>
-      batches.next.foreach {
+      batch.next.foreach {
         case (fullMovie, remainingMovies) =>
-          batches = remainingMovies
+          batch = remainingMovies
           if(remainingMovies.isDone) {
             from = from + size
             for {
               movies <- fetchNextBatch(from, size)
             } yield {
               startWorkersAgain()
-              batches = Batches(movies.toVector)
-              if (!batches.isDone) startWorkers() else shutdownSystem()
+              batch = Batch(movies.toVector)
+              if (!batch.isDone) startWorkers() else shutdownSystem()
             }
           }
           sender() ! IndexSuggestion(fullMovie.suggestion)
       }
   }
 
-  def fetchNextBatch(from: Int, size: Int): Future[Seq[FullMovie]] = {
+  private def fetchNextBatch(from: Int, size: Int): Future[Seq[FullMovie]] = {
     Logger.info("Fetching Batch")
     searchService.getFullMovies(from, size)
   }
 
-  def shutdownSystem() = {
+  private def shutdownSystem() = {
     Logger.info("Shutting Down")
     Logger.warn(s"$completeTasks elements indexed")
     Logger.warn(s"$incompleteTasks elements not indexed")
@@ -82,6 +81,9 @@ class MovieSuggestionIndexer @Inject()(
 
   private def startWorkers() = workers.foreach(_ ! StartWorking)
   private def startWorkersAgain() = workers.foreach(_ ! StartWorkingAgain)
+  private def createWorkers(numberOfWorkers: Int): Seq[ActorRef] = {
+    (0 until numberOfWorkers) map (_ => context.actorOf(Props(new MovieSuggestionWorker(self))))
+  }
 
 }
 
@@ -129,7 +131,6 @@ object MovieSuggestionIndexer {
         Logger.info("Worker asking for DUTY !!!!")
         context.become(waitingForDuty)
     }
-
   }
 
 }

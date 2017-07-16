@@ -1,6 +1,5 @@
 package services
 
-import java.util.concurrent.Executors
 import javax.inject.{Inject, Singleton}
 
 import configs.AppConfig
@@ -11,9 +10,7 @@ import play.api.libs.json.JsArray
 import play.api.libs.ws.WSClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{Await, ExecutionContext, Future}
-import scala.util.{Failure, Success}
-import concurrent.duration._
+import scala.concurrent.Future
 
 @Singleton
 class EnricherService @Inject()(
@@ -65,45 +62,5 @@ class EnricherService @Inject()(
       )
     }
   }.flatMap(identity)
-
-
-  // Serial and blocking way to enrich movies just for testing withouy akka actors
-  def getAllIdsBlocking = {
-
-    val customExecutor = ExecutionContext.fromExecutor(
-      Executors.newFixedThreadPool(1))
-
-    def serialiseFutures[A, B](l: Iterable[A])(fn: A ⇒ Future[B])
-                              (implicit ec: ExecutionContext): Future[List[B]] =
-      l.foldLeft(Future(List.empty[B])) {
-        (previousFuture, next) ⇒
-          for {
-            previousResults ← previousFuture
-            next ← fn(next)
-          } yield previousResults :+ next
-      }
-
-
-    val eventuallyExternalIds: Future[Seq[String]] = searchService.getMoviesExternalIds(0, 6000)
-    eventuallyExternalIds.map { externalIds =>
-      def future(externalIds: Seq[String])(implicit ec: ExecutionContext): Unit = {
-
-        def fn(externalId: String) = Future {
-          println("start")
-          Thread.sleep(3000)
-          getMovieIdFromExternalId(externalId).onComplete {
-            case Success(response) => Logger.info(s"SUCCESS : ${response.toString}")
-            case Failure(e) => Logger.error(s" ERREUR : $e")
-          }
-          println("stop")
-        }
-
-        serialiseFutures(externalIds)(fn)(customExecutor)
-
-      }
-
-      future(externalIds)
-    }
-  }
 
 }

@@ -1,5 +1,6 @@
 package controllers
 
+import java.net.URLDecoder
 import javax.inject.{Inject, Singleton}
 
 import models.FullMovie
@@ -17,7 +18,7 @@ class SearchController @Inject()(
   lazy val Movies_Index = "movies_index"
 
   def searchMovie(q: String) = Action.async {
-    val eventuallySearchResult = searchService.searchMovie(q)
+    val eventuallySearchResult = searchService.searchMovie(URLDecoder.decode(q, "UTF-8"))
     for {
       searchResponse <- eventuallySearchResult
     } yield {

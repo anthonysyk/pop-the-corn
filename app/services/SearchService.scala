@@ -24,7 +24,7 @@ class SearchService @Inject()() extends EsClient {
       search in "full_movie" -> "movie" query {
         bool {
           must(
-            termQuery("title", q)
+            matchQuery("title", q)
           )
         }
       }
