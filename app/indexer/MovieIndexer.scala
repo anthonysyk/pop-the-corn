@@ -5,25 +5,23 @@ import javax.inject.{Inject, Singleton}
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import indexer.MovieIndexer._
 import indexer.MovieWorker._
+import indexer.mapping.MovieIndexDefinition
 import models.kaggle.Movie
-import play.api.{Configuration, Logger}
+import play.api.{Logger}
 import services.EnricherService
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 @Singleton
 class MovieIndexer @Inject()(
-                              enricherService: EnricherService,
-                              configuration: Configuration
+                              enricherService: EnricherService
                             ) extends Actor with EsClient with ReadCsvHelper with ActorLogging {
 
   var incompleteTasks = 0
   var data = Vector.empty[Movie]
-  var batches: Batches[Movie] = Batches.empty[Movie]
+  var batch: Batch[Movie] = Batch.empty[Movie]
   val workers: Seq[ActorRef] = createWorkers(1)
   var errors = 0
-  val config: String = configuration.getString("my.config").getOrElse("none")
   val Index: String = "movies_index"
 
   private def startWorkers() = workers.foreach(_ ! StartWorking)
@@ -36,27 +34,25 @@ class MovieIndexer @Inject()(
     case StartIndexing =>
       Logger.info("Retrieving Movies from csv source")
       for {
-        indexExists <- ensureIndexExists(Index)
-        _ <- if (indexExists) eventuallyDeleteIndex(Index).map(_ => ()) else Future.successful(()) // Todo add case index exists
-        _ <- eventuallyCreateIndexWithMapping(MovieMapping)
+        _ <- upsertIndex(MovieIndexDefinition.esIndexConfiguration)
         movies <- serializeMoviesFromCsv
       } yield {
         data = movies.toVector
-        batches = Batches(data.take(3))
-        incompleteTasks = batches.size
+        batch = Batch(data.take(3))
+        incompleteTasks = batch.size
         context.become(busy)
         Logger.warn(s"MOVIES TO INDEX : $incompleteTasks ")
-        if (!batches.isDone) startWorkers()
+        if (!batch.isDone) startWorkers()
       }
     case RequestNextBatch =>
       Logger.info("Fetching next batch")
       Logger.warn(s"$errors for the moment")
       data = data.drop(3)
-      batches = Batches(data.take(3))
-      incompleteTasks = batches.size
+      batch = Batch(data.take(3))
+      incompleteTasks = batch.size
       context.become(busy)
 
-      if (!batches.isDone) startWorkers()
+      if (!batch.isDone) startWorkers()
       else {
         Logger.warn("System shutting down ... All data processed")
         context.system.terminate()
@@ -73,7 +69,7 @@ class MovieIndexer @Inject()(
       else Logger.error(s"Movie NOT indexed. Moving on Remaining Movies : $incompleteTasks")
       incompleteTasks = incompleteTasks - 1
     case GetMovie =>
-      batches.next.fold({
+      batch.next.fold({
         Logger.info("No more movies to index")
         context.become(waiting)
         sender() ! StartWorkingAgain
@@ -81,7 +77,7 @@ class MovieIndexer @Inject()(
         case (movie, remainingMovies) =>
           Logger.info(s"Sending movie ${movie.title} to a worker")
           sender() ! EnrichElement(movie)
-          batches = remainingMovies
+          batch = remainingMovies
       }
   }
 

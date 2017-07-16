@@ -1,5 +1,6 @@
 package controllers
 
+import java.net.URLDecoder
 import javax.inject.{Inject, Singleton}
 
 import models.FullMovie
@@ -17,7 +18,7 @@ class SearchController @Inject()(
   lazy val Movies_Index = "movies_index"
 
   def searchMovie(q: String) = Action.async {
-    val eventuallySearchResult = searchService.searchMovie(q)
+    val eventuallySearchResult = searchService.searchMovie(URLDecoder.decode(q, "UTF-8"))
     for {
       searchResponse <- eventuallySearchResult
     } yield {
@@ -46,5 +47,9 @@ class SearchController @Inject()(
     searchService.countMovies(Movies_Index).map { counter =>
       Ok(s"Il y a $counter films indexés")
     }
+  }
+
+  def suggestMovies(q: String) = Action.async {
+    searchService.suggest(q).map(suggestions => Ok(Json.toJson(suggestions)))
   }
 }

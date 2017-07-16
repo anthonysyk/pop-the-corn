@@ -2,12 +2,12 @@ package indexer
 
 import javax.inject.{Inject, Singleton}
 
-import akka.actor.{Actor, ActorLogging, ActorRef, Props}
+import akka.actor.{Actor, ActorRef, Props}
 import indexer.MovieEnricher._
 import indexer.MovieEnricherWorker._
+import indexer.mapping.FullMovieIndexDefinition
 import models.FullMovie
 import models.kaggle.Movie
-import play.api.libs.ws.WSClient
 import play.api.{Configuration, Logger}
 import services.{EnricherService, SearchService}
 
@@ -16,15 +16,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
 class MovieEnricher @Inject()(
-                               wSClient: WSClient,
                                searchService: SearchService,
-                               configuration: Configuration,
                                enricherService: EnricherService
-                             ) extends Actor with EsClient with ActorLogging {
+                             ) extends Actor with EsClient {
 
   var incompleteTasks = 0
   var failures = 0
-  var batches: Batches[Movie] = Batches.empty[Movie]
+  var batch: Batch[Movie] = Batch.empty[Movie]
   val workers: Seq[ActorRef] = createWorkers(3)
   var from = 0
   var unindexedElements = 0
@@ -43,24 +41,23 @@ class MovieEnricher @Inject()(
       Logger.info("Start enriching movies ...")
 
       for {
-        indexExists <- ensureIndexExists(Index)
-        _ <- if (indexExists) eventuallyDeleteIndex(Index).map(_ => ()) else eventuallyCreateIndexWithMapping(FullMovieMapping).map(_ => ())
+        _ <- upsertIndex(FullMovieIndexDefinition.esIndexConfiguration)
         movies <- searchService.getMovies(from, size)
       } yield {
-        batches = Batches(movies.toVector)
-        incompleteTasks = batches.size
+        batch = Batch(movies.toVector)
+        incompleteTasks = batch.size
         context.become(busy)
 
-        if (!batches.isDone) startWorkers()
+        if (!batch.isDone) startWorkers()
       }
     case FetchNextBatch =>
       from = from + size
       for {
         movies <- searchService.getMovies(from, 30)
       } yield {
-        batches = Batches(movies.toVector)
+        batch = Batch(movies.toVector)
         context.become(busy)
-        if (!batches.isDone) startWorkers()
+        if (!batch.isDone) startWorkers()
         else {
           Logger.warn("System Shutting Down")
           Logger.error(s"Total failures : $failures")
@@ -80,7 +77,7 @@ class MovieEnricher @Inject()(
       }
       incompleteTasks = incompleteTasks + 1
     case GetMovieDetails =>
-      batches.next.fold({
+      batch.next.fold({
         Logger.info(s"No more movie to enrich")
         context.become(waiting)
         sender() ! StartWorkingAgain
@@ -88,7 +85,7 @@ class MovieEnricher @Inject()(
         case (id, nextIds) =>
           Logger.info(s"Sending id $id to worker")
           sender() ! FetchMovieDetails(id)
-          batches = nextIds
+          batch = nextIds
       }
   }
 
@@ -115,7 +112,7 @@ object MovieEnricher {
   class MovieEnricherWorker @Inject()(
                                        indexer: ActorRef,
                                        enricherService: EnricherService
-                                     ) extends Actor with EsClient with ActorLogging {
+                                     ) extends Actor with EsClient {
 
     var retry = 0
     implicit var totalRetries = 0
@@ -147,7 +144,7 @@ object MovieEnricher {
 
     def waiting: Receive = {
       case StartWorking =>
-        log.info(s"Indexing movie details started ...")
+        Logger.info(s"Indexing movie details started ...")
         context.become(working)
         indexer ! GetMovieDetails
     }
@@ -174,7 +171,7 @@ object MovieEnricher {
       case IndexFullMovie(fullMovie) =>
         Logger.info(s"Indexing Movie ${fullMovie.movie.title}")
         for {
-          hasFailure <- bulkIndex(Index, EsType, fullMovie).map(response => response.hasFailures)
+          hasFailure <- bulkIndex(Index, EsType, fullMovie).map(_.hasFailures)
         } yield {
           if (hasFailure) {
             onFailureIndexingRetry(IndexFullMovie(fullMovie), FullMovieIndexed(indexed = false, totalRetries), GetMovieDetails)

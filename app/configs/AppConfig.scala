@@ -5,9 +5,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.Configuration
 
 @Singleton
-class AppConfig @Inject()(
-                         config: Configuration
-                         ) {
+class AppConfig @Inject()(config: Configuration) {
 
   val tmdbFindBaseUri = config.getString("tmdb_find_base_uri").get
 

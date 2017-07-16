@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import SearchBar from './SearchBar';
 import SearchResult from './SearchResult';
 import {connect} from 'react-redux'
-import {searchMovies} from '../../actions/search';
+import {searchMovies, suggest} from '../../actions/search';
 import {Loader} from 'react-loaders';
 
 @connect(
@@ -16,17 +16,21 @@ class SearchComponent extends Component {
         const {dispatch, moviesData} = this.props;
 
         function handleSubmit(keywords) {
-            dispatch(searchMovies(keywords));
+            dispatch(searchMovies(keywords.toLowerCase()));
+        }
+
+        function handleSuggest(keywords) {
+            dispatch(suggest(keywords))
         }
 
         return (
             <div>
-                <SearchBar onSubmit={ handleSubmit }/>
+                <SearchBar onSubmit={ handleSubmit } onChange={ handleSuggest } suggestions={ moviesData.suggestions }/>
                 { moviesData.isLoading ?
                     <div className="loader-container">
                         <Loader type="ball-scale-ripple-multiple" active/>
                     </div>
-                    : < SearchResult movies={ moviesData.movies }/>
+                    : <SearchResult movies={ moviesData.movies }/>
                 }
             </div>
         );

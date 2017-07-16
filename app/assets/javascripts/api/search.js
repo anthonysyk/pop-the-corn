@@ -5,4 +5,9 @@ function searchByTitle(keyword) {
         .then(res => res.data)
 }
 
-export { searchByTitle };
+function suggest(keyword) {
+    return axios.get(`/suggest?q=${keyword}`)
+        .then (res => res.data)
+}
+
+export { searchByTitle, suggest };
