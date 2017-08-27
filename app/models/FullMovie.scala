@@ -22,7 +22,7 @@ object MovieStats {
 case class FullMovie(
                       id: Option[Int],
                       adult: Option[Boolean],
-                      backdrop_path: Option[String],
+//                      backdrop_path: Option[String],
 //                      belongs_to_collection: Option[BelongsToCollection],
                       budget: Option[Float],
                       genres: Seq[String],
@@ -63,7 +63,7 @@ object FullMovie {
     FullMovie(
       id = movie.id,
       adult = movieDetails.adult,
-      backdrop_path = movieDetails.backdrop_path,
+//      backdrop_path = movieDetails.backdrop_path,
 //      belongs_to_collection = movieDetails.belongs_to_collection,
       budget = movieDetails.budget,
       genres = movieDetails.genres.map(_.name),
