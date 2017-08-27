@@ -8,7 +8,7 @@ import indexer.MovieEnricherWorker._
 import indexer.mapping.FullMovieIndexDefinition
 import models.FullMovie
 import models.kaggle.Movie
-import play.api.{Configuration, Logger}
+import play.api.Logger
 import services.{EnricherService, SearchService}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -119,17 +119,6 @@ object MovieEnricher {
     val Index = "full_movie"
     val EsType = "movie"
 
-    def onFailureEnrichmentRetry(retryMessage: Object, indexElementWithoutEnrichment: Object): Unit = {
-      if (retry <= 5) {
-        retry = retry + 1
-        totalRetries = totalRetries + 1
-        self ! retryMessage
-      } else {
-        retry = 0
-        self ! indexElementWithoutEnrichment
-      }
-    }
-
     def onFailureIndexingRetry(retryMessage: Object, notifySupervisorMessage: Object, nextElementMessage: Object): Unit = {
       if (retry <= 5) {
         retry = retry + 1
@@ -152,24 +141,25 @@ object MovieEnricher {
     def working: Receive = {
       case FetchMovieDetails(movie) =>
         Logger.info(s"Fetching extra details for movie: ${movie.title}")
-        movie.id.fold({
-          Logger.info(s"NO_ID_FOUND on retrieving extra details for movie ${movie.title}")
-          self ! IndexFullMovie(FullMovie(movie))
-        })(
-          (id) => for {
-            maybeMovieDetails <- enricherService.getMovieDetailsFromId(id)
-          } yield {
-            maybeMovieDetails.fold({
-              onFailureEnrichmentRetry(FetchMovieDetails(movie), IndexFullMovie(FullMovie(movie)))
-            }) {
-              case (movieDetails) =>
-                Logger.info(s"SUCCESS on retrieving extra details for movie ${movieDetails.original_title}")
-                self ! IndexFullMovie(FullMovie(movie, Seq(movieDetails)))
+        movie.id match {
+          case Some(id) =>
+            for {
+              maybeMovieDetails <- enricherService.getMovieDetailsFromId(id)
+            } yield {
+              maybeMovieDetails match {
+                case Some(movieDetails) =>
+                  Logger.info(s"SUCCESS on retrieving extra details for movie ${movieDetails.original_title}")
+                  self ! IndexFullMovie(FullMovie.fromMovieDetails(movie, movieDetails))
+                case None =>
+                  onFailureIndexingRetry(FetchMovieDetails(movie), FullMovieIndexed(indexed = false, totalRetries), GetMovieDetails)
+              }
             }
-          }
-        )
+          case None =>
+            Logger.info(s"NO_ID_FOUND on retrieving extra details for movie ${movie.title}")
+            onFailureIndexingRetry(FetchMovieDetails(movie), FullMovieIndexed(indexed = false, totalRetries), GetMovieDetails)
+        }
       case IndexFullMovie(fullMovie) =>
-        Logger.info(s"Indexing Movie ${fullMovie.movie.title}")
+        Logger.info(s"Indexing Movie ${fullMovie.title}")
         for {
           hasFailure <- bulkIndex(Index, EsType, fullMovie).map(_.hasFailures)
         } yield {
@@ -198,5 +188,4 @@ object MovieEnricherWorker {
   case object StartWorkingAgain
 
   case class IndexFullMovie(fullMovie: FullMovie)
-
 }

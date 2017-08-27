@@ -23,16 +23,16 @@ class SearchController @Inject()(
       searchResponse <- eventuallySearchResult
     } yield {
       val fullMovies = Json.parse(searchResponse.toString) \ "hits" \\ "_source" map (_.as[FullMovie])
-      val movieDistinctIds: Seq[Int] = fullMovies.flatMap(_.movie.id).distinct
+      val movieDistinctIds: Seq[Int] = fullMovies.flatMap(_.id).distinct
       val moviesDistinct = movieDistinctIds.flatMap { id =>
-        fullMovies.find(_.movie.id == Option(id))
+        fullMovies.find(_.id == Option(id))
       }
       val movies = moviesDistinct.map { fullMovie =>
         Json.obj(
-          "title" -> fullMovie.movie.title,
-          "poster" -> fullMovie.movieDetails.headOption.map(_.poster_url),
-          "overview" -> fullMovie.movieDetails.headOption.map(_.overview.getOrElse("Aucune description")),
-          "genres" -> fullMovie.movieDetails.headOption.map(_.genres.map(_.name).mkString(" "))
+          "title" -> fullMovie.title,
+          "poster" -> fullMovie.poster_url,
+          "overview" -> fullMovie.overview,
+          "genres" -> fullMovie.genres.mkString(" ")
         )
       }
 
