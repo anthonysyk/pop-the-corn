@@ -1,12 +1,11 @@
 package models
 
-import models.kaggle.{Casting, Movie, Rating}
 import models.themoviedb._
 import play.api.libs.json.{Format, Json}
 
 case class MovieStats(
                        color: String,
-                       contentRating: Option[Int],
+                       contentRating: String,
                        faceNumbersInPoster: Option[Int],
                        aspectRatio: String,
                        castTotalFacebookLikes: Option[Int],
@@ -61,7 +60,7 @@ object FullMovie {
 
   def fromMovieDetails(movie: Movie, movieDetails: MovieDetails) = {
     FullMovie(
-      id = movie.id,
+      id = movieDetails.id,
       adult = movieDetails.adult,
 //      backdrop_path = movieDetails.backdrop_path,
 //      belongs_to_collection = movieDetails.belongs_to_collection,

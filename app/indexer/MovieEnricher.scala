@@ -6,8 +6,7 @@ import akka.actor.{Actor, ActorRef, Props}
 import indexer.MovieEnricher._
 import indexer.MovieEnricherWorker._
 import indexer.mapping.FullMovieIndexDefinition
-import models.FullMovie
-import models.kaggle.Movie
+import models.{FullMovie, Movie}
 import play.api.Logger
 import services.{EnricherService, SearchService}
 
@@ -23,10 +22,10 @@ class MovieEnricher @Inject()(
   var incompleteTasks = 0
   var failures = 0
   var batch: Batch[Movie] = Batch.empty[Movie]
-  val workers: Seq[ActorRef] = createWorkers(3)
+  val workers: Seq[ActorRef] = createWorkers(2)
   var from = 0
   var unindexedElements = 0
-  val size = 38
+  val size = 18
   val Index = "full_movie"
 
   def createWorkers(numberOfWorkers: Int): Seq[ActorRef] = {
@@ -53,14 +52,14 @@ class MovieEnricher @Inject()(
     case FetchNextBatch =>
       from = from + size
       for {
-        movies <- searchService.getMovies(from, 30)
+        movies <- searchService.getMovies(from, size)
       } yield {
         batch = Batch(movies.toVector)
         context.become(busy)
         if (!batch.isDone) startWorkers()
         else {
           Logger.warn("System Shutting Down")
-          Logger.error(s"Total failures : $failures")
+          Logger.error(s"Movies Not Indexed : $failures")
           context.system.terminate()
         }
       }
@@ -70,7 +69,7 @@ class MovieEnricher @Inject()(
   def busy: Receive = {
     case FullMovieIndexed(indexed, totalRetries) =>
       failures = totalRetries
-      if (indexed) Logger.info(s"Full Movie indexed. Remaining movies : $incompleteTasks")
+      if (indexed) Logger.info(s"Full Movie indexed. Movies indexed: $incompleteTasks")
       else {
         unindexedElements = unindexedElements + 1
         Logger.error(s"Movie Not Indexed, Error ... Moving On ...")
@@ -141,7 +140,8 @@ object MovieEnricher {
     def working: Receive = {
       case FetchMovieDetails(movie) =>
         Logger.info(s"Fetching extra details for movie: ${movie.title}")
-        movie.id match {
+        val eventuallyId = enricherService.getMovieIdFromExternalId(movie.externalId)
+        eventuallyId.map{
           case Some(id) =>
             for {
               maybeMovieDetails <- enricherService.getMovieDetailsFromId(id)

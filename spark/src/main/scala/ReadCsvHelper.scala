@@ -1,16 +1,13 @@
-package indexer
-
 import java.io.File
 
-import com.github.tototoshi.csv._
-import models.kaggle.{Casting, KaggleInput, Movie, Rating}
+import com.github.tototoshi.csv.CSVReader
+import kaggle.{Casting, KaggleInput, Movie, Rating}
 
-import scala.concurrent.Future
 import scala.io.Source
 
 trait ReadCsvHelper {
 
-  def serializeMoviesFromCsv: Future[Seq[Movie]] = Future.successful {
+  def serializeMoviesFromCsv: Seq[Movie] = {
     val bufferedSource = Source.fromFile("/sideproject/pop-the-corn/app/resources/movie_metadata.csv")
     val file = new File("/sideproject/pop-the-corn/app/resources/movie_metadata.csv")
 
@@ -33,7 +30,7 @@ trait ReadCsvHelper {
         line(0),
         line(1),
         castToInt(line(2)),
-        castToInt(line(3)),
+        castToDouble(line(3)),
         castToInt(line(4)),
         castToInt(line(5)),
         line(6),
@@ -51,7 +48,7 @@ trait ReadCsvHelper {
         castToInt(line(18)),
         line(19),
         line(20),
-        castToInt(line(21)),
+        line(21),
         castToDouble(line(22)),
         line(23),
         castToInt(line(24)),
@@ -80,7 +77,7 @@ trait ReadCsvHelper {
         budget = movie.budget,
         gross = movie.gross,
         genres = movie.genres.split('|'),
-        contentRating = movie.contentRating,
+        contentRating = movie.contentRating.toString,
         faceNumbersInPoster = movie.faceNumberInPoster,
         language = movie.language,
         country = movie.country,

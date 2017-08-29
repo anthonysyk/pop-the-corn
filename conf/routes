@@ -10,7 +10,6 @@ GET        /search                          controllers.SearchController.searchM
 GET        /enrich                          controllers.IndexerController.enrichMovies
 
 GET        /startEnrichment                 controllers.IndexerController.startEnrichingMovies
-GET        /startIndexing                   controllers.IndexerController.startIndexingMovies
 GET        /startIndexingSuggestions        controllers.IndexerController.startIndexingSuggestions
 
 GET        /countMovies                     controllers.SearchController.countMovies

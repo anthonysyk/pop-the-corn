@@ -4,8 +4,7 @@ import javax.inject.{Inject, Named, Singleton}
 
 import akka.actor.{ActorRef, ActorSystem}
 import indexer.MovieEnricher.StartEnrichment
-import indexer.MovieIndexer.StartIndexing
-import indexer.{MovieEnricher, MovieIndexer, MovieSuggestionIndexer}
+import indexer.{MovieEnricher, MovieSuggestionIndexer}
 import play.api.mvc.{Action, Controller}
 import services.EnricherService
 
@@ -15,7 +14,6 @@ import scala.concurrent.duration._
 
 @Singleton
 class IndexerController @Inject()(@Named(MovieEnricher.Name) movieEnricher: ActorRef,
-                                  @Named(MovieIndexer.Name) movieIndexer: ActorRef,
                                   @Named(MovieSuggestionIndexer.Name) movieSuggestionIndexer: ActorRef,
                                   enricherService: EnricherService,
                                   system: ActorSystem) extends Controller {
@@ -34,16 +32,6 @@ class IndexerController @Inject()(@Named(MovieEnricher.Name) movieEnricher: Acto
       15.seconds, 10.seconds, movieEnricher, MovieEnricher.FetchNextBatch
     )
     Ok("Starting Enrichment")
-  }
-
-  def startIndexingMovies = Action {
-    system.scheduler.scheduleOnce(
-      5.seconds, movieIndexer, StartIndexing
-    )
-    system.scheduler.schedule(
-      10.seconds, 1.seconds, movieIndexer, MovieIndexer.RequestNextBatch
-    )
-    Ok("Starting Indexing")
   }
 
   def startIndexingSuggestions = Action {

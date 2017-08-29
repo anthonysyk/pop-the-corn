@@ -5,8 +5,7 @@ import javax.inject.{Inject, Singleton}
 import com.sksamuel.elastic4s.ElasticDsl.{fieldFactorScore, _}
 import com.sksamuel.elastic4s.{FieldValueFactorDefinition, MatchQueryDefinition}
 import indexer.EsClient
-import models.{FullMovie, Suggestion}
-import models.kaggle.Movie
+import models.{FullMovie, Movie, Suggestion}
 import org.elasticsearch.action.search.SearchResponse
 import org.elasticsearch.common.lucene.search.function.FieldValueFactorFunction
 import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilder
