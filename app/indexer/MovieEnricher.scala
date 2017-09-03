@@ -25,7 +25,7 @@ class MovieEnricher @Inject()(
   val workers: Seq[ActorRef] = createWorkers(2)
   var from = 0
   var unindexedElements = 0
-  val size = 18
+  val size = 15
   val Index = "full_movie"
 
   def createWorkers(numberOfWorkers: Int): Seq[ActorRef] = {

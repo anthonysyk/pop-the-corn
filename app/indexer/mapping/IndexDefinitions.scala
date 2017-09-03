@@ -55,7 +55,9 @@ object FullMovieIndexDefinition {
       "default",
       WhitespaceTokenizer,
       LowercaseTokenFilter,
-      AsciiFoldingTokenFilter)
+      StopTokenFilter("myTokenFilter1", enablePositionIncrements = true, ignoreCase = true),
+      AsciiFoldingTokenFilter
+    )
   }
   val esIndexConfiguration = EsIndexDefinition(IndexName, FullMovieDefinition)
 }
