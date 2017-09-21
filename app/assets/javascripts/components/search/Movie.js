@@ -8,9 +8,10 @@ const Movie = ({movie}) => (
                 <Image src={movie.poster} rounded/>
             </Col>
             <Col xs={8} md={10}>
-                <h5>{movie.title}</h5>
+                <h2>{movie.title}</h2>
                 <p className="lead"><i>{movie.genres}</i></p>
                 <p>{movie.overview}</p>
+                <p>Note : {movie.note} ({movie.votes})</p>
             </Col>
         </Row>
     </div>

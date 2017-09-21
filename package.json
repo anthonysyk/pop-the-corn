@@ -1,21 +1,17 @@
 {
-  "name": "pop-the-corn",
+  "name": "pop-the-corn-react",
   "version": "1.0.0",
   "private": true,
   "description": "Sideproject to apply what I learned",
   "scripts": {
     "start-dev": "npm-run-all --parallel start-dev:*",
     "start-dev:front": "npm run clean && NODE_ENV=development webpack-dev-server",
-    "start-dev:api": "activator ~run",
-    "build": "webpack -p",
+    "build-watch": "webpack --watch",
     "clean": "npm-run-all clean:*",
     "clean:js": "rm -rf public/javascripts/*",
     "clean:css": "rm -rf public/stylesheets/*"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/anthonysyk/pop-the-corn.git"
-  },
+  "repository": "git+https://github.com/anthonysyk/pop-the-corn.git",
   "author": "anthonysyk <anthony.ssiyk@gmail.com> (https://sykanthony.wordpress.com/)",
   "bugs": {
     "url": "https://github.com/anthonysyk/pop-the-corn/issues"
@@ -47,10 +43,13 @@
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.11.1",
     "node-sass": "^4.5.3",
+    "npm-run-all": "^4.1.1",
     "resolve-url-loader": "^2.0.2",
     "sass-loader": "^6.0.5",
     "style-loader": "^0.18.1",
     "webpack": "^2.6.1",
     "webpack-dev-server": "^2.4.5"
-  }
+  },
+  "main": "main.js",
+  "license": "MIT"
 }
