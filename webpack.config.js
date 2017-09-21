@@ -49,7 +49,6 @@ module.exports = {
         ]
     },
     plugins: [extractSass],
-    devtool: "source-map",
     devServer: {
         compress: true,
         proxy: {
