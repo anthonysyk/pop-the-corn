@@ -22,7 +22,7 @@ const store = createStore(
 const Main = (props) => (
     <div id="wrapper">
         <div className="page-header main-title">
-            <h1><i className="fa fa-film"/>&nbsp;&nbsp;Pop the corn</h1>
+            <h1><a href="/"><i className="logo"/></a>&nbsp;&nbsp;Pop the corn</h1>
             <p className="lead">Get me the movie, I'm making popcorn !</p>
         </div>
 

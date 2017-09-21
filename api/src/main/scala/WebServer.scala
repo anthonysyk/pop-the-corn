@@ -19,11 +19,15 @@ object WebServer {
     // needed for the future flatMap/onComplete in the end
     implicit val executionContext = system.dispatcher
 
+    ApiController.startService // To launch actors
+
     val route =
       pathSingleSlash{
-        ApiController.startService // To launch actors
         getFromFile("/sideproject/pop-the-corn/app/index.html")
       } ~
+        path("favicon.ico") {
+          getFromFile("/sideproject/pop-the-corn/app/assets/images/favicon.ico")
+        }~
         path("search") {
         get {
           parameter('q.as[String]) { q =>
