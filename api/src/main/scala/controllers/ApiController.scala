@@ -27,6 +27,7 @@ object ApiController {
 
       val displayedMovie = searchResponse.results.map { movie =>
         Json.obj(
+          "id" -> movie.id.asJson,
           "title" -> movie.title.asJson,
           "poster" -> movie.poster_url.asJson,
           "overview" -> movie.overview.asJson,
@@ -49,6 +50,24 @@ object ApiController {
       suggestions <- eventuallySuggestions
     } yield suggestions.asJson.noSpaces
 
+  }
+
+  def getMovie(id: String) = {
+    for {
+      movie <- ApiService.getMovie(id)
+    } yield movie.asJson.noSpaces
+  }
+
+  def getPopularMovies() = {
+    for {
+      popularMovies <- ApiService.getPopularMovies
+    } yield popularMovies.asJson.noSpaces
+  }
+
+  def getBestRatedMovies() = {
+    for {
+      bestRatedMovies <- ApiService.getBestRatedMovies
+    } yield bestRatedMovies.asJson.noSpaces
   }
 
 

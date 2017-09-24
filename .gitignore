@@ -8,3 +8,4 @@ target
 node_modules
 public/javascripts/
 public/stylesheets/
+package-lock.json

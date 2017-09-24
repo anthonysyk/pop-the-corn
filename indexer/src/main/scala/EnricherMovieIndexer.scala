@@ -22,7 +22,7 @@ object EnricherMovieIndexer extends EsClient {
       search in DiscoveredMovieIndexDefinition.IndexName -> DiscoveredMovieIndexDefinition.TypeName from from size size
     }
   }.map { searchResponse =>
-    parseSearchResponse(searchResponse.toString).flatMap(_.as[DiscoveredMovie].right.toOption)
+    parseSearchResponseWithHits[DiscoveredMovie](searchResponse.toString).results
   }
 
   def getMovieDetailsById(id: Int): Option[TmdbMovie] = {

@@ -6,9 +6,10 @@ import thunk from "redux-thunk";
 import {Route} from "react-router";
 import {ConnectedRouter, routerMiddleware} from "react-router-redux";
 import SearchComponent from "./components/search/SearchComponent";
+import DetailComponent from "./components/details/DetailComponent";
+import MainComponent from "./components/MainComponent";
 import createHistory from "history/createHashHistory";
 import reducer from "./reducers/reducers";
-
 
 import "../stylesheets/main.scss";
 
@@ -19,27 +20,13 @@ const store = createStore(
     applyMiddleware(routerMiddleware(history), thunk)
 );
 
-const Main = (props) => (
-    <div id="wrapper">
-        <div className="page-header main-title">
-            <h1><a href="/"><i className="logo"/></a>&nbsp;&nbsp;Pop the corn</h1>
-            <p className="lead">Get me the movie, I'm making popcorn !</p>
-        </div>
-
-        <div id="page-wrapper">
-            <div className="container-fluid">
-                { props.children }
-            </div>
-        </div>
-    </div>
-);
-
 render(
     <Provider store={ store }>
         <ConnectedRouter history={ history }>
-            <Main>
+            <MainComponent>
                 <Route exact path="/" component={SearchComponent}/>
-            </Main>
+                <Route exact path="/details/:id" component={DetailComponent}/>
+            </MainComponent>
         </ConnectedRouter>
     </Provider>
     ,

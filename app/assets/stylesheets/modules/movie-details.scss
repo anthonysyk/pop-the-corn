@@ -1,0 +1,30 @@
+.movie-details {
+  padding: 3rem;
+
+  .movie-backdrop {
+    opacity: 0.5;
+  }
+
+  .movie-poster {
+
+    img {
+      max-width: 100%;
+    }
+
+  }
+
+}
+
+.details__sidebar {
+
+  text-align: center;
+
+  ul {
+    list-style-type: none;
+    padding: inherit;
+
+    li {
+    }
+  }
+
+}

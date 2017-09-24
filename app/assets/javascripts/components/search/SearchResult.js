@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Movie from './Movie';
+import MovieResult from './MovieResult';
 
 class SearchResult extends Component {
 
@@ -13,7 +13,7 @@ class SearchResult extends Component {
             <div className="search-result-section">
                 {
                     movies.map((movie, index) =>
-                        <Movie movie={movie} key={index}/>
+                        <MovieResult movie={movie} key={index}/>
                     )
                 }
             </div>

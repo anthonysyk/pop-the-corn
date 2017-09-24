@@ -4,40 +4,14 @@
 @import "./modules/variables";
 @import "./loaders.css/src/animations/ball-scale-ripple-multiple";
 @import "./modules/suggest";
-
-.loader-hidden {
-  display: none;
-}
-
-.loader-active {
-  display: block;
-}
-
-.loader-container {
-  margin: 10% 50%;
-  width:10px;
-}
-
-.logo {
-  display: block;
-  text-indent: -9999px;
-  width: 100px;
-  height: 82px;
-  background: url(../images/popcorn.svg);
-  background-size: 100px 82px;
-  margin: auto;
-}
-
+@import "./modules/font";
+@import "./modules/movie-details";
+@import "./modules/general";
 
 html,
 body {
   width: 100%;
   height: 100%;
-}
-
-.main-title {
-  text-align: center;
-  background-color: white;
 }
 
 #app-container,
@@ -51,6 +25,19 @@ body {
   height: 100%;
 }
 
+.container-fluid {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
 body {
-  font-family: "Open Sans","Arial","Helvetica",sans-serif;
+  font-family: -apple-system,
+  BlinkMacSystemFont,
+  "Segoe UI",
+  Roboto,
+  Oxygen-Sans,
+  Ubuntu,
+  Cantarell,
+  "Helvetica Neue",
+  sans-serif;
 }

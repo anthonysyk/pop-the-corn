@@ -28,6 +28,8 @@ case class TmdbMovie(
                           vote_count: Option[Int]
                         ) {
   lazy val poster_url: Option[String] = poster_path.map(url => "https://image.tmdb.org/t/p/w1280" + url)
+  lazy val backdrop_url: Option[String] = backdrop_path.map(url => "https://image.tmdb.org/t/p/w1280" + url)
+
 
   val suggestion = Suggestion(
     id,

@@ -1,4 +1,4 @@
-import {LOAD_MOVIES, RECEIVE_MOVIES, ERROR_RECEIVE_MOVIES, RECEIVE_SUGGESTIONS} from './types';
+import {LOAD_MOVIES, RECEIVE_MOVIES, ERROR_RECEIVE_MOVIES, RECEIVE_SUGGESTIONS, RECEIVE_MOVIE_DETAILS, RECEIVE_POPULAR_MOVIES, RECEIVE_BEST_RATED_MOVIES} from './types';
 
 import * as searchAPI  from '../api/search';
 
@@ -24,6 +24,27 @@ function receiveMovies(moviesData) {
     };
 }
 
+function receiveMovieDetails(movie) {
+    return {
+        type: RECEIVE_MOVIE_DETAILS,
+        movie: movie
+    };
+}
+
+function receivePopularMovies(popularMovies) {
+    return {
+        type: RECEIVE_POPULAR_MOVIES,
+        popularMovies: popularMovies
+    }
+}
+
+function receiveBestRatedMovies(bestRatedMovies) {
+    return {
+        type: RECEIVE_BEST_RATED_MOVIES,
+        bestRatedMovies: bestRatedMovies
+    }
+}
+
 function error(message) {
     return {
         type: ERROR_RECEIVE_MOVIES,
@@ -46,4 +67,19 @@ function suggest(keywords) {
         .then(suggestions => dispatch(receiveSuggestions(suggestions)))
 }
 
-export { searchMovies, suggest }
+function getMovieDetails(id) {
+    return (dispatch) => searchAPI.getMovieDetails(id)
+        .then(movie => dispatch(receiveMovieDetails(movie)))
+}
+
+function getPopularMovies(){
+    return (dispatch) => searchAPI.getPopularMovies()
+        .then(popularMovies => dispatch(receivePopularMovies(popularMovies)))
+}
+
+function getBestRatedMovies() {
+    return (dispatch) => searchAPI.getBestRatedMovies()
+        .then(bestRatedMovies => dispatch(receiveBestRatedMovies(bestRatedMovies)))
+}
+
+export { searchMovies, suggest, getMovieDetails, getPopularMovies, getBestRatedMovies }

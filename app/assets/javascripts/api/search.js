@@ -10,4 +10,19 @@ function suggest(keyword) {
         .then (res => res.data)
 }
 
-export { searchByTitle, suggest };
+function getMovieDetails(id) {
+    return axios.get(`/movie/${id}`)
+        .then (res => res.data)
+}
+
+function getPopularMovies() {
+    return axios.get(`/popular`)
+        .then (res => res.data)
+}
+
+function getBestRatedMovies() {
+    return axios.get(`/bestrated`)
+        .then (res => res.data)
+}
+
+export { searchByTitle, suggest, getMovieDetails, getPopularMovies, getBestRatedMovies };

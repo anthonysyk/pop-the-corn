@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Media} from 'react-bootstrap';
-import ReactDOM from 'react-dom';
 
 let match = require('autosuggest-highlight/match');
 let parse = require('autosuggest-highlight/parse');
@@ -11,7 +10,7 @@ function renderSuggestion(suggestion, input) {
 
     return (
         <span className="suggestion-content">
-      <span className="name">
+            <span className="name">
         {
             parts.map((part, index) => {
                 const className = part.highlight ? 'highlight' : null;
@@ -21,8 +20,8 @@ function renderSuggestion(suggestion, input) {
                 );
             })
         }
-      </span>
-    </span>
+            </span>
+        </span>
     );
 }
 
