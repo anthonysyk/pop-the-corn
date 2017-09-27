@@ -61,7 +61,6 @@ class DetailComponent extends Component {
                         </div>
                     </Col>
                 </Row>
-                {console.log(movieData.movie)}
             </div>
         );
     }

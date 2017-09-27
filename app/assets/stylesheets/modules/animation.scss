@@ -1,0 +1,17 @@
+.apparition-enter {
+  opacity: 0.01;
+}
+
+.apparition-enter.apparition-enter-active {
+  opacity: 1;
+  transition: opacity 700ms ease-in;
+}
+
+.apparition-leave {
+  opacity: 1;
+}
+
+.apparition-leave.apparition-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}

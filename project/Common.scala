@@ -32,7 +32,8 @@ object Common {
     lazy val sparkVersion = "2.0.2"
     lazy val sparkDependencies = Seq(
       "org.apache.spark" %% "spark-core",
-      "org.apache.spark" %% "spark-sql"
+      "org.apache.spark" %% "spark-sql",
+      "org.apache.spark" %% "spark-mllib"
     ).map(_ % sparkVersion)
 
     lazy val shapeless = "com.chuusai" %% "shapeless" % "2.3.2"

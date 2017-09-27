@@ -37,6 +37,9 @@ lazy val spark = (project in file("spark"))
       "org.elasticsearch" % "elasticsearch-spark-20_2.11" % "5.5.1",
       "org.apache.hadoop" % "hadoop-common" % "2.7.2",
       "org.apache.hadoop" % "hadoop-mapreduce-client-core" % "2.7.2",
+      "com.quantifind" %% "wisp" % "0.0.4",
+      "edu.stanford.nlp" % "stanford-corenlp" % "3.6.0",
+      "edu.stanford.nlp" % "stanford-corenlp" % "3.6.0" classifier "models",
       csvReader
     ) ++ sparkDependencies
   )

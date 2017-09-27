@@ -11,13 +11,23 @@
   width:10px;
 }
 
+.circle-border-logo {
+  border: 1px solid $navyblue;
+  border-radius: 999rem;
+  width: 60px;
+  height: 60px;
+  padding-top: 0.7rem;
+  margin: auto;
+  background-color: $navyblue;
+}
+
 .logo {
   display: block;
   text-indent: -9999px;
-  width: 100px;
-  height: 82px;
+  width: 50px;
+  height: 41px;
   background: url(../../images/popcorn.svg) no-repeat;
-  background-size: 100px 82px;
+  background-size: 50px 41px;
   margin: auto;
 }
 
@@ -26,7 +36,7 @@
   background: url(../../images/cover1.jpg) no-repeat center fixed;
   background-size: cover;
   position: relative;
-  z-index: 0;
+  z-index: 10;
   margin: 0;
   background-position: 100% 50%;
   text-align: center;
@@ -34,14 +44,10 @@
   padding: 5rem;
 }
 
-.circle-border-logo {
-  border: 1px solid $navyblue;
-  border-radius: 999rem;
-  width: 120px;
-  height: 120px;
-  padding-top: 1.4rem;
-  margin: auto;
-  background-color: $navyblue;
+.footer {
+  text-align: center;
+  border-top: 1px solid $lightgrey;
+  padding: 2rem 0;
 }
 
 a {

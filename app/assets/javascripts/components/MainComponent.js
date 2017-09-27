@@ -7,12 +7,13 @@ import {Row, Col} from 'react-bootstrap';
 import {Link} from 'react-router-dom'
 import HeaderComponent from './HeaderComponent';
 import HomeComponent from './HomeComponent';
+import FooterComponent from './FooterComponent';
 
 @withRouter
 @connect(
     state => ({
         suggestionsData: state.suggestionsData,
-        movieData: state.movieData,
+        moviesData: state.moviesData
     })
 )
 
@@ -28,7 +29,7 @@ class MainComponent extends Component {
     }
 
     render() {
-        const {dispatch, suggestionsData, children} = this.props;
+        const {dispatch, suggestionsData, moviesData, children} = this.props;
 
         function handleSubmit(keywords) {
             dispatch(searchMovies(keywords.toLowerCase()));
@@ -46,8 +47,10 @@ class MainComponent extends Component {
                             <SearchBar onSubmit={ handleSubmit } onChange={ handleSuggest }
                                        suggestions={ suggestionsData.suggestions }/>
                         </HeaderComponent>
-                        <HomeComponent data={suggestionsData}/>
+                        { window.location.hash === "#/" && moviesData.movies.length === 0 &&
+                            <HomeComponent data={suggestionsData}/>}
                         {children}
+                        <FooterComponent />
                     </div>
                 </div>
             </div>

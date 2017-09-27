@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Media} from 'react-bootstrap';
+import match from 'autosuggest-highlight/match'
+import parse from 'autosuggest-highlight/parse'
 
-let match = require('autosuggest-highlight/match');
-let parse = require('autosuggest-highlight/parse');
 
 function renderSuggestion(suggestion, input) {
     const matches = match(suggestion, input);

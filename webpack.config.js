@@ -35,7 +35,7 @@ module.exports = {
                 })
             },
             {
-                test: /\.(eot|svg|ttf|woff|woff2|jpg)$/,
+                test: /\.(eot|svg|ttf|woff|woff2|jpg|gif)$/,
                 use: [
                     {
                         loader: 'file-loader',
@@ -49,6 +49,7 @@ module.exports = {
         ]
     },
     plugins: [extractSass],
+    devtool: 'eval',
     devServer: {
         compress: true,
         proxy: {
