@@ -33,7 +33,6 @@ object WebServer {
             parameter('q.as[String]) { q =>
               println(s"Search de $q")
               val results = ApiController.searchMovie(q)
-              //            complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, s"$results"))
               onComplete(results) {
                 case Success(result) => complete(result)
                 case Failure(ex) => complete(StatusCodes.InternalServerError, s"$ex")
