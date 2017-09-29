@@ -30,7 +30,7 @@ lazy val indexer = (project in file("indexer"))
   )
   .dependsOn(libraries)
 
-lazy val spark = (project in file("spark"))
+lazy val mlapi = (project in file("mlapi"))
   .settings(Common.settings: _*)
   .settings(
     libraryDependencies ++= Seq(
@@ -40,6 +40,7 @@ lazy val spark = (project in file("spark"))
       "com.quantifind" %% "wisp" % "0.0.4",
       "edu.stanford.nlp" % "stanford-corenlp" % "3.6.0",
       "edu.stanford.nlp" % "stanford-corenlp" % "3.6.0" classifier "models",
+      "org.sangria-graphql" %% "sangria" % "1.3.0"
       csvReader
     ) ++ sparkDependencies
   )

@@ -7,6 +7,7 @@ Side-Project to apply what I learned
 
 Data
 ----------
+
 ###Content-Based Recommendation
 
  - Natural Language Processing (NLP)

@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
 import SearchBar from './search/SearchBar';
-import {searchMovies, suggest, getPopularMovies, getBestRatedMovies} from '../actions/search';
+import {searchMovies, suggest, getPopularMovies, getBestRatedMovies, getPopularByGenre} from '../actions/search';
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router'
-import {Row, Col} from 'react-bootstrap';
-import {Link} from 'react-router-dom'
 import HeaderComponent from './HeaderComponent';
 import HomeComponent from './HomeComponent';
 import FooterComponent from './FooterComponent';
@@ -26,6 +24,7 @@ class MainComponent extends Component {
     componentWillMount() {
         this.props.dispatch(getPopularMovies());
         this.props.dispatch(getBestRatedMovies());
+        this.props.dispatch(getPopularByGenre());
     }
 
     render() {

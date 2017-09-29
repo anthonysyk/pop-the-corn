@@ -63,11 +63,14 @@ class SliderComponent extends Component {
                             </div>
                         }</Motion>
                 </div>
-                <div className="right-arrow">
-                    <i className="fa fa-chevron-right" aria-hidden="true"
-                       onClick={() => this.slideRight()}
-                    />
-                </div>
+                {console.log (movies.length)}
+                { this.state.position < movies.length - 1 && movies.length > 6 &&
+                    <div className="right-arrow">
+                        <i className="fa fa-chevron-right" aria-hidden="true"
+                           onClick={() => this.slideRight()}
+                        />
+                    </div>
+                }
             </div>
         );
     }

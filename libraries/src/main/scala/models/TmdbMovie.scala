@@ -1,32 +1,32 @@
 package models
 
 case class TmdbMovie(
-                          adult: Option[Boolean],
-                          backdrop_path: Option[String],
-                          belongs_to_collection: Option[BelongsToCollection],
-                          budget: Option[Double],
-                          genres: Seq[Genre] = Nil,
-                          homepage: Option[String],
-                          id: Option[Int],
-                          imdb_id: Option[String],
-                          original_language: Option[String],
-                          original_title: Option[String],
-                          overview: Option[String],
-                          popularity: Option[Double],
-                          poster_path: Option[String],
-                          production_companies: Seq[ProductionCompany] = Nil,
-                          production_countries: Seq[ProductionCountry] = Nil,
-                          release_date: Option[String],
-                          revenue: Option[Int],
-                          runtime: Option[Int],
-                          spoken_languages: Seq[SpokenLanguage] = Nil,
-                          status: Option[String],
-                          tagline: Option[String],
-                          title: Option[String],
-                          video: Option[Boolean],
-                          vote_average: Option[Double],
-                          vote_count: Option[Int]
-                        ) {
+                      adult: Option[Boolean],
+                      backdrop_path: Option[String],
+                      belongs_to_collection: Option[BelongsToCollection],
+                      budget: Option[Double],
+                      genres: Seq[Genre] = Nil,
+                      homepage: Option[String],
+                      id: Option[Int],
+                      imdb_id: Option[String],
+                      original_language: Option[String],
+                      original_title: Option[String],
+                      overview: Option[String],
+                      popularity: Option[Double],
+                      poster_path: Option[String],
+                      production_companies: Seq[ProductionCompany] = Nil,
+                      production_countries: Seq[ProductionCountry] = Nil,
+                      release_date: Option[String],
+                      revenue: Option[Int],
+                      runtime: Option[Int],
+                      spoken_languages: Seq[SpokenLanguage] = Nil,
+                      status: Option[String],
+                      tagline: Option[String],
+                      title: Option[String],
+                      video: Option[Boolean],
+                      vote_average: Option[Double],
+                      vote_count: Option[Int]
+                    ) {
   lazy val poster_url: Option[String] = poster_path.map(url => "https://image.tmdb.org/t/p/w1280" + url)
   lazy val backdrop_url: Option[String] = backdrop_path.map(url => "https://image.tmdb.org/t/p/w1280" + url)
 
@@ -59,6 +59,9 @@ case class Genre(
                   name: String
                 )
 
+object Genre extends Enumeration {
+  val Drama, Comedy, Documentary, Thriller, Horror, Romance, Action, Animation, Crime, Family, ScienceFiction, Adventure = Value
+}
 
 case class ProductionCompany(
                               name: String,

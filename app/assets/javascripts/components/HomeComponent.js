@@ -21,6 +21,36 @@ class HomeComponent extends Component {
                                          movies={data.bestRatedMovies}/>
                     </Col>
                 </Row>
+                <Row className="slider-row">
+                    <Col md={12} xs={12}>
+                        <SliderComponent title="Comedy"
+                                         movies={data.popularByGenre.Comedy}/>
+                    </Col>
+                </Row>
+                <Row className="slider-row">
+                    <Col md={12} xs={12}>
+                        <SliderComponent title="Family"
+                                         movies={data.popularByGenre.Family}/>
+                    </Col>
+                </Row>
+                <Row className="slider-row">
+                    <Col md={12} xs={12}>
+                        <SliderComponent title="Drama"
+                                         movies={data.popularByGenre.Drama}/>
+                    </Col>
+                </Row>
+                <Row className="slider-row">
+                    <Col md={12} xs={12}>
+                        <SliderComponent title="Thriller"
+                                         movies={data.popularByGenre.Thriller}/>
+                    </Col>
+                </Row>
+                <Row className="slider-row">
+                    <Col md={12} xs={12}>
+                        <SliderComponent title="Documentary"
+                                         movies={data.popularByGenre.Documentary}/>
+                    </Col>
+                </Row>
             </div>
         );
     }

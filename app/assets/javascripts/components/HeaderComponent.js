@@ -2,9 +2,10 @@ import React, {Component} from 'react';
 import {getPopularMovies} from '../actions/search';
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router'
-import {Row, Col} from 'react-bootstrap';
+import {Row, Col, Button} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import NavbarComponent from './NavbarComponent';
 
 
 @withRouter
@@ -34,6 +35,7 @@ class HeaderComponent extends Component {
 
         return (
             <div className="popthecorn-header" style={movieData.movie.backdrop && divImage}>
+                <NavbarComponent />
                 <Row>
                     <div className="main-title__white">
                         <a href="/"><h1>&nbsp;&nbsp;Pop the corn</h1></a>
@@ -62,6 +64,11 @@ class HeaderComponent extends Component {
                                 </ul>
                             </div>
                         </ReactCSSTransitionGroup>
+                    </Col>
+                </Row>
+                <Row className="padding-top">
+                    <Col xs={12} md={12}>
+                        <Button bsSize="large" bsStyle="success">Get Me a Movie !</Button>
                     </Col>
                 </Row>
             </div>

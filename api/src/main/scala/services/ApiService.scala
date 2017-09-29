@@ -13,6 +13,7 @@ import io.circe.generic.auto._
 import io.circe.parser._
 import io.circe.syntax._
 import org.elasticsearch.search.sort.SortOrder
+import services.ApiService.{client, field, parseSearchResponseWithHits, search}
 
 import scala.util.{Failure, Success}
 
@@ -69,9 +70,9 @@ object ApiService extends EsClient {
     parseSearchResponseWithHits[TmdbMovie](searchResponse.toString).results.headOption.map(MovieDetails.fromTmdbMovie)
   }
 
-  def getPopularMovies: Future[Seq[MovieDetails]] = {
+  def getPopularMovies(limit: Int): Future[Seq[MovieDetails]] = {
     client execute {
-      search in MovieIndexDefinition.IndexName -> MovieIndexDefinition.TypeName sort (field sort "popularity" order SortOrder.DESC) limit 50
+      search in MovieIndexDefinition.IndexName -> MovieIndexDefinition.TypeName sort (field sort "popularity" order SortOrder.DESC) limit limit
     }
   }.map { searchResponse =>
     parseSearchResponseWithHits[TmdbMovie](searchResponse.toString).results.map(MovieDetails.fromTmdbMovie)
@@ -80,10 +81,59 @@ object ApiService extends EsClient {
   def getBestRatedMovies: Future[Seq[MovieDetails]] = {
     client execute {
       search in MovieIndexDefinition.IndexName -> MovieIndexDefinition.TypeName sort(field sort "vote_count" order SortOrder.DESC, field sort "vote_average" order SortOrder.DESC) limit
-      50
+        50
     }
   }.map { searchResponse =>
     parseSearchResponseWithHits[TmdbMovie](searchResponse.toString).results.map(MovieDetails.fromTmdbMovie)
+  }
+
+}
+
+
+object ExploreES extends EsClient {
+
+  def main(args: Array[String]): Unit = {
+
+    val typesOfGenres = {
+      client execute {
+        search in MovieIndexDefinition.IndexName -> MovieIndexDefinition.TypeName query matchAllQuery limit 100000
+      }
+    }.map { searchResponse =>
+      parseSearchResponseWithHits[TmdbMovie](searchResponse.toString).results.map(MovieDetails.fromTmdbMovie)
+        .flatMap(_.genres.split(" "))
+        .map(genre => genre -> 1)
+        .groupBy(_._1)
+        .mapValues(_.map(_._2).sum)
+        .toSeq
+        .sortWith((a, b) => a._2 > b._2)
+    }.await
+
+//    (Drama,3645)
+//    (,3213)
+//    (Comedy,2314)
+//    (Documentary,2170)
+//    (Thriller,1244)
+//    (Horror,1012)
+//    (Romance,951)
+//    (Action,799)
+//    (Animation,572)
+//    (Crime,501)
+//    (Family,462)
+//    (Science,456)
+//    (Fiction,456)
+//    (Adventure,447)
+//    (Music,436)
+//    (Mystery,360)
+//    (Fantasy,315)
+//    (Movie,257)
+//    (TV,257)
+//    (History,214)
+//    (War,128)
+//    (Western,54)
+//    (Foreign,22)
+
+    typesOfGenres.foreach(println)
+
   }
 
 }

@@ -25,4 +25,9 @@ function getBestRatedMovies() {
         .then (res => res.data)
 }
 
-export { searchByTitle, suggest, getMovieDetails, getPopularMovies, getBestRatedMovies };
+function getPopularByGenre() {
+    return axios.get(`/popularByGenre`)
+        .then (res => res.data)
+}
+
+export { searchByTitle, suggest, getMovieDetails, getPopularMovies, getBestRatedMovies, getPopularByGenre };

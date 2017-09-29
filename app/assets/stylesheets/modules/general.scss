@@ -31,6 +31,14 @@
   margin: auto;
 }
 
+.navbar-container {
+  width: 100%;
+  position: fixed;
+  z-index: 15;
+  top: 0;
+  left: 0;
+}
+
 .popthecorn-header {
   border-bottom: 1px solid $lightgrey;
   background: url(../../images/cover1.jpg) no-repeat center fixed;

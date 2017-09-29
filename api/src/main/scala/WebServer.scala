@@ -85,6 +85,16 @@ object WebServer {
               case Failure(ex) => complete(StatusCodes.InternalServerError, s"$ex")
             }
           }
+        } ~
+        path("popularByGenre") {
+          get {
+            println(s"Récupération des films populaires par Genre")
+            val results = ApiController.getPopularMoviesByGenre()
+            onComplete(results) {
+              case Success(result) => complete(result)
+              case Failure(ex) => complete(StatusCodes.InternalServerError, s"$ex")
+            }
+          }
         }
 
     val bindingFuture = Http().bindAndHandle(route, "localhost", 9000)
