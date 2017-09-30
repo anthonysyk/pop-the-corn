@@ -36,6 +36,6 @@ val mlapi = Project(id = "mlapi", base = file("."))
 
 packSettings
 
-packResourceDir ++= Map(baseDirectory.value / "mlapi/src/main/resources" -> "resources")
+packResourceDir ++= Map(baseDirectory.value / "src/main/resources" -> "resources")
 
 packMain := Map("start-exploit-tfidf" -> "nlp.ExploitTFIDF")
