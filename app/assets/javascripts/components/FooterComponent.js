@@ -10,7 +10,7 @@ class FooterComponent extends Component {
         return (
           <div className="footer">
               <span className="footer-title">Pop the corn</span>
-              <a href="/"><div className="circle-border-logo"><i className="logo"/></div></a>
+              <div className="circle-border-logo"><a href="/"><i className="logo"/></a></div>
           </div>
         );
     }

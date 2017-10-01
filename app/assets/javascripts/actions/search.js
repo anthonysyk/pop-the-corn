@@ -1,4 +1,4 @@
-import {LOAD_MOVIES, RECEIVE_MOVIES, ERROR_RECEIVE_MOVIES, RECEIVE_SUGGESTIONS, RECEIVE_MOVIE_DETAILS, RECEIVE_POPULAR_MOVIES, RECEIVE_BEST_RATED_MOVIES, RECEIVE_POPULAR_BY_GENRE} from './types';
+import {LOAD_MOVIES, RECEIVE_MOVIES, ERROR_RECEIVE_MOVIES, RECEIVE_SUGGESTIONS, RECEIVE_MOVIE_DETAILS, RECEIVE_POPULAR_MOVIES, RECEIVE_BEST_RATED_MOVIES, RECEIVE_POPULAR_BY_GENRE, RECEIVE_TFIDF_MOVIES} from './types';
 
 import * as searchAPI  from '../api/search';
 
@@ -52,6 +52,13 @@ function receivePopularByGenre(popularByGenre) {
     }
 }
 
+function receiveTfIdf(tfidfMovies) {
+    return {
+        type: RECEIVE_TFIDF_MOVIES,
+        tfidfMovies: tfidfMovies
+    }
+}
+
 function error(message) {
     return {
         type: ERROR_RECEIVE_MOVIES,
@@ -94,4 +101,8 @@ function getPopularByGenre() {
         .then(popularByGenre => dispatch(receivePopularByGenre(popularByGenre)))
 }
 
-export { searchMovies, suggest, getMovieDetails, getPopularMovies, getBestRatedMovies, getPopularByGenre }
+function getSimilarMoviesTfidf(id) {
+    return (dispatch) => searchAPI.getSimilarMoviesTfidf(id)
+        .then(movie => dispatch(receiveTfIdf(movie)))
+}
+export { searchMovies, suggest, getMovieDetails, getPopularMovies, getBestRatedMovies, getPopularByGenre, getSimilarMoviesTfidf }

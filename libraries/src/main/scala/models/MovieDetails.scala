@@ -13,7 +13,8 @@ case class MovieDetails(
                          homepage: Option[String],
                          genres: String,
                          overview: Option[String],
-                         tagline: Option[String]
+                         tagline: Option[String],
+                         tfidfSimilarity: Option[Double] = None
                        )
 
 object MovieDetails {

@@ -12,8 +12,8 @@ class SearchResult extends Component {
         return (
             <div className="search-result-section">
                 {
-                    movies.map((movie, index) =>
-                        <MovieResult movie={movie} key={index}/>
+                    movies.map((movie, key) =>
+                        <MovieResult movie={movie} key={key}/>
                     )
                 }
             </div>

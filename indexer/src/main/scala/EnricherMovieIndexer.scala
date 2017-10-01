@@ -2,14 +2,11 @@ import akka.actor.{ActorRef, Props}
 import io.circe._
 import io.circe.generic.auto._
 import io.circe.parser._
-import main.scala.WebClient
 import models.{Batch, DiscoveredMovie, TmdbMovie}
-import ptc.libraries.{AkkaHelper, DiscoveredMovieIndexDefinition, EsClient, MovieIndexDefinition}
+import ptc.libraries._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-
-// TODO: Rajouter des tests mokkés pour les indexers
 
 object EnricherMovieIndexer extends EsClient {
 

@@ -9,6 +9,13 @@ lazy val elastic4sVersion = "1.7.0"
 
 lazy val csvReader = "com.github.tototoshi" %% "scala-csv" % "1.3.4"
 
+val akkaVersion = "2.5.4"
+val akkaHttpVersion = "10.0.10"
+libraryDependencies += "com.typesafe.akka" %% "akka-http"   % akkaHttpVersion
+libraryDependencies += "com.typesafe.akka" %% "akka-actor"  % akkaVersion
+libraryDependencies += "com.typesafe.akka" %% "akka-stream" % akkaVersion
+libraryDependencies += "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttpVersion
+
 lazy val sparkVersion = "2.0.2"
 lazy val sparkDependencies = Seq(
   "org.apache.spark" %% "spark-core",
@@ -29,6 +36,7 @@ val mlapi = Project(id = "mlapi", base = file("."))
       "edu.stanford.nlp" % "stanford-corenlp" % "3.6.0",
       "edu.stanford.nlp" % "stanford-corenlp" % "3.6.0" classifier "models",
       "org.sangria-graphql" %% "sangria" % "1.3.0",
+      "org.sangria-graphql" %% "sangria-spray-json" % "1.0.0",
       csvReader
     ) ++ sparkDependencies
   )

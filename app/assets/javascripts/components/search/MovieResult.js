@@ -39,12 +39,12 @@ const MovieResult = ({movie}) => (
                             </Col>
                         </Row>
                         <Row>
-                            <Col xs={8} md={10}></Col>
+                            <Col xs={8} md={10}/>
                             <Col xs={4} md={2}>
-                                <ReactStars className="rating-stars" value={movie.note / 2} count={5}
+                                <ReactStars className="rating-stars" value={movie.vote_average / 2} count={5}
                                             onChange={ ratingChanged }
                                             size={24} color2={'#ffd700'}/>
-                                <span className="small-info">{movie.votes} votes</span>
+                                <span className="small-info">{movie.vote_count} votes</span>
                             </Col>
                         </Row>
                     </Col>

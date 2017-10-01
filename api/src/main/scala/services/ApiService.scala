@@ -14,6 +14,7 @@ import io.circe.parser._
 import io.circe.syntax._
 import org.elasticsearch.search.sort.SortOrder
 import services.ApiService.{client, field, parseSearchResponseWithHits, search}
+import services.ExploreES.{client, search, termsQuery}
 
 import scala.util.{Failure, Success}
 
@@ -87,6 +88,16 @@ object ApiService extends EsClient {
     parseSearchResponseWithHits[TmdbMovie](searchResponse.toString).results.map(MovieDetails.fromTmdbMovie)
   }
 
+  def getMovies(ids: Seq[String]): Future[Seq[MovieDetails]] = {
+    client execute {
+      search in MovieIndexDefinition.IndexName -> MovieIndexDefinition.TypeName query {
+        termsQuery("_id", ids: _*)
+      } limit 100
+    }
+  }.map { searchResponse =>
+    parseSearchResponseWithHits[TmdbMovie](searchResponse.toString).results.map(MovieDetails.fromTmdbMovie)
+  }
+
 }
 
 
@@ -108,31 +119,31 @@ object ExploreES extends EsClient {
         .sortWith((a, b) => a._2 > b._2)
     }.await
 
-//    (Drama,3645)
-//    (,3213)
-//    (Comedy,2314)
-//    (Documentary,2170)
-//    (Thriller,1244)
-//    (Horror,1012)
-//    (Romance,951)
-//    (Action,799)
-//    (Animation,572)
-//    (Crime,501)
-//    (Family,462)
-//    (Science,456)
-//    (Fiction,456)
-//    (Adventure,447)
-//    (Music,436)
-//    (Mystery,360)
-//    (Fantasy,315)
-//    (Movie,257)
-//    (TV,257)
-//    (History,214)
-//    (War,128)
-//    (Western,54)
-//    (Foreign,22)
+    //    (Drama,3645)
+    //    (,3213)
+    //    (Comedy,2314)
+    //    (Documentary,2170)
+    //    (Thriller,1244)
+    //    (Horror,1012)
+    //    (Romance,951)
+    //    (Action,799)
+    //    (Animation,572)
+    //    (Crime,501)
+    //    (Family,462)
+    //    (Science,456)
+    //    (Fiction,456)
+    //    (Adventure,447)
+    //    (Music,436)
+    //    (Mystery,360)
+    //    (Fantasy,315)
+    //    (Movie,257)
+    //    (TV,257)
+    //    (History,214)
+    //    (War,128)
+    //    (Western,54)
+    //    (Foreign,22)
 
-    typesOfGenres.foreach(println)
+    //    typesOfGenres.foreach(println)
 
   }
 

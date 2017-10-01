@@ -58,7 +58,7 @@ export class SuggestComponent extends Component {
                 {input &&
                 <ul className="no-padding">
                     {suggestions.map((suggestion, index) =>
-                        <li key={index} onClick={() => applySuggestion(suggestion.title)}>
+                        <li key={index} onClick={() => applySuggestion(suggestion.title, suggestion.id)}>
                             <Media>
                                 <Media.Left align="middle">
                                     <img height={60} width={45} src={suggestion.url}/>

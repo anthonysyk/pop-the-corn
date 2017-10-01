@@ -19,11 +19,6 @@ object TFIDF {
 
   case class Article(id: Int, words: Seq[String], score: Seq[(String, Double)] = Nil)
 
-
-  def getMovieTermDictionnary = {
-
-  }
-
   def preprocessData(bagsOfWords: RDD[Array[String]], dictionnaryBroadcast: Broadcast[Array[String]]) = {
 
     val numberOfArticles = bagsOfWords.count

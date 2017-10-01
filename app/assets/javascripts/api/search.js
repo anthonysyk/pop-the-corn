@@ -30,4 +30,9 @@ function getPopularByGenre() {
         .then (res => res.data)
 }
 
-export { searchByTitle, suggest, getMovieDetails, getPopularMovies, getBestRatedMovies, getPopularByGenre };
+function getSimilarMoviesTfidf(id) {
+    return axios.get(`/tfidf/${id}`)
+        .then(res => res.data)
+}
+
+export { searchByTitle, suggest, getMovieDetails, getPopularMovies, getBestRatedMovies, getPopularByGenre, getSimilarMoviesTfidf };

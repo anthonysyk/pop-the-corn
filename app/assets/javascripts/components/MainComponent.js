@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import SearchBar from './search/SearchBar';
-import {searchMovies, suggest, getPopularMovies, getBestRatedMovies, getPopularByGenre} from '../actions/search';
+import {getPopularMovies, getBestRatedMovies, getPopularByGenre} from '../actions/search';
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router'
 import HeaderComponent from './HeaderComponent';
@@ -28,23 +28,14 @@ class MainComponent extends Component {
     }
 
     render() {
-        const {dispatch, suggestionsData, moviesData, children} = this.props;
-
-        function handleSubmit(keywords) {
-            dispatch(searchMovies(keywords.toLowerCase()));
-        }
-
-        function handleSuggest(keywords) {
-            dispatch(suggest(keywords))
-        }
+        const {suggestionsData, moviesData, children} = this.props;
 
         return (
             <div id="wrapper">
                 <div id="page-wrapper">
                     <div className="container-fluid">
                         <HeaderComponent>
-                            <SearchBar onSubmit={ handleSubmit } onChange={ handleSuggest }
-                                       suggestions={ suggestionsData.suggestions }/>
+                            <SearchBar />
                         </HeaderComponent>
                         { window.location.hash === "#/" && moviesData.movies.length === 0 &&
                             <HomeComponent data={suggestionsData}/>}

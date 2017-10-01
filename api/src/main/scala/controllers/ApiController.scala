@@ -33,8 +33,8 @@ object ApiController {
           "poster" -> movie.poster_url.asJson,
           "overview" -> movie.overview.asJson,
           "genres" -> movie.genres.map(_.name).mkString(" ").asJson,
-          "votes" -> movie.vote_count.asJson,
-          "note" -> movie.vote_average.asJson
+          "vote_count" -> movie.vote_count.asJson,
+          "vote_average" -> movie.vote_average.asJson
         )
       }
 

@@ -6,8 +6,9 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{Sink, Source}
-import controllers.ApiController
+import controllers.{ApiController, GraphQLController}
 
+import scala.concurrent.Future
 import scala.io.StdIn
 import scala.util.{Failure, Success}
 
@@ -94,7 +95,21 @@ object WebServer {
               case Failure(ex) => complete(StatusCodes.InternalServerError, s"$ex")
             }
           }
+        } ~
+        pathPrefix("tfidf") {
+          pathEnd {
+            complete("/tfidf")
+          } ~
+            path(IntNumber) { id =>
+              println(s"Details du film $id")
+              val results = GraphQLController.getMovieSimilaritiesById(id)
+              onComplete(results) {
+                case Success(result) => complete(result)
+                case Failure(ex) => complete(StatusCodes.InternalServerError, s"$ex")
+              }
+            }
         }
+
 
     val bindingFuture = Http().bindAndHandle(route, "localhost", 9000)
 

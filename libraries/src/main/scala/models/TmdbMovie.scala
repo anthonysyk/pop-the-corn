@@ -25,7 +25,8 @@ case class TmdbMovie(
                       title: Option[String],
                       video: Option[Boolean],
                       vote_average: Option[Double],
-                      vote_count: Option[Int]
+                      vote_count: Option[Int],
+                      tfidfSimilarity: Option[Double] = None
                     ) {
   lazy val poster_url: Option[String] = poster_path.map(url => "https://image.tmdb.org/t/p/w1280" + url)
   lazy val backdrop_url: Option[String] = backdrop_path.map(url => "https://image.tmdb.org/t/p/w1280" + url)
