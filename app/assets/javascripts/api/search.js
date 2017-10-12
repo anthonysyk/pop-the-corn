@@ -35,4 +35,14 @@ function getSimilarMoviesTfidf(id) {
         .then(res => res.data)
 }
 
-export { searchByTitle, suggest, getMovieDetails, getPopularMovies, getBestRatedMovies, getPopularByGenre, getSimilarMoviesTfidf };
+function getQuickRatingMovies(){
+    return axios.get(`/quickrating`)
+        .then(res => res.data)
+}
+
+function sendQuickRatingResult(result){
+    return axios.post(`/quickrating`, result)
+        .then(res => res.data)
+}
+
+export { searchByTitle, suggest, getMovieDetails, getPopularMovies, getBestRatedMovies, getPopularByGenre, getSimilarMoviesTfidf, getQuickRatingMovies, sendQuickRatingResult };

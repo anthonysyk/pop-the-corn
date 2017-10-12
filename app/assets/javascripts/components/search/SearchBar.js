@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, FormControl, Row, Col} from 'react-bootstrap';
 import {SuggestComponent} from './SuggestComponent';
-import {searchMovies, suggest, getSimilarMoviesTfidf} from '../../actions/search';
+import {searchMovies, suggest, getSimilarMoviesTfidf} from '../../actions/actions';
 import ReactDOM from 'react-dom';
 import {withRouter} from 'react-router'
 import {connect} from 'react-redux'

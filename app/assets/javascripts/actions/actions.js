@@ -1,4 +1,4 @@
-import {LOAD_MOVIES, RECEIVE_MOVIES, ERROR_RECEIVE_MOVIES, RECEIVE_SUGGESTIONS, RECEIVE_MOVIE_DETAILS, RECEIVE_POPULAR_MOVIES, RECEIVE_BEST_RATED_MOVIES, RECEIVE_POPULAR_BY_GENRE, RECEIVE_TFIDF_MOVIES} from './types';
+import {RECEIVE_RECOMMENDATIONS, LOAD_MOVIES, RECEIVE_MOVIES, ERROR_RECEIVE_MOVIES, RECEIVE_SUGGESTIONS, RECEIVE_MOVIE_DETAILS, RECEIVE_POPULAR_MOVIES, RECEIVE_BEST_RATED_MOVIES, RECEIVE_POPULAR_BY_GENRE, RECEIVE_TFIDF_MOVIES, RECEIVE_QUICK_RATING_MOVIES} from './types';
 
 import * as searchAPI  from '../api/search';
 
@@ -59,6 +59,20 @@ function receiveTfIdf(tfidfMovies) {
     }
 }
 
+function receiveQuickRatingMovies(quickRatingMovies) {
+    return {
+        type: RECEIVE_QUICK_RATING_MOVIES,
+        quickRatingMovies: quickRatingMovies
+    }
+}
+
+function receiveRecommendations(recommendations) {
+    return {
+        type: RECEIVE_RECOMMENDATIONS,
+        userProfileMovies: recommendations
+    }
+}
+
 function error(message) {
     return {
         type: ERROR_RECEIVE_MOVIES,
@@ -105,4 +119,15 @@ function getSimilarMoviesTfidf(id) {
     return (dispatch) => searchAPI.getSimilarMoviesTfidf(id)
         .then(movie => dispatch(receiveTfIdf(movie)))
 }
-export { searchMovies, suggest, getMovieDetails, getPopularMovies, getBestRatedMovies, getPopularByGenre, getSimilarMoviesTfidf }
+
+function getQuickRatingMovies() {
+    return (dispatch) => searchAPI.getQuickRatingMovies()
+        .then(movie => dispatch(receiveQuickRatingMovies(movie)))
+}
+
+function sendQuickRatingResult(result) {
+    return (dispatch) => searchAPI.sendQuickRatingResult(result)
+        .then(recommendations => dispatch(receiveRecommendations(recommendations)))
+}
+
+export { searchMovies, suggest, getMovieDetails, getPopularMovies, getBestRatedMovies, getPopularByGenre, getSimilarMoviesTfidf, getQuickRatingMovies, sendQuickRatingResult }

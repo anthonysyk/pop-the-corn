@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
-import {getMovieDetails} from '../../actions/search';
+import {getMovieDetails} from '../../actions/actions';
 import {Image, Row, Col} from 'react-bootstrap';
 import no_image from '../../../images/no-image.svg';
 import { withRouter } from 'react-router'

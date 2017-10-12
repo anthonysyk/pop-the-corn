@@ -11,3 +11,110 @@
   border-top: none;
 
 }
+
+.quick-rating {
+  text-align:  center;
+}
+
+.quick-rating-image {
+  width: 25%;
+  margin: auto;
+  .poster-name {
+    background: linear-gradient(to bottom, transparent 0, rgba(0, 0, 0, 0.7) 50%, #000 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#000000', GradientType=0 );
+    position: absolute;
+    width: 100%;
+    padding: 200px 20px 45px;
+    bottom: 0;
+    left: 0;
+    font-weight: 400;
+    text-align: center;
+    font-size: 24px;
+    color: #ccc;
+    height: 72%;
+  }
+}
+
+.recommendation-container {
+  height: 15rem;
+  display: inline-table;
+}
+
+.recommendation-results {
+  padding: 5rem;
+}
+
+.recommendation-item {
+  padding-left: 8px;
+  padding-right: 8px;
+  margin: 2rem 0;
+  display: inline-block;
+  vertical-align: top;
+  white-space: normal;
+  position: relative;
+  img {
+    height: 250px;
+  }
+}
+
+.button {
+  &:hover{
+    transform: scale(1.1);
+    z-index: 2;
+  }
+  text-align: center;
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  padding: 4rem 0;
+  font-weight: 500;
+  font-size: 14px;
+  color: #fff;
+  border: 3px solid #fff;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  cursor: pointer;
+  z-index: 1;
+  outline: 0;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  border-radius: 56px;
+  transition: all .2s cubic-bezier(.175,.885,.32,2);
+  animation: animate-controls .2s ease-in-out;
+  transform: translatez(0);
+  transform-origin: center;
+}
+
+.button__bad {
+  @extend .button;
+  top: 68%;
+  left: 35%;
+  background-color: indianred;
+  padding: 3.2rem 0;
+}
+
+.button__meh {
+  @extend .button;
+  top: 71%;
+  left: 41.6%;
+  background-color: slategrey;
+  width: 110px;
+  height: 110px;
+}
+
+.button__okay {
+  @extend .button;
+  top: 71%;
+  left: 50%;
+  background-color: darkseagreen;
+  width: 110px;
+  height: 110px;
+}
+
+.button__good {
+  @extend .button;
+  top: 68%;
+  left: 58%;
+  background-color: forestgreen;
+  padding: 3.2rem 0;
+}

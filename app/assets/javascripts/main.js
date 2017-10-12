@@ -8,6 +8,7 @@ import {ConnectedRouter, routerMiddleware} from "react-router-redux";
 import SearchComponent from "./components/search/SearchComponent";
 import DetailComponent from "./components/details/DetailComponent";
 import RecommendationComponent from "./components/recommendation/RecommendationComponent";
+import UserProfileRecommendationComponent from "./components/recommendation/UserProfileRecommendationComponent";
 import MainComponent from "./components/MainComponent";
 import createHistory from "history/createHashHistory";
 import reducer from "./reducers/reducers";
@@ -28,6 +29,7 @@ render(
                 <Route exact path="/" component={SearchComponent}/>
                 <Route exact path="/details/:id" component={DetailComponent}/>
                 <Route exact path="/content-based" component={RecommendationComponent}/>
+                <Route exact path="/recommendations" component={UserProfileRecommendationComponent}/>
             </MainComponent>
         </ConnectedRouter>
     </Provider>

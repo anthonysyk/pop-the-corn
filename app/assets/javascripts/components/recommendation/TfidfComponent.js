@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import SearchBar from "../search/SearchBar";
-import {getSimilarMoviesTfidf} from '../../actions/search';
+import {getSimilarMoviesTfidf} from '../../actions/actions';
 import {Table} from 'react-bootstrap';
 import {connect} from 'react-redux'
 

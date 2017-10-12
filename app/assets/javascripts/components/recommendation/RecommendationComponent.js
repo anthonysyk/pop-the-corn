@@ -1,6 +1,15 @@
 import React, {Component} from "react";
 import {Nav, NavItem} from "react-bootstrap";
 import TfidfComponent from './TfidfComponent';
+import {connect} from 'react-redux';
+import QuickRatingComponent from "./QuickRatingComponent";
+import UserProfileRecommendationComponent from "./UserProfileRecommendationComponent";
+
+@connect(
+    state => ({
+        machineLearningData: state.machineLearningData
+    })
+)
 
 class RecommendationComponent extends Component {
 
@@ -30,6 +39,15 @@ class RecommendationComponent extends Component {
                     {
                         this.state.activeKey === "1" &&
                         <TfidfComponent />
+                    }
+                    {
+                        this.state.activeKey === "2" &&
+                        <div>
+                            {
+                                this.props.machineLearningData.userProfileMovies.length !== 0 ?
+                                    <UserProfileRecommendationComponent/> : <QuickRatingComponent testFeature="true"/>
+                            }
+                        </div>
                     }
                     {
                         this.state.activeKey === "3" &&

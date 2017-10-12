@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
-import {getPopularMovies} from '../actions/search';
+import {getPopularMovies} from '../actions/actions';
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router'
-import {Row, Col, Button} from 'react-bootstrap';
+import {Row, Col} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import NavbarComponent from './NavbarComponent';
+import QuickRatingComponent from "./recommendation/QuickRatingComponent";
 
 
 @withRouter
@@ -68,7 +69,7 @@ class HeaderComponent extends Component {
                 </Row>
                 <Row className="padding-top">
                     <Col xs={12} md={12}>
-                        <Button bsSize="large" bsStyle="success">Get Me a Movie !</Button>
+                        <QuickRatingComponent/>
                     </Col>
                 </Row>
             </div>
