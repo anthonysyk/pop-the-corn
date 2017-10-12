@@ -8,13 +8,15 @@ Side-Project to apply what I learned
 Data
 ----------
 
-###Content-Based Recommendation
+### Content-Based Recommendation
 
  - Natural Language Processing (NLP)
 	 - TF-IDF
 	 - Latent Dirichlet Allocation (LDA)
- - Clustering
-	 - ...
+ - Users Preferences
+    - Features to consider : Genres, Actors, Directors, etc ... (For the moment I only use Genre)
+    - Based on the user ratings of several movie profiles, we establish a user profile
+    - Cosine Similarity to find the similarity between user profile and movie profile
 
 ### Collaborative Recommendation
 
@@ -30,6 +32,7 @@ Backend
 	 - ==> System based on a supervisor sending batch of movies to some workers to enrich the movie and indexing it
  - Spark : Creating autocomplete index from movie titles in ES to ES
 	 - ==> Backpressure with ```.coalesce(20)```
+ - GraphQL : Use to query the machine learning API with Sangria
 
 ----------
 

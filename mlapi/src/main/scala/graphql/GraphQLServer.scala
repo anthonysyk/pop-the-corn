@@ -9,6 +9,8 @@ import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.server._
 import akka.stream.ActorMaterializer
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
+import contentbased.ContentBasedRecommendation
+import models.UserProfile
 import sangria.parser.QueryParser
 import sangria.execution.{ErrorWithResolver, Executor, QueryAnalysisError}
 import sangria.marshalling.sprayJson._
@@ -19,6 +21,11 @@ import scala.util.{Failure, Success}
 object GraphQLServer {
 
   def main(args: Array[String]): Unit = {
+
+    import io.circe._
+    import io.circe.generic.auto._
+    import io.circe.parser._
+    import io.circe.syntax._
 
     val repo = State.createState()
 
@@ -65,7 +72,15 @@ object GraphQLServer {
         }
       } ~ get {
         getFromFile(s"src/main/resources/graphql.html")
+      } ~
+    path("profile") {
+      post {
+        entity(as[String]) { json =>
+          val userProfile = parse(json).right.toOption.getOrElse(Json.Null).as[UserProfile].right.toOption
+          complete(userProfile.map(ContentBasedRecommendation.computeUserProfileRecommendation).getOrElse(Nil).asJson.noSpaces)
+        }
       }
+    }
 
     Http().bindAndHandle(route, "0.0.0.0", sys.props.get("http.port").fold(4242)(_.toInt))
 

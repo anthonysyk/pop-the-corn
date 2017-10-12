@@ -14,7 +14,10 @@ case class MovieDetails(
                          genres: String,
                          overview: Option[String],
                          tagline: Option[String],
-                         tfidfSimilarity: Option[Double] = None
+                         companies: Seq[ProductionCompany],
+                         tfidfSimilarity: Option[Double] = None,
+                         sqdist: Option[Double] = None,
+                         rating: Option[Double] = None
                        )
 
 object MovieDetails {
@@ -34,7 +37,8 @@ object MovieDetails {
       homepage = homepage,
       genres = genres.map(_.name).mkString(" "),
       overview = overview,
-      tagline = tagline
+      tagline = tagline,
+      companies = production_companies
     )
   }
 

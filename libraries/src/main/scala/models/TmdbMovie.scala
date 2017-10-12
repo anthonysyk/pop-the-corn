@@ -1,5 +1,7 @@
 package models
 
+import scala.collection.immutable.ListMap
+
 case class TmdbMovie(
                       adult: Option[Boolean],
                       backdrop_path: Option[String],
@@ -61,7 +63,39 @@ case class Genre(
                 )
 
 object Genre extends Enumeration {
-  val Drama, Comedy, Documentary, Thriller, Horror, Romance, Action, Animation, Crime, Family, ScienceFiction, Adventure = Value
+  val Drama, Comedy, Documentary, Thriller, Horror, Romance, Action, Animation, Crime, Family, Adventure = Value
+
+  val ScienceFiction = Value("Science Fiction")
+
+  val genreReferential =
+    ListMap(
+      12 -> "Adventure",
+      14 -> "Fantasy",
+      16 -> "Animation",
+      18 -> "Drama",
+      27 -> "Horror",
+      28 -> "Action",
+      35 -> "Comedy",
+      36 -> "History",
+      37 -> "Western",
+      53 -> "Thriller",
+      80 -> "Crime",
+      99 -> "Documentary",
+      878 -> "Science Fiction",
+      9648 -> "Mystery",
+      10402 -> "Music",
+      10749 -> "Romance",
+      10751 -> "Family",
+      10752 -> "War",
+      10769 -> "Foreign",
+      10770 -> "TV Movie"
+    )
+
+  //  def main(args: Array[String]): Unit = {
+  //    println(ListMap(genreReferential.toSeq.sortWith(_._1 < _._1):_*)
+  //      .mapValues(toto => "\"" + toto + "\"\n" )
+  //    )
+  //  }
 }
 
 case class ProductionCompany(

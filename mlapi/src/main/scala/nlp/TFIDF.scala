@@ -19,41 +19,12 @@ object TFIDF {
 
   case class Article(id: Int, words: Seq[String], score: Seq[(String, Double)] = Nil)
 
-  def preprocessData(bagsOfWords: RDD[Array[String]], dictionnaryBroadcast: Broadcast[Array[String]]) = {
-
-    val numberOfArticles = bagsOfWords.count
-
-
-    // Frequence du term dans l'ensemble des documents
-    val inverseDocumentFrequency: RDD[(String, Double)] = bagsOfWords
-      .flatMap(article => article.filter(dictionnaryBroadcast.value.contains).distinct.map(_ -> 1))
-      .reduceByKey(_ + _)
-      .map {
-        case (termLabel, numberOfArticlesContainingTerm) =>
-          termLabel -> log(numberOfArticles / numberOfArticlesContainingTerm.toDouble)
-      }.sortBy(_._2, false)
-      .persist
-
-    // Fréquence du term dans un article
-    val termFrequencyByArticle: RDD[Seq[(String, Double)]] = bagsOfWords
-      .map { article =>
-        val numberOfWords = article.length
-        article.filter(dictionnaryBroadcast.value.contains)
-          .map(word => word -> 1)
-          .groupBy(_._1)
-          .mapValues(value => value.map(_._2).sum.toDouble / numberOfWords)
-          .toSeq
-      }
-
-
-  }
-
   import org.apache.log4j.{Level, Logger}
 
   Logger.getLogger("org").setLevel(Level.OFF)
   Logger.getLogger("akka").setLevel(Level.OFF)
 
-  val conf: SparkConf = new SparkConf().setMaster("local[*]").setAppName("LatentDirichletAllocation")
+  val conf: SparkConf = new SparkConf().setMaster("local[*]").setAppName("TFIDF")
   implicit val ss: SparkSession = SparkSession.builder().config(conf).getOrCreate()
 
   import org.elasticsearch.spark._
@@ -65,9 +36,9 @@ object TFIDF {
       .persist()
 
     // Découpage des documents en sacs de mots
-    val bagsOfWords: RDD[Article] = moviesRDD.collect{
-      case movie if movie.overview.nonEmpty && movie.id.nonEmpty =>
-        val overview: Seq[String] = movie.overview.get.toLowerCase.split("\\s")
+    val bagsOfWords: RDD[Article] = moviesRDD.collect {
+      case movie if movie.overview.nonEmpty && movie.id.nonEmpty && movie.title.nonEmpty =>
+        val overview: Seq[String] = movie.overview.get.toLowerCase.replaceAll("\\p{P}(?=\\s|$)", "").split("\\s")
           .filter(_.length > 3)
           .filter(_.forall(_.isLetter))
           .toSeq
@@ -115,7 +86,7 @@ object TFIDF {
 
     val broadcastIDF = ss.sparkContext.broadcast(inverseDocumentFrequency.collect().toSeq).value
 
-    val articlesWithTFIDF: RDD[Article] = termFrequencyByArticle.map{ article =>
+    val articlesWithTFIDF: RDD[Article] = termFrequencyByArticle.map { article =>
       val idfs: Seq[(String, Double)] = broadcastIDF.filter(idf => article.score.map(_._1).contains(idf._1))
       val tfidf: Seq[(String, Double)] = (article.score ++ idfs).groupBy(_._1).mapValues(_.map(_._2).product).toSeq.sortBy(_._2).reverse
       article.copy(score = tfidf)
