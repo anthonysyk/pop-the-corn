@@ -44,10 +44,9 @@
   border-bottom: 1px solid $lightgrey;
   background: url(../../images/cover1.jpg) no-repeat center fixed;
   background-size: cover;
-  position: relative;
+  position: inherit;
   z-index: 10;
   margin: 0;
-  background-position: 100% 50%;
   text-align: center;
   color: #fff;
   padding: 5rem;

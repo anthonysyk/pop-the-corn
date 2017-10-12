@@ -35,7 +35,8 @@ class HeaderComponent extends Component {
         };
 
         return (
-            <div className="popthecorn-header" style={movieData.movie.backdrop && divImage}>
+            <div className="popthecorn-header">
+                {/*<div className="popthecorn-header" style={movieData.movie.backdrop && divImage}>*/}
                 <NavbarComponent />
                 <Row>
                     <div className="main-title__white">
@@ -73,7 +74,8 @@ class HeaderComponent extends Component {
                     </Col>
                 </Row>
             </div>
-        );
+        )
+            ;
     }
 }
 
