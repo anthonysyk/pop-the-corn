@@ -1,6 +1,11 @@
 package services
 
+import models.{MovieDetails, UserProfile}
 import ptc.libraries.WebClient
+import io.circe._
+import io.circe.generic.auto._
+import io.circe.parser._
+import io.circe.syntax._
 
 object GraphQLService {
 
@@ -10,6 +15,15 @@ object GraphQLService {
 
     WebClient.doPost("http://localhost:4242/graphql",  content = content,  headers = Map("Content-Type" -> "application/json", "Accept-Encoding" -> "gzip"))
       .toOption
+
+  }
+
+  def getMoviesBasedOnTaste(userProfile: UserProfile): Seq[MovieDetails] = {
+
+    val response = WebClient.doPost("http://localhost:4242/profile",  content = userProfile.asJson.noSpaces,  headers = Map("Content-Type" -> "application/json", "Accept-Encoding" -> "gzip"))
+      .toOption
+
+    response.flatMap(res => parse(res).right.toOption.getOrElse(Json.Null).as[Seq[MovieDetails]].right.toOption).getOrElse(Nil)
 
   }
 

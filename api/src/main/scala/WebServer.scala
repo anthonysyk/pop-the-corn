@@ -1,12 +1,12 @@
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
-import akka.http.scaladsl.model.headers.RawHeader
 import akka.http.scaladsl.server.Directives._
-import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
-import akka.stream.scaladsl.{Sink, Source}
 import controllers.{ApiController, GraphQLController}
+import io.circe.generic.auto._
+import io.circe.syntax._
+import models.MovieDetails
 
 import scala.concurrent.Future
 import scala.io.StdIn
@@ -108,6 +108,29 @@ object WebServer {
                 case Failure(ex) => complete(StatusCodes.InternalServerError, s"$ex")
               }
             }
+        } ~
+        path("quickrating") {
+          get {
+            println(s"Récupération de films pour un quick rating")
+            val results = ApiController.getQuickRatingMovies()
+            onComplete(results) {
+              case Success(result) => complete(result)
+              case Failure(ex) => complete(StatusCodes.InternalServerError, s"$ex")
+            }
+          }
+        } ~
+        path("quickrating") {
+          post {
+            entity(as[String]) { response =>
+              val eventuallyMovies: Future[Seq[MovieDetails]] = GraphQLController.getMoviesBasedOnTaste(response)
+              onComplete(eventuallyMovies) {
+                case Success(result) =>
+                  println(result.asJson.noSpaces)
+                  complete(result.asJson.noSpaces)
+                case Failure(ex) => complete(StatusCodes.InternalServerError, s"$ex")
+              }
+            }
+          }
         }
 
 

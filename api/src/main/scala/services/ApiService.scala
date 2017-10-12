@@ -119,6 +119,15 @@ object ExploreES extends EsClient {
         .sortWith((a, b) => a._2 > b._2)
     }.await
 
+    val genreRefential = {
+      client execute {
+        search in MovieIndexDefinition.IndexName -> MovieIndexDefinition.TypeName query matchAllQuery limit 100000
+      }
+    }.map { searchResponse =>
+      parseSearchResponseWithHits[TmdbMovie](searchResponse.toString)
+        .results.flatMap(_.genres).distinct
+    }.await
+
     //    (Drama,3645)
     //    (,3213)
     //    (Comedy,2314)
@@ -143,7 +152,8 @@ object ExploreES extends EsClient {
     //    (Western,54)
     //    (Foreign,22)
 
-    //    typesOfGenres.foreach(println)
+    typesOfGenres.foreach(println)
+    genreRefential.foreach(println)
 
   }
 

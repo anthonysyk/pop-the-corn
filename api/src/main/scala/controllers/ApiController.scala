@@ -72,21 +72,28 @@ object ApiController {
   }
 
   def getPopularMoviesByGenre() = {
+
     for {
       popularMovies <- ApiService.getPopularMovies(500)
     } yield {
-      val dramaMovies = Genre.Drama.toString -> popularMovies.filter(_.genres.contains(Genre.Drama.toString)).take(20).asJson
-      val comedyMovies = Genre.Comedy.toString -> popularMovies.filter(_.genres.contains(Genre.Comedy.toString)).take(20).asJson
-      val documentaryMovies = Genre.Documentary.toString -> popularMovies.filter(_.genres.contains(Genre.Documentary.toString)).take(20).asJson
-      val thrillerMovies = Genre.Thriller.toString -> popularMovies.filter(_.genres.contains(Genre.Thriller.toString)).take(20).asJson
-      val horrorMovies = Genre.Horror.toString -> popularMovies.filter(_.genres.contains(Genre.Horror.toString)).take(20).asJson
-      val romanceMovies = Genre.Romance.toString -> popularMovies.filter(_.genres.contains(Genre.Romance.toString)).take(20).asJson
-      val actionMovies = Genre.Action.toString -> popularMovies.filter(_.genres.contains(Genre.Action.toString)).take(20).asJson
-      val familyMovies = Genre.Family.toString -> popularMovies.filter(_.genres.contains(Genre.Family.toString)).take(20).asJson
-
-      Json.fromFields(Seq(dramaMovies, comedyMovies, documentaryMovies, thrillerMovies, horrorMovies, romanceMovies, actionMovies, familyMovies)).noSpaces
+      Json.fromFields(Genre.values.map(genre => genre.toString -> popularMovies.filter(_.genres.contains(genre.toString)).take(20).asJson)).noSpaces
     }
+
   }
 
+  def getQuickRatingMovies() = {
+    for {
+      popularMovies <- ApiService.getPopularMovies(5000).map(_.filterNot(_.id contains 416148))
+    } yield {
+      val allMovies: Seq[(String, Seq[MovieDetails])] = Genre.values.map(genre =>
+        genre.toString -> popularMovies.filter(_.genres.contains(genre.toString))
+      ).toSeq.sortBy(_._2.size)
+
+      allMovies.foldLeft(Seq.empty[MovieDetails]) {
+        (acc, next) => acc ++ next._2.take(3).filterNot(movie => acc contains movie)
+      }.asJson.noSpaces
+
+    }
+  }
 
 }
