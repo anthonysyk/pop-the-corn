@@ -142,21 +142,9 @@ class DiscoveredMovieWorker(supervisor: ActorRef) extends EsClient with AkkaHelp
   def working: Receive = {
     case IndexDiscoveredMovie(discoveredMovie) =>
       logger.info(s"Indexing Movie ${discoveredMovie.title.getOrElse("Unkown Movie")}")
-      for {
-        hasFailure <- bulkIndex(DiscoveredMovieIndexDefinition.IndexName, DiscoveredMovieIndexDefinition.TypeName, discoveredMovie).map(_.hasFailures)
-      } yield {
-        if (hasFailure && retry < 5) {
-          retry = retry + 1
-          logger.error(s"Error while indexing movie ${discoveredMovie.title.getOrElse("Unkown Movie")}")
-          self ! IndexDiscoveredMovie(discoveredMovie)
-        } else {
-          if (retry == 5) {
-            supervisor ! DiscoveredMovieSupervisor.NotifySupervisor(isIndexed = false)
-          } else supervisor ! DiscoveredMovieSupervisor.NotifySupervisor(isIndexed = true)
-          supervisor ! DiscoveredMovieSupervisor.GetDiscoveredMoviesPage
-          retry = 0
-        }
-      }
+      val isIndexed = upsertDocumentWithRetry[DiscoveredMovie](discoveredMovie, 5)
+      supervisor ! DiscoveredMovieSupervisor.NotifySupervisor(isIndexed = isIndexed)
+      supervisor ! DiscoveredMovieSupervisor.GetDiscoveredMoviesPage
     case DiscoveredMovieWorker.WaitForNextBatch =>
       logger.info("WORKER ASKING FOR DUTY !!!!")
       context.become(receive)
