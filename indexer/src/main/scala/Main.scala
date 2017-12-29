@@ -13,8 +13,9 @@ object LaunchDiscoveryIndexer {
 
     val discoveredMovieIndexer = system.actorOf(DiscoveredMovieIndexer.props, "discovered_movie_indexer")
 
-    args.sliding(2,2).flatten match {
-      case ("--year", year: String) if Try(year.toInt).isSuccess =>
+    val params = args.sliding(2,2).map(arr => arr(0) -> arr(1)).toMap
+    args.sliding(2,2).map(arr => arr(0) -> arr(1)).toMap.get("--year") match {
+      case Some(year) if Try(year.toInt).isSuccess =>
         system.scheduler.schedule(2.seconds, 10.seconds, discoveredMovieIndexer, DiscoveredMovieSupervisor.FetchNextBatch(year.toInt))
       case _ => println("Error please use parameter --year"); System.exit(0)
     }
