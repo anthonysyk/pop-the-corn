@@ -50,10 +50,10 @@ class DiscoveredMovieSupervisor extends EsClient with AkkaHelper {
   var page = 1
   var numberOfPages: Future[Int] = Future.successful(-1)
 
-  def updatePage(): Future[Unit] = {
+  def updatePage(year: Int): Future[Unit] = {
     numberOfPages.map {
       case -1 =>
-        numberOfPages = DiscoveredMovieIndexer.getNumberOfPagesForThisYear(2016).map(_.getOrElse(0))
+        numberOfPages = DiscoveredMovieIndexer.getNumberOfPagesForThisYear(year).map(_.getOrElse(0))
         logger.info(s"récupération du nombre de pages total")
       case value if page >= value =>
         logger.info(s"$page pages indexees sur $value")
@@ -66,14 +66,14 @@ class DiscoveredMovieSupervisor extends EsClient with AkkaHelper {
   }
 
   def receive: Receive = {
-    case DiscoveredMovieSupervisor.FetchNextBatch =>
+    case DiscoveredMovieSupervisor.FetchNextBatch(year) =>
 
       logger.info("Fetch new batch")
 
-      updatePage()
+      updatePage(year: Int)
 
       val eventuallyDiscoveredMovies = Future.sequence(
-        (page to page + size).map(p => DiscoveredMovieIndexer.getDiscoveredMovies(p, 2016))
+        (page to page + size).map(p => DiscoveredMovieIndexer.getDiscoveredMovies(p, year))
       ).map(_.flatten.toSeq)
 
       page = page + size
@@ -122,7 +122,7 @@ object DiscoveredMovieSupervisor {
 
   case object GetDiscoveredMoviesPage extends SupervisorMessage
 
-  case object FetchNextBatch extends SupervisorMessage
+  case class FetchNextBatch(year: Int) extends SupervisorMessage
 
   case class NotifySupervisor(isIndexed: Boolean) extends SupervisorMessage
 
