@@ -3,7 +3,6 @@ package graphql
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.coding.Gzip
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.server._
@@ -15,7 +14,6 @@ import sangria.parser.QueryParser
 import sangria.execution.{ErrorWithResolver, Executor, QueryAnalysisError}
 import sangria.marshalling.sprayJson._
 import spray.json._
-
 import scala.util.{Failure, Success}
 
 object GraphQLServer {
@@ -27,7 +25,9 @@ object GraphQLServer {
     import io.circe.parser._
     import io.circe.syntax._
 
-    val repo = State.createState()
+    val repo = GraphQLState.createState()
+
+    ContentBasedRecommendation.computeMoviesState()
 
     implicit val system = ActorSystem("sangria-server")
     implicit val materializer = ActorMaterializer()
@@ -73,14 +73,15 @@ object GraphQLServer {
       } ~ get {
         getFromFile(s"src/main/resources/graphql.html")
       } ~
-    path("profile") {
-      post {
-        entity(as[String]) { json =>
-          val userProfile = parse(json).right.toOption.getOrElse(Json.Null).as[UserProfile].right.toOption
-          complete(userProfile.map(ContentBasedRecommendation.computeUserProfileRecommendation).getOrElse(Nil).asJson.noSpaces)
+        path("profile") {
+          post {
+            entity(as[String]) { json =>
+
+              val userProfile = decode[UserProfile](json).right.toOption
+              complete(userProfile.map(ContentBasedRecommendation.computeUserProfileRecommendation).getOrElse(Nil).asJson.noSpaces)
+            }
+          }
         }
-      }
-    }
 
     Http().bindAndHandle(route, "0.0.0.0", sys.props.get("http.port").fold(4242)(_.toInt))
 

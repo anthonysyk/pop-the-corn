@@ -4,9 +4,11 @@ import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
 import controllers.{ApiController, GraphQLController}
+import io.circe.Json
 import io.circe.generic.auto._
+import io.circe.parser.parse
 import io.circe.syntax._
-import models.MovieDetails
+import models.{MovieDetails, Recommendation}
 
 import scala.concurrent.Future
 import scala.io.StdIn
@@ -19,6 +21,8 @@ object WebServer {
     implicit val materializer = ActorMaterializer()
     // needed for the future flatMap/onComplete in the end
     implicit val executionContext = system.dispatcher
+
+    var recommendations: Vector[Recommendation] = Vector.empty
 
     ApiController.startService // To launch actors
 
@@ -122,15 +126,27 @@ object WebServer {
         path("quickrating") {
           post {
             entity(as[String]) { response =>
-              val eventuallyMovies: Future[Seq[MovieDetails]] = GraphQLController.getMoviesBasedOnTaste(response)
-              onComplete(eventuallyMovies) {
-                case Success(result) =>
-                  println(result.asJson.noSpaces)
-                  complete(result.asJson.noSpaces)
+              val quickRatingResults: Seq[MovieDetails] = parse(response).right.toOption.getOrElse(Json.Null).as[Seq[MovieDetails]].right.toOption.getOrElse(Nil)
+              val userProfile = GraphQLController.convertQuickResultsIntoUserProfile(quickRatingResults)
+              val eventuallyRecommendations: Future[Recommendation] = GraphQLController.getMoviesBasedOnTaste(quickRatingResults, userProfile._2.movieId)
+              eventuallyRecommendations.onSuccess{case result => recommendations = Vector.empty :+ result}
+              onComplete(eventuallyRecommendations) {
+                case Success(result) => complete(result.asJson.noSpaces)
                 case Failure(ex) => complete(StatusCodes.InternalServerError, s"$ex")
               }
             }
           }
+        } ~
+        pathPrefix("recommendation") {
+          pathEnd {
+            complete("/recommendation")
+          } ~
+            path(JavaUUID) { uuid =>
+              complete(recommendations.find(_.userProfile.movieId == uuid.toString) match {
+                case Some(reco) => reco.asJson.noSpaces
+                case None => StatusCodes.NotFound
+              })
+            }
         }
 
 

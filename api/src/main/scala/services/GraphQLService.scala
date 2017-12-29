@@ -20,7 +20,11 @@ object GraphQLService {
 
   def getMoviesBasedOnTaste(userProfile: UserProfile): Seq[MovieDetails] = {
 
-    val response = WebClient.doPost("http://localhost:4242/profile",  content = userProfile.asJson.noSpaces,  headers = Map("Content-Type" -> "application/json", "Accept-Encoding" -> "gzip"))
+    val response = WebClient.doPost("http://localhost:4242/profile",
+      content = userProfile.asJson.noSpaces,
+      headers = Map("Content-Type" -> "application/json", "Accept-Encoding" -> "gzip"),
+      timeout = 100000
+    )
       .toOption
 
     response.flatMap(res => parse(res).right.toOption.getOrElse(Json.Null).as[Seq[MovieDetails]].right.toOption).getOrElse(Nil)

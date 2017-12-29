@@ -31,23 +31,24 @@ class RecommendationComponent extends Component {
         return (
             <div className="recommendation">
                 <Nav bsStyle="tabs" justified activeKey={this.state.activeKey} onSelect={this.handleSelect.bind(this)}>
-                    <NavItem eventKey="1">TFIDF Similarity</NavItem>
-                    <NavItem eventKey="2">Users Preferences</NavItem>
+                    <NavItem eventKey="1">Users Preferences</NavItem>
+                    <NavItem eventKey="2">TFIDF Similarity</NavItem>
                     <NavItem eventKey="3">LDA</NavItem>
                 </Nav>
                 <div className="recommendation-tab">
                     {
                         this.state.activeKey === "1" &&
-                        <TfidfComponent />
+                        <div>
+                            <QuickRatingComponent testFeature="true"/>
+                            {
+                                this.props.machineLearningData.recommendations.length !== 0 &&
+                                <UserProfileRecommendationComponent test="true"/>
+                            }
+                        </div>
                     }
                     {
                         this.state.activeKey === "2" &&
-                        <div>
-                            {
-                                this.props.machineLearningData.userProfileMovies.length !== 0 ?
-                                    <UserProfileRecommendationComponent/> : <QuickRatingComponent testFeature="true"/>
-                            }
-                        </div>
+                        <TfidfComponent />
                     }
                     {
                         this.state.activeKey === "3" &&

@@ -1,10 +1,16 @@
 package models
 
+case class Recommendation(
+                         userProfile: DisplayProfile,
+                         recommendations: Seq[MovieDetails]
+                         )
+
 case class MovieDetails(
                          id: Option[Int],
                          title: Option[String],
                          poster: Option[String],
                          backdrop: Option[String],
+                         adult: Option[Boolean],
                          vote_average: Option[Double],
                          vote_count: Option[Int],
                          popularity: Option[Double],
@@ -16,8 +22,12 @@ case class MovieDetails(
                          tagline: Option[String],
                          companies: Seq[ProductionCompany],
                          tfidfSimilarity: Option[Double] = None,
-                         sqdist: Option[Double] = None,
-                         rating: Option[Double] = None
+                         highestSimilarityProfile: Option[Double] = None,
+                         companySqdist: Option[Double] = None,
+                         rating: Option[Double] = None,
+                         genreWeights: Map[String, Double] = Map.empty[String, Double],
+                         companiesWeights: Map[String, Double] = Map.empty[String, Double],
+                         cosineSimilarity: Option[Double] = None
                        )
 
 object MovieDetails {
@@ -29,6 +39,7 @@ object MovieDetails {
       title = title,
       poster = poster_url,
       backdrop = backdrop_url,
+      adult = adult,
       vote_average = vote_average,
       vote_count = vote_count,
       popularity = popularity,
@@ -43,3 +54,4 @@ object MovieDetails {
   }
 
 }
+

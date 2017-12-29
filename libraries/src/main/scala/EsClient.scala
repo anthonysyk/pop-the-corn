@@ -24,7 +24,7 @@ import scala.util.{Failure, Success, Try}
 
 trait EsClient extends ElasticDsl with CirceHelper {
 
-  val settings: Settings = ImmutableSettings.settingsBuilder().put("cluster.name", "elasticsearch_Anthony").build()
+  val settings: Settings = ImmutableSettings.settingsBuilder().put("cluster.name", "elasticsearch").build()
   val uri = ElasticsearchClientUri("localhost:9300")
   val client: ElasticClient = ElasticClient.remote(settings, uri)
 

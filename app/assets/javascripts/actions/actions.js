@@ -1,4 +1,17 @@
-import {RECEIVE_RECOMMENDATIONS, LOAD_MOVIES, RECEIVE_MOVIES, ERROR_RECEIVE_MOVIES, RECEIVE_SUGGESTIONS, RECEIVE_MOVIE_DETAILS, RECEIVE_POPULAR_MOVIES, RECEIVE_BEST_RATED_MOVIES, RECEIVE_POPULAR_BY_GENRE, RECEIVE_TFIDF_MOVIES, RECEIVE_QUICK_RATING_MOVIES} from './types';
+import {
+    RECEIVE_RECOMMENDATIONS,
+    LOAD_MOVIES,
+    RECEIVE_MOVIES,
+    ERROR_RECEIVE_MOVIES,
+    RECEIVE_SUGGESTIONS,
+    RECEIVE_MOVIE_DETAILS,
+    RECEIVE_POPULAR_MOVIES,
+    RECEIVE_BEST_RATED_MOVIES,
+    RECEIVE_POPULAR_BY_GENRE,
+    RECEIVE_TFIDF_MOVIES,
+    RECEIVE_QUICK_RATING_MOVIES,
+    RECEIVE_USER_PROFILE
+} from './types';
 
 import * as searchAPI  from '../api/search';
 
@@ -66,10 +79,18 @@ function receiveQuickRatingMovies(quickRatingMovies) {
     }
 }
 
+function receiveUserProfile(userProfile) {
+    return {
+        type: RECEIVE_USER_PROFILE,
+        userProfile: userProfile
+    }
+}
+
 function receiveRecommendations(recommendations) {
+
     return {
         type: RECEIVE_RECOMMENDATIONS,
-        userProfileMovies: recommendations
+        recommendations: recommendations
     }
 }
 
@@ -100,7 +121,7 @@ function getMovieDetails(id) {
         .then(movie => dispatch(receiveMovieDetails(movie)))
 }
 
-function getPopularMovies(){
+function getPopularMovies() {
     return (dispatch) => searchAPI.getPopularMovies()
         .then(popularMovies => dispatch(receivePopularMovies(popularMovies)))
 }
@@ -127,7 +148,26 @@ function getQuickRatingMovies() {
 
 function sendQuickRatingResult(result) {
     return (dispatch) => searchAPI.sendQuickRatingResult(result)
-        .then(recommendations => dispatch(receiveRecommendations(recommendations)))
+        .then(response => dispatch(receiveRecommendations(response)))
 }
 
-export { searchMovies, suggest, getMovieDetails, getPopularMovies, getBestRatedMovies, getPopularByGenre, getSimilarMoviesTfidf, getQuickRatingMovies, sendQuickRatingResult }
+function getRecommendation(uuid, numberOfTries) {
+    if (numberOfTries > 1) {
+        return (dispatch) => searchAPI.getRecommendation(uuid, numberOfTries)
+            .then(response => dispatch(receiveRecommendations(response)))
+            .catch(error => setTimeout(getRecommendation(uuid, numberOfTries - 1), 3000))
+    }
+}
+
+export {
+    searchMovies,
+    suggest,
+    getMovieDetails,
+    getPopularMovies,
+    getBestRatedMovies,
+    getPopularByGenre,
+    getSimilarMoviesTfidf,
+    getQuickRatingMovies,
+    sendQuickRatingResult,
+    getRecommendation
+}
