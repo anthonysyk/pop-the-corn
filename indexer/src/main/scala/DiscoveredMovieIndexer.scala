@@ -6,7 +6,7 @@ import io.circe.generic.auto._
 import io.circe.parser._
 import main.scala.DiscoveredMovieWorker.IndexDiscoveredMovie
 import models.{Batch, DiscoveredMovie}
-import ptc.libraries.{AkkaHelper, DiscoveredMovieIndexDefinition, EsClient}
+import ptc.libraries._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
