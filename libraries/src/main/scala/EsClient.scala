@@ -83,7 +83,7 @@ trait EsClient extends ElasticDsl with CirceHelper {
   }
 
   // doesn't work with nested case classes :(
-  private def parseDocument[T <: Product](element: T)(implicit m: Manifest[T]): Vector[(String, Any)] = {
+  def parseDocument[T <: Product](element: T)(implicit m: Manifest[T]): Vector[(String, Any)] = {
   m.runtimeClass.getDeclaredFields.map(_.getName).toVector.zip(element.productIterator.toVector).map {
       case (key, Some(response)) => (key, response)
       case (k,v) => (k,v)
