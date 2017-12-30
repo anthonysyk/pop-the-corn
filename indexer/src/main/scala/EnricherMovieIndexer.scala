@@ -61,7 +61,6 @@ class EnricherMovieSupervisor extends EsClient with AkkaHelper {
         movieDiscovered <- eventuallyMoviesDiscovered
       } yield {
         batch = Batch(movieDiscovered.flatMap(_.id).toVector)
-        //        batch = Batch(Vector(473814))
         println(s"Batch de ${batch.size} films disponible")
         incompleteTasks = batch.size
         context.become(busy)
@@ -110,6 +109,8 @@ object EnricherMovieSupervisor {
 }
 
 class EnricherMovieWorker(supervisor: ActorRef) extends EsClient with AkkaHelper {
+
+  implicit val indexDefinition: IndexDefinition = MovieIndexDefinition
 
   def receive: Receive = {
     case EnricherMovieWorker.StartWorking =>
