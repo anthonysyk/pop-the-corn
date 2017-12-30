@@ -1,10 +1,7 @@
 import akka.actor.ActorSystem
 import main.scala.{DiscoveredMovieIndexer, DiscoveredMovieSupervisor}
-import models.{MovieDetails, TmdbMovie}
-import ptc.libraries.MovieIndexDefinition
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
 import scala.util.Try
 
@@ -27,7 +24,7 @@ object LaunchDiscoveryIndexer {
 
 }
 
-object LauchEnricherIndexer {
+object LaunchEnricherIndexer {
 
   def main(args: Array[String]): Unit = {
 

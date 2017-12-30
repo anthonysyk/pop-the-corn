@@ -14,7 +14,7 @@ object EnricherMovieIndexer extends EsClient {
     s"https://api.themoviedb.org/3/movie/$id?api_key=5a12f551fdaa854030d1bea7e45217a2&language=en-US"
   }
 
-  def getMovieId(from: Int, size: Int): Future[Seq[DiscoveredMovie]] = {
+  def getMovieIds(from: Int, size: Int): Future[Seq[DiscoveredMovie]] = {
     client execute {
       search in DiscoveredMovieIndexDefinition.IndexName -> DiscoveredMovieIndexDefinition.TypeName from from size size
     }
@@ -51,7 +51,7 @@ class EnricherMovieSupervisor extends EsClient with AkkaHelper {
 
   def receive: Receive = {
     case EnricherMovieSupervisor.FetchNextBatch =>
-      val eventuallyMoviesDiscovered: Future[Seq[DiscoveredMovie]] = EnricherMovieIndexer.getMovieId(from, size)
+      val eventuallyMoviesDiscovered: Future[Seq[DiscoveredMovie]] = EnricherMovieIndexer.getMovieIds(from, size)
 
       for {
         _ <- if (from == 0) updateIndex(MovieIndexDefinition.esIndexConfiguration).map {

@@ -57,7 +57,7 @@ trait EsClient extends ElasticDsl with CirceHelper {
 
   def eventuallyDeleteIndex(index: String): Future[Boolean] = {
     client execute deleteIndex(index)
-  }.map{ response =>
+  }.map { response =>
     println(response); true
   }.recover {
     case t: Throwable => println(t); false
@@ -82,8 +82,11 @@ trait EsClient extends ElasticDsl with CirceHelper {
     }
   }
 
-  private def parseDocument[T <: Product](element: T)(implicit m: Manifest[T])= {
-    m.runtimeClass.getDeclaredFields.map(_.getName).zip(element.productIterator.toSeq)
+  private def parseDocument[T <: Product](element: T)(implicit m: Manifest[T]): Vector[(String, Any)] = {
+  m.runtimeClass.getDeclaredFields.map(_.getName).toVector.zip(element.productIterator.toVector).map {
+      case (key, Some(response)) => (key, response)
+      case (k,v) => (k,v)
+    }
   }
 
   // Il serait mieux d'utiliser une Future et un recover
@@ -100,7 +103,7 @@ trait EsClient extends ElasticDsl with CirceHelper {
 
   // Retry with recursion
   // no tail recursion here because no risk of blowing the stack (Futures operates on multiple stacks)
-  def upsertDocumentWithRetry[T <: Product {val id: Option[Any]}](element: T, retry: Int = 5)(implicit encoder: Encoder[T], m: Manifest[T], index: IndexDefinition): Boolean = {
+  def upsertDocumentWithRetry[T <: Product {val id : Option[Any]}](element: T, retry: Int = 5)(implicit encoder: Encoder[T], m: Manifest[T], index: IndexDefinition): Boolean = {
 
     upsertDocument[T](index.IndexName, index.TypeName, element, element.id.getOrElse(0)) match {
       case isIndexed if isIndexed => true
