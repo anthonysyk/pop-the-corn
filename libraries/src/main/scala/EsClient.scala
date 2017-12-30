@@ -89,7 +89,7 @@ trait EsClient extends ElasticDsl with CirceHelper {
       update id docId in s"$esIndex/$esType" docAsUpsert parseProductToMap(element)
     } await 1000.second)
   } match {
-    case Success(result) => println(result); true
+    case Success(result) => println("SUCCESS Upserting movie !"); true
     case Failure(ex) => println(ex); false
   }
 
