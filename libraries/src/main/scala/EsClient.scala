@@ -81,12 +81,16 @@ trait EsClient extends ElasticDsl with CirceHelper {
     }
   }
 
+  private def parseDocument[T <: Product](element: T)(implicit m: Manifest[T]): Array[(String, Any)] = {
+    m.runtimeClass.getDeclaredFields.map(_.getName).zip(element.productIterator.toArray).map(t => t._1 -> t._2)
+  }
+
   // Il serait mieux d'utiliser une Future et un recover
   // MAIS la boucle sera lancée de toute façon parceque la réponse de ES ne sera pas encore arrivée
   // Le await permet d'avoir la réponse de la part de ES avant de continuer
-  def upsertDocument[A <: Product](esIndex: String, esType: String, element: A, docId: Any)(implicit encoder: Encoder[A], m: Manifest[A]) = {
+  def upsertDocument[T <: Product](esIndex: String, esType: String, element: T, docId: Any)(implicit encoder: Encoder[T], m: Manifest[T]): Boolean = {
     Try(client execute {
-      update id docId in s"$esIndex/$esType" docAsUpsert parseProductToMap(element)
+      update id docId in s"$esIndex/$esType" docAsUpsert parseDocument[T](element)
     } await 1000.second)
   } match {
     case Success(result) => println(s"SUCCESS Upserting movie ! $result"); true
