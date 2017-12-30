@@ -89,16 +89,13 @@ trait EsClient extends ElasticDsl with CirceHelper {
       update id docId in s"$esIndex/$esType" docAsUpsert parseProductToMap(element)
     } await 1000.second)
   } match {
-    case Success(result) => true
+    case Success(result) => println(result); true
     case Failure(ex) => println(ex); false
   }
 
   // Retry with recursion
   // no tail recursion here because no risk of blowing the stack (Futures operates on multiple stacks)
   def upsertDocumentWithRetry[T <: Product {val id: Option[Any]}](element: T, retry: Int = 5)(implicit encoder: Encoder[T], m: Manifest[T]): Boolean = {
-//    import io.circe._, io.circe.generic.semiauto._
-//    implicit val fooDecoder: Decoder[T] = deriveDecoder[T]
-//    implicit val fooEncoder: Encoder[T] = deriveEncoder[T]
 
     upsertDocument[T](MovieIndexDefinition.IndexName, MovieIndexDefinition.TypeName, element, element.id.getOrElse(0)) match {
       case isIndexed if isIndexed => true
