@@ -24,7 +24,10 @@ trait CirceHelper {
   }
 
   def parseProductToMap[A <: Product](product: A)(implicit encoder: Encoder[A]): Map[String, Any] = {
-    removeOptionFromMap(parseJsonToMap(product.asJson).asInstanceOf[Map[String, Any]])
+    removeOptionFromMap(parseJsonToMap(product.asJson) match {
+      case Some(value) => value.asInstanceOf[Map[String,Any]]
+      case any@_ => any.asInstanceOf[Map[String, Any]]
+    })
   }
 
   // collect = map + filter
