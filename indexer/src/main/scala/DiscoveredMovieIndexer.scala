@@ -145,6 +145,7 @@ class DiscoveredMovieWorker(supervisor: ActorRef) extends EsClient with AkkaHelp
   def working: Receive = {
     case IndexDiscoveredMovie(discoveredMovie) =>
       logger.info(s"Indexing Movie ${discoveredMovie.title.getOrElse("Unkown Movie")}")
+      println(discoveredMovie)
       val isIndexed = upsertDocumentWithRetry[DiscoveredMovie](discoveredMovie, 5)
       supervisor ! DiscoveredMovieSupervisor.NotifySupervisor(isIndexed = isIndexed)
       supervisor ! DiscoveredMovieSupervisor.GetDiscoveredMoviesPage
