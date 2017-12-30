@@ -10,7 +10,7 @@ import scala.concurrent.Future
 
 object EnricherMovieIndexer extends EsClient {
 
-  def createFetchDetailsUrl(id: Int) = {
+  def createFetchDetailsUrl(id: Int): String = {
     s"https://api.themoviedb.org/3/movie/$id?api_key=5a12f551fdaa854030d1bea7e45217a2&language=en-US"
   }
 

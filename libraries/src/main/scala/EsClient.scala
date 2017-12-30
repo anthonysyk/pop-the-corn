@@ -95,9 +95,9 @@ trait EsClient extends ElasticDsl with CirceHelper {
 
   // Retry with recursion
   // no tail recursion here because no risk of blowing the stack (Futures operates on multiple stacks)
-  def upsertDocumentWithRetry[T <: Product {val id: Option[Any]}](element: T, retry: Int = 5)(implicit encoder: Encoder[T], m: Manifest[T]): Boolean = {
+  def upsertDocumentWithRetry[T <: Product {val id: Option[Any]}](element: T, retry: Int = 5)(implicit encoder: Encoder[T], m: Manifest[T], index: IndexDefinition): Boolean = {
 
-    upsertDocument[T](MovieIndexDefinition.IndexName, MovieIndexDefinition.TypeName, element, element.id.getOrElse(0)) match {
+    upsertDocument[T](index.IndexName, index.TypeName, element, element.id.getOrElse(0)) match {
       case isIndexed if isIndexed => true
       case _ if retry == 1 => println(s"ERROR: while indexing movie ${element.id.getOrElse("Unkown Movie")} --nbTries = ${6 - retry}"); false
       case _ => upsertDocumentWithRetry(element, retry - 1); false

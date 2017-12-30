@@ -4,7 +4,10 @@ import com.sksamuel.elastic4s.ElasticDsl.{create, mapping, _}
 import com.sksamuel.elastic4s.mappings.FieldType._
 import com.sksamuel.elastic4s.{AsciiFoldingTokenFilter, CustomAnalyzerDefinition, _}
 
-sealed trait IndexDefinition
+sealed trait IndexDefinition {
+  val IndexName: String
+  val TypeName: String
+}
 
 case class EsIndexDefinition(indexName: String, indexDefinition: CreateIndexDefinition)
 

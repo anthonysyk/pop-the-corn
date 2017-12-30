@@ -132,6 +132,9 @@ class DiscoveredMovieWorker(supervisor: ActorRef) extends EsClient with AkkaHelp
 
   var retry = 0
 
+  implicit val indexDefinition: IndexDefinition = DiscoveredMovieIndexDefinition
+
+
   def receive: Receive = {
     case DiscoveredMovieWorker.StartWorking =>
       logger.info(s"Indexing movie details started ...")
