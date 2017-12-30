@@ -32,6 +32,7 @@ trait CirceHelper {
     case (key, Some(result)) => key -> result
     case (key, None) => key -> null
     case (key, value: Map[String, Any]) => key -> removeOptionFromMap(value)
+    case (key, value: Vector[Any]) => key -> value
     case (key, value: Vector[Map[String, Any]]) if value.flatten.toMap.nonEmpty => key -> value.map(removeOptionFromMap)
     case (key, value: Vector[Map[String, Any]]) if value.flatten.toMap.isEmpty => key -> Nil
   }
