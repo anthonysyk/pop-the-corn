@@ -71,6 +71,7 @@ trait EsClient extends ElasticDsl with CirceHelper {
     }
   }
 
+  @deprecated("simply insert into -- prefer upserDocument")
   def bulkIndex[A](esIndex: String, esType: String, element: A)(implicit encoder: Encoder[A]): Future[BulkResponse] = {
     val json = element.asJson.noSpaces
     println(json)
@@ -81,8 +82,8 @@ trait EsClient extends ElasticDsl with CirceHelper {
     }
   }
 
-  private def parseDocument[T <: Product](element: T)(implicit m: Manifest[T]): Array[(String, Any)] = {
-    m.runtimeClass.getDeclaredFields.map(_.getName).zip(element.productIterator.toArray).map(t => t._1 -> t._2)
+  private def parseDocument[T <: Product](element: T)(implicit m: Manifest[T])= {
+    m.runtimeClass.getDeclaredFields.map(_.getName).zip(element.productIterator.toSeq)
   }
 
   // Il serait mieux d'utiliser une Future et un recover
