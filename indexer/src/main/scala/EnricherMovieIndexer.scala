@@ -118,23 +118,13 @@ class EnricherMovieWorker(supervisor: ActorRef) extends EsClient with AkkaHelper
       supervisor ! EnricherMovieSupervisor.GetMovieId
   }
 
-  // Retry with recursion
-  // no tail recursion here because no risk of blowing the stack (Futures operates on multiple stacks)
-  def indexMovie(movie: TmdbMovie, retry: Int = 5): Boolean = {
-    upsertDocument(MovieIndexDefinition.IndexName, MovieIndexDefinition.TypeName, movie, movie.id.getOrElse(0)) match {
-      case isIndexed if isIndexed => true
-      case _ if retry == 1 => println(s"ERROR: while indexing movie ${movie.title.getOrElse("Unkown Movie")} --nbTries = ${6 - retry}"); false
-      case _ => indexMovie(movie, retry - 1); false
-    }
-  }
-
   def working: Receive = {
     case EnricherMovieWorker.IndexMovie(id) =>
       println(s"movie $id received")
       val maybeMovie = EnricherMovieIndexer.tryGettingMovieDetailsById(id)
       println(maybeMovie)
       val isIndexed = maybeMovie match {
-        case Some(movie) => indexMovie(movie)
+        case Some(movie) => upsertDocumentWithRetry[TmdbMovie](movie, 5)
         case None => false
       }
       println(s"Indexing Movie ${maybeMovie.flatMap(_.title).getOrElse("Unkown Movie")}")
