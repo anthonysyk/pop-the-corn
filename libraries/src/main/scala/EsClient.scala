@@ -99,7 +99,7 @@ trait EsClient extends ElasticDsl with CirceHelper {
     } await 1000.second)
   } match {
     case Success(result) => println(s"SUCCESS Upserting movie ! $result"); true
-    case Failure(ex) => println(ex.getMessage); false
+    case Failure(ex) => println(ex.getMessage);ex.getStackTrace.foreach(println); false
   }
 
   // Retry with recursion
