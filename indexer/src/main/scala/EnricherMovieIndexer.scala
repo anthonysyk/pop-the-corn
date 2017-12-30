@@ -87,7 +87,7 @@ class EnricherMovieSupervisor extends EsClient with AkkaHelper {
           batch = nextBatch
         case None =>
           println("Batch Indexed :: Asking for next batch")
-          println(s"${from - failures} films indexés")
+          println(s"${from - (failures - 1)} films indexés")
           context.become(receive)
           sender() ! EnricherMovieWorker.WaitForNextBatch
       }

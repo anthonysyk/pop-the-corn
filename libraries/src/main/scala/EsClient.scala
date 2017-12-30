@@ -82,6 +82,7 @@ trait EsClient extends ElasticDsl with CirceHelper {
     }
   }
 
+  // doesn't work with nested case classes :(
   private def parseDocument[T <: Product](element: T)(implicit m: Manifest[T]): Vector[(String, Any)] = {
   m.runtimeClass.getDeclaredFields.map(_.getName).toVector.zip(element.productIterator.toVector).map {
       case (key, Some(response)) => (key, response)
@@ -94,7 +95,7 @@ trait EsClient extends ElasticDsl with CirceHelper {
   // Le await permet d'avoir la réponse de la part de ES avant de continuer
   def upsertDocument[T <: Product](esIndex: String, esType: String, element: T, docId: Any)(implicit encoder: Encoder[T], m: Manifest[T]): Boolean = {
     Try(client execute {
-      update id docId in s"$esIndex/$esType" docAsUpsert parseDocument[T](element)
+      update id docId in s"$esIndex/$esType" docAsUpsert parseProductToMap(element)
     } await 1000.second)
   } match {
     case Success(result) => println(s"SUCCESS Upserting movie ! $result"); true
