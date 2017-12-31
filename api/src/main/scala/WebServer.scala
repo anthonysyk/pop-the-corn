@@ -14,7 +14,6 @@ import models.{MovieDetails, Recommendation}
 import org.elasticsearch.index.translog.Translog.Source
 
 import scala.concurrent.Future
-import scala.io.StdIn
 import scala.util.{Failure, Success}
 
 object WebServer {
