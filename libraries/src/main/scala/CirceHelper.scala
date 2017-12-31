@@ -31,15 +31,13 @@ trait CirceHelper {
   // collect = map + filter
   def removeOptionFromMap(mapping: Map[String, Any]): Map[String, Any] = mapping.collect {
     case (key, Some(result)) => key -> result
-    case (key, None) => key -> null
-    case (key, value: Map[String, Any]) => key -> removeOptionFromMap(value)
-    case (key, value: Vector[Option[Any]]) => key -> value.map {
-      case Some(v) => v
-      case None => null
+    case (key, value: Map[_, _]) => key -> removeOptionFromMap(value.map(value => value._1.toString -> value._2))
+    case (key, vector: Vector[_])=> key -> vector.map {
+      case mapObject: Map[_, _] => removeOptionFromMap(mapObject.map(value => value._1.toString -> value._2))
+      case Some(a: Any) => a
     }
-    case (key, value: Vector[Map[String, Any]]) if value.flatten.toMap.nonEmpty => key -> value.map(removeOptionFromMap)
-    case (key, value: Vector[Map[String, Any]]) if value.flatten.toMap.isEmpty => key -> Nil
   }
+
 
   // Un peu moche parceque pas de tailrec
   def parseJsonToMap(json: Json): Any = json match {
