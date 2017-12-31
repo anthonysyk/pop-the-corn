@@ -51,8 +51,6 @@ module.exports = {
     plugins: [extractSass],
     devtool: 'eval',
     devServer: {
-        inline:true,
-        port: 80,
         compress: true,
         proxy: {
             '*': {
