@@ -9,8 +9,6 @@ import NavbarComponent from './NavbarComponent';
 import QuickRatingComponent from "./recommendation/QuickRatingComponent";
 import * as variables from '../variables';
 
-
-
 @withRouter
 @connect(
     state => ({
@@ -56,8 +54,8 @@ class HeaderComponent extends Component {
                                 <ul className="search__tags">
                                     {
                                         suggestionsData.popularMovies.slice(0, 6).map(movie =>
-                                            <li key={movie.id}><Link to={`/details/${movie.id}`}><span
-                                                className="popular-movie-label">{movie.title}</span></Link></li>
+                                            <li key={movie.id}><Link to={`/details/${movie.id}`}>
+                                                <span>{movie.title}</span></Link></li>
                                         )
                                     }
                                 </ul>
@@ -71,8 +69,7 @@ class HeaderComponent extends Component {
                     </Col>
                 </Row>
             </div>
-        )
-            ;
+        );
     }
 }
 

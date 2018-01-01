@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
-import {withRouter} from 'react-router'
 import {Row, Col} from 'react-bootstrap';
-import {Link} from 'react-router-dom'
 import Slider from './SliderComponent'
 
 class HomeComponent extends Component {

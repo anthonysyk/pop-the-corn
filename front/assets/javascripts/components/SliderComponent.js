@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {Image} from 'react-bootstrap';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {Motion, spring} from 'react-motion';
 import {Link} from 'react-router-dom'
