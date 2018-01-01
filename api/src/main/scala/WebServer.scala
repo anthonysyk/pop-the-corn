@@ -153,10 +153,10 @@ object WebServer {
             }
         }
 
-    val host = "localhost"
+    val host = "0.0.0.0"
     val port = 9000
 
-    val bindingFuture = Http().bindAndHandle(route, "localhost", port)
+    val bindingFuture = Http().bindAndHandle(route, host, port)
 
     println(s"Server online at http://$host:$port")
   }
