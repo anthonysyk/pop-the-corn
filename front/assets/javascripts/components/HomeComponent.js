@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {withRouter} from 'react-router'
 import {Row, Col} from 'react-bootstrap';
 import {Link} from 'react-router-dom'
-import SliderComponent from './SliderComponent'
+import Slider from './SliderComponent'
 
 class HomeComponent extends Component {
 
@@ -17,38 +17,38 @@ class HomeComponent extends Component {
             <div>
                 <Row className="slider-row">
                     <Col md={12} xs={12}>
-                        <SliderComponent title="Best Rated Movies"
-                                         movies={data.bestRatedMovies}/>
+                        <Slider title="Best Rated Movies"
+                                movies={data.bestRatedMovies}/>
                     </Col>
                 </Row>
                 <Row className="slider-row">
                     <Col md={12} xs={12}>
-                        <SliderComponent title="Comedy"
-                                         movies={data.popularByGenre.Comedy}/>
+                        <Slider title="Comedy"
+                                movies={data.popularByGenre.Comedy}/>
                     </Col>
                 </Row>
                 <Row className="slider-row">
                     <Col md={12} xs={12}>
-                        <SliderComponent title="Family"
-                                         movies={data.popularByGenre.Family}/>
+                        <Slider title="Family"
+                                movies={data.popularByGenre.Family}/>
                     </Col>
                 </Row>
                 <Row className="slider-row">
                     <Col md={12} xs={12}>
-                        <SliderComponent title="Drama"
-                                         movies={data.popularByGenre.Drama}/>
+                        <Slider title="Drama"
+                                movies={data.popularByGenre.Drama}/>
                     </Col>
                 </Row>
                 <Row className="slider-row">
                     <Col md={12} xs={12}>
-                        <SliderComponent title="Thriller"
-                                         movies={data.popularByGenre.Thriller}/>
+                        <Slider title="Thriller"
+                                movies={data.popularByGenre.Thriller}/>
                     </Col>
                 </Row>
                 <Row className="slider-row">
                     <Col md={12} xs={12}>
-                        <SliderComponent title="Documentary"
-                                         movies={data.popularByGenre.Documentary}/>
+                        <Slider title="Documentary"
+                                movies={data.popularByGenre.Documentary}/>
                     </Col>
                 </Row>
             </div>

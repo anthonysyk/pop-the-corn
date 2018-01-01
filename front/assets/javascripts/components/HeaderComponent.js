@@ -30,13 +30,8 @@ class HeaderComponent extends Component {
     render() {
         const {suggestionsData, movieData, children} = this.props;
 
-        const divImage = {
-            backgroundImage: "url(" + movieData.movie.backdrop + ")"
-        };
-
         return (
             <div className="popthecorn-header">
-                {/*<div className="popthecorn-header" style={movieData.movie.backdrop && divImage}>*/}
                 <NavbarComponent />
                 <Row>
                     <div className="main-title__white">
@@ -54,7 +49,7 @@ class HeaderComponent extends Component {
                             transitionLeaveTimeout={300}
                             transitionAppearTimeout={300}
                         >
-                            <div className="popular-movies">
+                            <div className="horizontal-list">
                                 <span className="search__popular-title">Popular Movies:</span>
                                 <ul className="search__tags">
                                     {

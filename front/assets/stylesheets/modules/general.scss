@@ -12,32 +12,6 @@
   width: 10px;
 }
 
-.loader-container_small {
-  height: 4rem;
-  margin: 7% 50% 3% 50%;
-  width: 10px;
-}
-
-.circle-border-logo {
-  border: 1px solid $navyblue;
-  border-radius: 999rem;
-  width: 60px;
-  height: 60px;
-  padding-top: 0.7rem;
-  margin: auto;
-  background-color: $navyblue;
-}
-
-.logo {
-  display: block;
-  text-indent: -9999px;
-  width: 50px;
-  height: 41px;
-  background: url(../../images/popcorn.svg) no-repeat;
-  background-size: 50px 41px;
-  margin: auto;
-}
-
 .navbar-container {
   width: 100%;
   position: fixed;
@@ -46,9 +20,9 @@
   left: 0;
 }
 
-.popthecorn-header {
+.template-header {
   border-bottom: 1px solid $lightgrey;
-  background: url(../../images/cover1.jpg) no-repeat center fixed;
+  background: url(../../images/cover1.jpg) no-repeat center;
   background-size: cover;
   position: inherit;
   z-index: 10;
@@ -62,10 +36,38 @@
   text-align: center;
   border-top: 1px solid $lightgrey;
   padding: 2rem 0;
+  margin-top: 3rem;
+  .logo {
+    background: url(../../images/heart.svg) no-repeat;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    vertical-align: middle;
+  }
+  ul {
+    list-style-type:none;
+    color: $darkgrey;
+  }
+
+  .copyright-container {
+    width: 80%;
+    margin: auto;
+    border-top: 1px solid $lightgrey;
+    padding-top: 2rem;
+  }
+  .brand-copyright {
+    padding-left: 2rem;
+    color: $darkgrey;
+  }
 }
 
 a {
-  color: $ligthergrey;
+  color: $lightergrey;
+  text-decoration: none;
+}
+
+a:visited {
+  color: inherit;
   text-decoration: none;
 }
 
@@ -73,10 +75,7 @@ a:hover {
   color: inherit;
   text-decoration: none;
 }
-a:visited {
-  color: inherit;
-  text-decoration: none;
-}
+
 a:active {
   color: inherit;
   text-decoration: none;
@@ -84,60 +83,4 @@ a:active {
 
 .thumbnail {
   padding: 0 !important;
-}
-
-/* The Modal (background) */
-.modal {
-  display: table;
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.8); /* Black w/ opacity */
-
-  /* Modal Content/Box */
-  .custom-modal-content {
-    margin: 10% auto; /* 15% from the top and centered */
-    padding: 20px;
-    width: 80%; /* Could be more or less, depending on screen size */
-    overflow: hidden;
-  }
-
-}
-
-/* The Close Button */
-.close-modal {
-  color: white;
-  font-size: 40px;
-  right: 1rem;
-  top: 4rem;
-  position: absolute;
-  z-index: 2;
-  &:hover, &:focus {
-    color: white;
-    text-decoration: none;
-    transform: scale(1.1);
-    cursor: pointer;
-  }
-}
-
-.custom-modal-content__white {
-
-  margin:auto;
-  background-color: white;
-  border-radius: 4px;
-  color: black;
-  padding: 5rem 0;
-}
-
-.custom-modal-footer {
-  border-top: 1px solid lightgrey;
-  padding-top: 3rem;
-  margin-top: 3rem;
 }

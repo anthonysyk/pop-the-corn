@@ -25,10 +25,24 @@
 
 .search__tags {
   max-width: 500px;
-  margin: 10px auto 0;
+  margin-top: 1.5rem;
+  a, a:hover, a:active, a:visited, a:focus {
+    text-decoration:none;
+    color: white;
+    padding: 0.4rem;
+    line-height: 3.2rem;
+    border-radius: 4px;
+  }
+  a:hover {
+    background-color: rgba(0, 0, 0, .5)
+  }
 }
 
 .footer-title {
   font-size:large;
   font-weight: bold;
+}
+
+p .text {
+  color: $lightergrey;
 }

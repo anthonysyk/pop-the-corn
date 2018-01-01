@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, Row, Col} from 'react-bootstrap';
+import {Image} from 'react-bootstrap';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {Motion, spring} from 'react-motion';
 import {Link} from 'react-router-dom'
@@ -23,22 +23,24 @@ class SliderComponent extends Component {
     }
 
 
+    // TODO: FIX ARROWS
+
     render() {
 
-        const {movies, title} = this.props;
+        const {cards, title} = this.props;
         const translateX = this.state.position;
 
 
         return (
             <div>
                 <h2>{title}</h2>
-                { this.state.position < 0 &&
-                <div className="left-arrow">
-                    <i className="fa fa-chevron-left" aria-hidden="true"
-                       onClick={() => this.slideLeft()}
-                    />
-                </div>
-                }
+                {/*{ this.state.position < 0 &&*/}
+                {/*<div className="left-arrow">*/}
+                {/*<i className="fa fa-chevron-left" aria-hidden="true"*/}
+                {/*onClick={() => this.slideLeft()}*/}
+                {/*/>*/}
+                {/*</div>*/}
+                {/*}*/}
                 <div className="slider-container">
                     <Motion style={{x: spring(translateX)}}>
                         {({x}) =>
@@ -51,10 +53,10 @@ class SliderComponent extends Component {
                                     transitionAppearTimeout={300}
                                 >
                                     {
-                                        movies.map((movie, index) =>
+                                        cards.map((card, index) =>
                                             <div key={index} className="slider-card">
-                                                <Link to={`/details/${movie.id}`}>
-                                                    <Image src={movie.poster}/>
+                                                <Link to={`/#`}>
+                                                    <img src={card.poster}/>
                                                 </Link>
                                             </div>
                                         )
@@ -63,13 +65,13 @@ class SliderComponent extends Component {
                             </div>
                         }</Motion>
                 </div>
-                { this.state.position < movies.length - 1 && movies.length > 6 &&
-                    <div className="right-arrow">
-                        <i className="fa fa-chevron-right" aria-hidden="true"
-                           onClick={() => this.slideRight()}
-                        />
-                    </div>
-                }
+                {/*{ this.state.position < cards.length - 1 && cards.length > 6 &&*/}
+                {/*<div className="right-arrow">*/}
+                {/*<i className="fa fa-chevron-right" aria-hidden="true"*/}
+                {/*onClick={() => this.slideRight()}*/}
+                {/*/>*/}
+                {/*</div>*/}
+                {/*}*/}
             </div>
         );
     }
