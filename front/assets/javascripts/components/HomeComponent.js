@@ -18,37 +18,37 @@ class HomeComponent extends Component {
                 <Row className="slider-row">
                     <Col md={12} xs={12}>
                         <Slider title="Best Rated Movies"
-                                movies={data.bestRatedMovies}/>
+                                cards={data.bestRatedMovies}/>
                     </Col>
                 </Row>
                 <Row className="slider-row">
                     <Col md={12} xs={12}>
                         <Slider title="Comedy"
-                                movies={data.popularByGenre.Comedy}/>
+                                cards={data.popularByGenre.Comedy}/>
                     </Col>
                 </Row>
                 <Row className="slider-row">
                     <Col md={12} xs={12}>
                         <Slider title="Family"
-                                movies={data.popularByGenre.Family}/>
+                                cards={data.popularByGenre.Family}/>
                     </Col>
                 </Row>
                 <Row className="slider-row">
                     <Col md={12} xs={12}>
                         <Slider title="Drama"
-                                movies={data.popularByGenre.Drama}/>
+                                cards={data.popularByGenre.Drama}/>
                     </Col>
                 </Row>
                 <Row className="slider-row">
                     <Col md={12} xs={12}>
                         <Slider title="Thriller"
-                                movies={data.popularByGenre.Thriller}/>
+                                cards={data.popularByGenre.Thriller}/>
                     </Col>
                 </Row>
                 <Row className="slider-row">
                     <Col md={12} xs={12}>
                         <Slider title="Documentary"
-                                movies={data.popularByGenre.Documentary}/>
+                                cards={data.popularByGenre.Documentary}/>
                     </Col>
                 </Row>
             </div>
