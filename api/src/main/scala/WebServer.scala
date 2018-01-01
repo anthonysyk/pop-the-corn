@@ -13,22 +13,38 @@ import io.circe.syntax._
 import models.{MovieDetails, Recommendation}
 import org.elasticsearch.index.translog.Translog.Source
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContextExecutor, Future}
 import scala.util.{Failure, Success}
 
 object WebServer {
   def main(args: Array[String]) {
 
-    implicit val system = ActorSystem("my-system")
-    implicit val materializer = ActorMaterializer()
+    val params = args.sliding(2,2).map(arr => arr(0) -> arr(1)).toMap
+
+    val maybeHost = args.sliding(2,2).map(arr => arr(0) -> arr(1)).toMap.get("--host")
+    val maybePort = args.sliding(2,2).map(arr => arr(0) -> arr(1)).toMap.get("--port")
+
+    if (maybeHost.isEmpty || maybePort.isEmpty)
+    {
+      println("error with params, please specify an --host and a --port")
+      System.exit(0)
+    }
+
+    val host = maybeHost.get
+    val port = maybePort.get.toInt
+    println(s"starting server with config: http://$host:$port")
+
+
+    implicit val system: ActorSystem = ActorSystem("my-system")
+    implicit val materializer: ActorMaterializer = ActorMaterializer()
     // needed for the future flatMap/onComplete in the end
-    implicit val executionContext = system.dispatcher
+    implicit val executionContext: ExecutionContextExecutor = system.dispatcher
 
     val rootDir: String = new File("..").getCanonicalPath
 
     var recommendations: Vector[Recommendation] = Vector.empty
 
-    ApiController.startService // To launch actors
+    ApiController.startService() // To launch actors
 
     val route =
       pathSingleSlash {
@@ -152,9 +168,6 @@ object WebServer {
               })
             }
         }
-
-    val host = "0.0.0.0"
-    val port = 9000
 
     val bindingFuture = Http().bindAndHandle(route, host, port)
 

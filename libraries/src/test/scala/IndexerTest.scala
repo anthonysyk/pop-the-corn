@@ -6,9 +6,6 @@ import io.circe.generic.auto._
 import io.circe.parser._
 import io.circe.syntax._
 
-/**
-  * Created by Anthony on 19/09/2017.
-  */
 class IndexerTest extends FunSuite with CirceHelper{
 
   test("test parsing productToMap") {
