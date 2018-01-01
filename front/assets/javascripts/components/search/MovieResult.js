@@ -1,7 +1,6 @@
 import React from 'react';
 import {Image, Row, Col} from 'react-bootstrap';
 import no_image from '../../../images/no-image.svg';
-import ReactStars from 'react-stars';
 import {Link} from 'react-router-dom'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
@@ -41,9 +40,9 @@ const MovieResult = ({movie}) => (
                         <Row>
                             <Col xs={8} md={10}/>
                             <Col xs={4} md={2}>
-                                <ReactStars className="rating-stars" value={movie.vote_average / 2} count={5}
-                                            onChange={ ratingChanged }
-                                            size={24} color2={'#ffd700'}/>
+                                {/*<ReactStars className="rating-stars" value={movie.vote_average / 2} count={5}*/}
+                                            {/*onChange={ ratingChanged }*/}
+                                            {/*size={24} color2={'#ffd700'}/>*/}
                                 <span className="small-info">{movie.vote_count} votes</span>
                             </Col>
                         </Row>

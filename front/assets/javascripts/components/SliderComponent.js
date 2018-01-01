@@ -28,6 +28,7 @@ class SliderComponent extends Component {
     render() {
 
         const {cards, title} = this.props;
+
         const translateX = this.state.position;
 
 

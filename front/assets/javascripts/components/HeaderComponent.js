@@ -30,7 +30,7 @@ class HeaderComponent extends Component {
     }
 
     render() {
-        const {suggestionsData, movieData, children} = this.props;
+        const {suggestionsData, children} = this.props;
 
         return (
             <div className="popthecorn-header">
