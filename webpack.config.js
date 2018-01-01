@@ -51,6 +51,9 @@ module.exports = {
     plugins: [extractSass],
     devtool: 'eval',
     devServer: {
+        public: 'anthonysyk.ddns.net:8080',
+        host:'192.168.1.26',
+        port: '8080',
         compress: true,
         proxy: {
             '*': {

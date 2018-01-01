@@ -6,7 +6,7 @@
   "scripts": {
     "start-dev": "npm-run-all --parallel start-dev:*",
     "start-dev:back": "cd api && exec sbt 'runMain WebServer --host 192.168.1.26 --port 9000'",
-    "start-dev:front": "npm run clean && NODE_ENV=development webpack-dev-server --host 192.168.1.26 --port 8080",
+    "start-dev:front": "npm run clean && NODE_ENV=development webpack-dev-server",
     "build-watch": "webpack --watch",
     "clean": "npm-run-all clean:*",
     "clean:js": "rm -rf public/javascripts/*",
