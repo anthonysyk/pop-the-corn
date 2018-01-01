@@ -10,6 +10,7 @@ const extractSass = new ExtractTextPlugin({
 
 module.exports = {
     entry: {
+        'webpack-dev-server/client?http://0.0.0.0:8080',
         main: './app/assets/javascripts/main.js'
     },
     output: {
