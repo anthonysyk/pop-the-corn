@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import * as variables from '../../variables';
+import * as variables from '../variables';
 import { Row, Col } from 'react-bootstrap'
 
 class FooterComponent extends Component {

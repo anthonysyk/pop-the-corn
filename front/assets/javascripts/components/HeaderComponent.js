@@ -7,6 +7,8 @@ import {Link} from 'react-router-dom';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import NavbarComponent from './NavbarComponent';
 import QuickRatingComponent from "./recommendation/QuickRatingComponent";
+import * as variables from '../variables';
+
 
 
 @withRouter
@@ -35,8 +37,8 @@ class HeaderComponent extends Component {
                 <NavbarComponent />
                 <Row>
                     <div className="main-title__white">
-                        <a href="/"><h1>&nbsp;&nbsp;Pop the corn</h1></a>
-                        <p className="lead">Get me the movie, I'm making popcorn !</p>
+                        <a href="/"><h1>&nbsp;&nbsp;{variables.site_name}</h1></a>
+                        <p className="lead">{variables.slogan}</p>
                     </div>
                 </Row>
                 {children}
