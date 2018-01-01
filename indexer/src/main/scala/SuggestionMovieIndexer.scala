@@ -16,11 +16,6 @@ object SuggestionMovieIndexer extends CirceHelper with EsClient {
   val sparkConf: SparkConf = new SparkConf().setMaster("local[*]").setAppName("SuggestionIndexer")
   val ss: SparkSession = SparkSession.builder().config(sparkConf).getOrCreate()
 
-  import org.apache.log4j.{Level, Logger}
-
-  Logger.getLogger("org").setLevel(Level.OFF)
-  Logger.getLogger("akka").setLevel(Level.OFF)
-
   import org.elasticsearch.spark._
 
   def main(args: Array[String]): Unit = {
@@ -34,6 +29,8 @@ object SuggestionMovieIndexer extends CirceHelper with EsClient {
         .flatMap(s => decode[TmdbMovie](parse(s).right.toOption.getOrElse(Json.Null).noSpaces).right.toOption)
         .map(_.suggestionES)
         .persist()
+
+      moviesRDD.take(10).foreach(println)
 
       moviesRDD.coalesce(20).saveToEs(IndexAndType)
     }
