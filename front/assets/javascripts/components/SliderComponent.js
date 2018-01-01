@@ -55,7 +55,7 @@ class SliderComponent extends Component {
                                     {
                                         cards.map((card, index) =>
                                             <div key={index} className="slider-card">
-                                                <Link to={`/#`}>
+                                                <Link to={`/details/${movie.id}`}>
                                                     <img src={card.poster}/>
                                                 </Link>
                                             </div>
