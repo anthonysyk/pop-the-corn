@@ -48,10 +48,10 @@ object WebServer {
 
     val route =
       pathSingleSlash {
-        getFromFile(s"$rootDir/app/index.html")
+        getFromFile(s"$rootDir/front/index.html")
       } ~
         path("favicon.ico") {
-          getFromFile(s"$rootDir/app/assets/images/favicon.ico")
+          getFromFile(s"$rootDir/front/assets/images/favicon.ico")
         } ~
         path("search") {
           get {

@@ -10,7 +10,7 @@ const extractSass = new ExtractTextPlugin({
 
 module.exports = {
     entry: {
-        main: './app/assets/javascripts/main.js'
+        main: './front/assets/javascripts/main.js'
     },
     output: {
         path: path.resolve(__dirname, 'public/javascripts'),
