@@ -31,7 +31,7 @@ class HeaderComponent extends Component {
         const {suggestionsData, children} = this.props;
 
         return (
-            <div className="popthecorn-header">
+            <div className="template-header">
                 <NavbarComponent />
                 <Row>
                     <div className="main-title__white">
