@@ -35,8 +35,6 @@ object SuggestionMovieIndexer extends CirceHelper with EsClient {
         .map(_.suggestionES)
         .persist()
 
-      moviesRDD.take(10).foreach(println)
-
       moviesRDD.coalesce(20).saveToEs(IndexAndType)
     }
 
