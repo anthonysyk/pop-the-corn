@@ -7,6 +7,7 @@ import io.circe.parser._
 import io.circe.syntax._
 import models.{Suggestion, SuggestionES, TmdbMovie}
 import org.apache.spark.rdd.RDD
+import org.apache.spark.serializer.KryoSerializer
 
 import scala.concurrent.ExecutionContext.Implicits._
 import scala.concurrent.duration._
@@ -14,9 +15,10 @@ import scala.concurrent.duration._
 object SuggestionMovieIndexer extends CirceHelper with EsClient {
 
   val sparkConf: SparkConf = new SparkConf().setMaster("local[*]").setAppName("SuggestionIndexer")
-  val ss: SparkSession = SparkSession.builder().config(sparkConf).getOrCreate()
+    .set("es.nodes", "192.168.1.26:9200")
+    .set("spark.serializer", classOf[KryoSerializer].getName)
 
-  import org.elasticsearch.spark._
+  val ss: SparkSession = SparkSession.builder().config(sparkConf).getOrCreate()
 
   import org.apache.log4j.{Level, Logger}
 
@@ -43,7 +45,12 @@ object SuggestionMovieIndexer extends CirceHelper with EsClient {
 
 //      moviesRDD.coalesce(20).saveToEs(IndexAndType)
 
-      val testRDD = ss.read.format("es").load("movies/movie").show(20)
+      import org.elasticsearch.spark._
+      import org.elasticsearch.spark.sql._
+      import org.apache.spark.SparkContext._
+
+
+      ss.sparkContext.esJsonRDD("movies/movie").take(20).foreach(println)
     }
 
   }
