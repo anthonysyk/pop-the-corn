@@ -42,6 +42,7 @@ object SuggestionMovieIndexer extends CirceHelper with EsClient {
 //      moviesRDD.coalesce(20).saveToEs(IndexAndType)
 //    }
 
+
     ss.read.format("org.elasticsearch.spark.sql")
       .option("pushdown", "true")
       .load(s"${MovieIndexDefinition.IndexName}/${MovieIndexDefinition.TypeName}")

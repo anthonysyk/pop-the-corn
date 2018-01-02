@@ -2,7 +2,7 @@ name := """pop-the-corn-indexer"""
 
 lazy val commonSettings = Seq(
   version := "1.0-SNAPSHOT",
-  scalaVersion := "2.11.7"
+  scalaVersion := "2.11.8"
 )
 
 lazy val elastic4sVersion = "1.7.0"
@@ -22,8 +22,7 @@ lazy val circe = Seq(
 lazy val sparkVersion = "2.0.2"
 lazy val sparkDependencies = Seq(
   "org.apache.spark" %% "spark-core",
-  "org.apache.spark" %% "spark-sql",
-  "org.apache.spark" %% "spark-mllib"
+  "org.apache.spark" %% "spark-sql"
 ).map(_ % sparkVersion)
 
 lazy val libraries = RootProject(file("../libraries"))

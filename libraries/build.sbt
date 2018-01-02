@@ -3,7 +3,7 @@ name := """pop-the-corn-libraries"""
 
 lazy val commonSettings = Seq(
   version := "1.0-SNAPSHOT",
-  scalaVersion := "2.11.7"
+  scalaVersion := "2.11.8"
 )
 lazy val elastic4sVersion = "1.7.0"
 
