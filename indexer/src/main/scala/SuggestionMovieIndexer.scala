@@ -32,10 +32,10 @@ object SuggestionMovieIndexer extends CirceHelper with EsClient {
     if (isIndexCreated) {
       val moviesRDD: RDD[String] = ss.sparkContext.esJsonRDD(s"${MovieIndexDefinition.IndexName}/${MovieIndexDefinition.TypeName}").values
 
-      val suggestionsRDD = moviesRDD
-      .flatMap(s => decode[TmdbMovie](s).right.toOption)
-        .map(_.suggestionES)
-        .persist()
+//      val suggestionsRDD = moviesRDD
+//      .flatMap(s => decode[TmdbMovie](s).right.toOption)
+//        .map(_.suggestionES)
+//        .persist()
 
       moviesRDD.take(10).foreach(println)
 
