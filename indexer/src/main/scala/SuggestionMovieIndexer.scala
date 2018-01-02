@@ -1,6 +1,6 @@
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
-import ptc.libraries._
+import ptc.libraries.{CirceHelper, EsClient, MovieIndexDefinition, SuggestIndexDefinition}
 import io.circe._
 import io.circe.generic.auto._
 import io.circe.parser._
@@ -14,11 +14,9 @@ import scala.concurrent.duration._
 object SuggestionMovieIndexer extends CirceHelper with EsClient {
 
   val sparkConf: SparkConf = new SparkConf().setMaster("local[*]").setAppName("SuggestionIndexer")
-    .set("es.nodes", "192.168.1.26")
-    .set("es.port", "9200")
-    .set("spark.es.nodes.discovery", "true")
-
   val ss: SparkSession = SparkSession.builder().config(sparkConf).getOrCreate()
+
+  import org.elasticsearch.spark._
 
   import org.apache.log4j.{Level, Logger}
 
@@ -32,25 +30,16 @@ object SuggestionMovieIndexer extends CirceHelper with EsClient {
     val isIndexCreated = upsertIndex(SuggestIndexDefinition.esIndexConfiguration).await(2.seconds)
 
     if (isIndexCreated) {
-//      val moviesRDD: RDD[(String, String)] = ss.sparkContext.esJsonRDD(s"${MovieIndexDefinition.IndexName}/${MovieIndexDefinition.TypeName}")
-//        .values
-
-//      val suggestionsRDD = moviesRDD
-//      .flatMap(s => decode[TmdbMovie](s).right.toOption)
-//        .map(_.suggestionES)
-//        .persist()
+      val moviesRDD: RDD[SuggestionES] = ss.sparkContext.esJsonRDD(s"${MovieIndexDefinition.IndexName}/${MovieIndexDefinition.TypeName}")
+        .values
+        .flatMap(s => decode[TmdbMovie](s).right.toOption)
+        .map(_.suggestionES)
+        .persist()
 
 
-//      moviesRDD.take(10).foreach(println)
+      moviesRDD.take(10).foreach(println)
 
-//      moviesRDD.coalesce(20).saveToEs(IndexAndType)
-
-      import org.elasticsearch.spark._
-      import org.elasticsearch.spark.sql._
-      import org.apache.spark.SparkContext._
-
-
-      ss.sparkContext.esJsonRDD(s"${DiscoveredMovieIndexDefinition.IndexName}/${DiscoveredMovieIndexDefinition.TypeName}").take(20).foreach(println)
+      moviesRDD.coalesce(20).saveToEs(IndexAndType)
     }
 
   }
