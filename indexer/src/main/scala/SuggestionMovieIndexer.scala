@@ -16,7 +16,6 @@ object SuggestionMovieIndexer extends CirceHelper with EsClient {
 
   val sparkConf: SparkConf = new SparkConf().setMaster("local[*]").setAppName("SuggestionIndexer")
     .set("es.nodes", "192.168.1.26:9200")
-    .set("spark.serializer", classOf[KryoSerializer].getName)
 
   val ss: SparkSession = SparkSession.builder().config(sparkConf).getOrCreate()
 
