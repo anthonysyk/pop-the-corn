@@ -1,6 +1,6 @@
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
-import ptc.libraries.{CirceHelper, EsClient, MovieIndexDefinition, SuggestIndexDefinition}
+import ptc.libraries._
 import io.circe._
 import io.circe.generic.auto._
 import io.circe.parser._
@@ -50,7 +50,7 @@ object SuggestionMovieIndexer extends CirceHelper with EsClient {
       import org.apache.spark.SparkContext._
 
 
-      ss.sparkContext.esJsonRDD("movies/movie").take(20).foreach(println)
+      ss.sparkContext.esJsonRDD(s"${DiscoveredMovieIndexDefinition.IndexName}/${DiscoveredMovieIndexDefinition.TypeName}").take(20).foreach(println)
     }
 
   }
