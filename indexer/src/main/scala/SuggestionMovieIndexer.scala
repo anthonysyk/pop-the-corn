@@ -44,7 +44,7 @@ object SuggestionMovieIndexer extends CirceHelper with EsClient {
 
     ss.read.format("org.elasticsearch.spark.sql")
       .option("pushdown", "true")
-      .load("myindex/mytype")
+      .load(s"${MovieIndexDefinition.IndexName}/${MovieIndexDefinition.TypeName}")
       .show(20)
 
 
