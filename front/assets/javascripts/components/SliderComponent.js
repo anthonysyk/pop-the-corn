@@ -4,12 +4,25 @@ import {Motion, spring} from 'react-motion';
 import {Link} from 'react-router-dom'
 
 
+// https://www.andrewhfarmer.com/react-image-gallery/
+function imagesLoaded(parentNode) {
+    const imgElements = parentNode.querySelectorAll('img');
+    for (const img of imgElements) {
+        if (!img.complete) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
 class SliderComponent extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            position: 0
+            position: 0,
+            loading: true
         };
     }
 
@@ -21,6 +34,12 @@ class SliderComponent extends Component {
         this.setState({position: this.state.position + 182.6});
     }
 
+    handleImageChange() {
+        this.setState({
+            loading: imagesLoaded(this.sliderCarouselRef)
+        })
+    };
+
 
     // TODO: FIX ARROWS
 
@@ -29,7 +48,6 @@ class SliderComponent extends Component {
         const {cards, title} = this.props;
 
         const translateX = this.state.position;
-
 
         return (
             <div>
@@ -44,7 +62,9 @@ class SliderComponent extends Component {
                 <div className="slider-container">
                     <Motion style={{x: spring(translateX)}}>
                         {({x}) =>
-                            <div className="slider-carousel" style={{transform: `translateX(${x}px)`}}>
+                            <div className="slider-carousel"
+                                 ref={(ref) => this.sliderCarouselRef = ref}
+                                 style={{transform: `translateX(${x}px)`}}>
                                 <ReactCSSTransitionGroup
                                     transitionName="apparition"
                                     transitionAppear={true}
@@ -56,7 +76,11 @@ class SliderComponent extends Component {
                                         cards.map((card, index) =>
                                             <div key={index} className="slider-card">
                                                 <Link to={`/details/${card.id}`}>
-                                                    <img src={card.poster}/>
+                                                    <img
+                                                        className={this.state.loading && "loading-image"}
+                                                        src={card.poster}
+                                                        onLoad={this.handleImageChange.bind(this)}
+                                                    />
                                                 </Link>
                                             </div>
                                         )
