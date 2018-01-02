@@ -25,31 +25,22 @@ object SuggestionMovieIndexer extends CirceHelper with EsClient {
 
   def main(args: Array[String]): Unit = {
 
-//    val IndexAndType = s"${SuggestIndexDefinition.IndexName}/${SuggestIndexDefinition.TypeName}"
-//
-//    val isIndexCreated = upsertIndex(SuggestIndexDefinition.esIndexConfiguration).await(2.seconds)
+    val IndexAndType = s"${SuggestIndexDefinition.IndexName}/${SuggestIndexDefinition.TypeName}"
 
-//    if (isIndexCreated) {
-//      val moviesRDD: RDD[SuggestionES] = ss.sparkContext.esJsonRDD(s"${MovieIndexDefinition.IndexName}/${MovieIndexDefinition.TypeName}")
-//        .values
-//        .flatMap(s => decode[TmdbMovie](s).right.toOption)
-//        .map(_.suggestionES)
-//        .persist()
-//
-//
-//      moviesRDD.take(10).foreach(println)
-//
-//      moviesRDD.coalesce(20).saveToEs(IndexAndType)
-//    }
+    val isIndexCreated = upsertIndex(SuggestIndexDefinition.esIndexConfiguration).await(2.seconds)
+
+    if (isIndexCreated) {
+      val moviesRDD: RDD[SuggestionES] = ss.sparkContext.esJsonRDD(s"${MovieIndexDefinition.IndexName}/${MovieIndexDefinition.TypeName}")
+        .values
+        .flatMap(s => decode[TmdbMovie](s).right.toOption)
+        .map(_.suggestionES)
+        .persist()
 
 
-//    ss.read.format("org.elasticsearch.spark.sql")
-//      .option("pushdown", "true")
-//      .load(s"${MovieIndexDefinition.IndexName}/${MovieIndexDefinition.TypeName}")
-//      .show(20)
+      moviesRDD.take(10).foreach(println)
 
-    import ss.implicits._
-    ss.sparkContext.parallelize(Seq("toto", "tata", "titi")).toDF.show(20)
+      moviesRDD.coalesce(20).saveToEs(IndexAndType)
+    }
 
 
   }
