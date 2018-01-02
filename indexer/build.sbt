@@ -21,6 +21,8 @@ lazy val circe = Seq(
 
 lazy val libraries = RootProject(file("../libraries"))
 
+lazy val sparkV = "2.2.0"
+
 val main = Project(id = "indexer", base = file("."))
   .settings(commonSettings)
   .settings(
@@ -29,7 +31,8 @@ val main = Project(id = "indexer", base = file("."))
       akkaActor,
       scalaTest,
       "org.elasticsearch" %% "elasticsearch-spark-20" % "6.1.1",
-      "org.apache.spark" %% "spark-core" % "2.2.0"
+      "org.apache.spark" %% "spark-core" % sparkV,
+      "org.apache.spark" %% "spark-sql" % sparkV
     ) ++ circe
   )
   .dependsOn(libraries)
