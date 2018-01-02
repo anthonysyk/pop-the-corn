@@ -37,7 +37,8 @@ val main = Project(id = "indexer", base = file("."))
       scalaTest,
       "org.elasticsearch" %% "elasticsearch-spark-20" % "6.1.1",
       "org.apache.hadoop" % "hadoop-common" % "2.7.2",
-      "org.apache.hadoop" % "hadoop-mapreduce-client-core" % "2.7.2"
+      "org.apache.hadoop" % "hadoop-mapreduce-client-core" % "2.7.2",
+      "org.scala-lang" % "scala-library" % "2.11.8"
     ) ++ circe ++ sparkDependencies
   )
   .dependsOn(libraries)

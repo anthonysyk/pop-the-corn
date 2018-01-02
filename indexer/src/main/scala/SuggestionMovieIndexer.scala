@@ -7,7 +7,6 @@ import io.circe.parser._
 import io.circe.syntax._
 import models.{Suggestion, SuggestionES, TmdbMovie}
 import org.apache.spark.rdd.RDD
-import org.apache.spark.serializer.KryoSerializer
 
 import scala.concurrent.ExecutionContext.Implicits._
 import scala.concurrent.duration._
