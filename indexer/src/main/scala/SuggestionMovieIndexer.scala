@@ -25,9 +25,9 @@ object SuggestionMovieIndexer extends CirceHelper with EsClient {
 
   def main(args: Array[String]): Unit = {
 
-    val IndexAndType = s"${SuggestIndexDefinition.IndexName}/${SuggestIndexDefinition.TypeName}"
-
-    val isIndexCreated = upsertIndex(SuggestIndexDefinition.esIndexConfiguration).await(2.seconds)
+//    val IndexAndType = s"${SuggestIndexDefinition.IndexName}/${SuggestIndexDefinition.TypeName}"
+//
+//    val isIndexCreated = upsertIndex(SuggestIndexDefinition.esIndexConfiguration).await(2.seconds)
 
 //    if (isIndexCreated) {
 //      val moviesRDD: RDD[SuggestionES] = ss.sparkContext.esJsonRDD(s"${MovieIndexDefinition.IndexName}/${MovieIndexDefinition.TypeName}")
