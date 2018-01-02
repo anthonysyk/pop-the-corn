@@ -18,6 +18,11 @@ object SuggestionMovieIndexer extends CirceHelper with EsClient {
 
   import org.elasticsearch.spark._
 
+  import org.apache.log4j.{Level, Logger}
+
+  Logger.getLogger("org").setLevel(Level.OFF)
+  Logger.getLogger("akka").setLevel(Level.OFF)
+
   def main(args: Array[String]): Unit = {
 
     val IndexAndType = s"${SuggestIndexDefinition.IndexName}/${SuggestIndexDefinition.TypeName}"
