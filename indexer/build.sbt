@@ -19,12 +19,6 @@ lazy val circe = Seq(
   "io.circe" %% "circe-optics"
 ).map(_ % circeVersion)
 
-lazy val sparkVersion = "2.0.2"
-lazy val sparkDependencies = Seq(
-  "org.apache.spark" %% "spark-core",
-  "org.apache.spark" %% "spark-sql"
-).map(_ % sparkVersion)
-
 lazy val libraries = RootProject(file("../libraries"))
 
 val main = Project(id = "indexer", base = file("."))
@@ -34,10 +28,9 @@ val main = Project(id = "indexer", base = file("."))
       elastic4s,
       akkaActor,
       scalaTest,
-      "org.elasticsearch" % "elasticsearch-spark-20_2.11" % "5.5.1",
-      "org.apache.hadoop" % "hadoop-common" % "2.7.2",
-      "org.apache.hadoop" % "hadoop-mapreduce-client-core" % "2.7.2"
-    ) ++ circe ++ sparkDependencies
+      "org.elasticsearch" %% "elasticsearch-spark-20" % "6.1.1",
+      "org.apache.spark" %% "spark-core" % "2.2.0"
+    ) ++ circe
   )
   .dependsOn(libraries)
 
