@@ -14,7 +14,9 @@ import scala.concurrent.duration._
 object SuggestionMovieIndexer extends CirceHelper with EsClient {
 
   val sparkConf: SparkConf = new SparkConf().setMaster("local[*]").setAppName("SuggestionIndexer")
-    .set("es.nodes", "192.168.1.26:9200")
+    .set("es.nodes", "192.168.1.26")
+    .set("es.port", "9200")
+    .set("spark.es.nodes.discovery", "true")
 
   val ss: SparkSession = SparkSession.builder().config(sparkConf).getOrCreate()
 
