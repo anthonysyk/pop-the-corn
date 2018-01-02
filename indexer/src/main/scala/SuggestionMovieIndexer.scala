@@ -43,10 +43,13 @@ object SuggestionMovieIndexer extends CirceHelper with EsClient {
 //    }
 
 
-    ss.read.format("org.elasticsearch.spark.sql")
-      .option("pushdown", "true")
-      .load(s"${MovieIndexDefinition.IndexName}/${MovieIndexDefinition.TypeName}")
-      .show(20)
+//    ss.read.format("org.elasticsearch.spark.sql")
+//      .option("pushdown", "true")
+//      .load(s"${MovieIndexDefinition.IndexName}/${MovieIndexDefinition.TypeName}")
+//      .show(20)
+
+    import ss.implicits._
+    ss.sparkContext.parallelize(Seq("toto", "tata", "titi")).toDF.show(20)
 
 
   }
