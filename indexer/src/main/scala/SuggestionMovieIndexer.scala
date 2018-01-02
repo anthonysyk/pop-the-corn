@@ -43,9 +43,7 @@ object SuggestionMovieIndexer extends CirceHelper with EsClient {
 
 //      moviesRDD.coalesce(20).saveToEs(IndexAndType)
 
-      val testRDD = ss.sparkContext.esRDD("movies/movie").take(10)
-
-      println(testRDD)
+      val testRDD = ss.read.format("es").load("movies/movie").show(20)
     }
 
   }
