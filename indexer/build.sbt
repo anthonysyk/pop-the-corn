@@ -21,7 +21,7 @@ lazy val circe = Seq(
 
 lazy val libraries = RootProject(file("../libraries"))
 
-lazy val sparkV = "2.2.0"
+lazy val sparkV = "2.0.2"
 
 val main = Project(id = "indexer", base = file("."))
   .settings(commonSettings)
@@ -37,8 +37,7 @@ val main = Project(id = "indexer", base = file("."))
   )
   .dependsOn(libraries)
 
-//packAutoSettings
-//packResourceDir ++= Map(baseDirectory.value / "src/main/bin" -> "bin", baseDirectory.value / "src/main/resources" -> "conf")
+packResourceDir ++= Map(baseDirectory.value / "src/main/bin" -> "bin", baseDirectory.value / "src/main/resources" -> "conf")
 
 //packResourceDir ++= Map(baseDirectory.value / "mlapi/src/main/resources" -> "resources")
 //
