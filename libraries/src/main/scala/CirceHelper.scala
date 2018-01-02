@@ -1,5 +1,7 @@
 package ptc.libraries
 
+import scala.util.Try
+
 trait CirceHelper {
 
   import io.circe._
@@ -30,7 +32,7 @@ trait CirceHelper {
 
   // collect = map + filter
   def removeOptionFromMap(mapping: Map[String, Any]): Map[String, Any] = mapping.collect {
-    case (key, Some(result)) => key -> result
+    case (key, Some(result)) if result.toString.nonEmpty => key -> result
     case (key, value: Map[_, _]) => key -> removeOptionFromMap(value.map(value => value._1.toString -> value._2))
     case (key, vector: Vector[_])=> key -> vector.map {
       case mapObject: Map[_, _] => removeOptionFromMap(mapObject.map(value => value._1.toString -> value._2))
