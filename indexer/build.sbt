@@ -7,7 +7,7 @@ lazy val commonSettings = Seq(
 
 lazy val elastic4sVersion = "1.7.0"
 
-lazy val scalaTest = "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test
+lazy val scalaTest =   "org.scalatest" %% "scalatest" % "3.0.1" % Test
 lazy val elastic4s = "com.sksamuel.elastic4s" %% "elastic4s-core" % elastic4sVersion
 lazy val akkaActor = "com.typesafe.akka" % "akka-actor_2.11" % "2.5.4"
 
@@ -35,7 +35,7 @@ val main = Project(id = "indexer", base = file("."))
       elastic4s,
       akkaActor,
       scalaTest,
-      "org.elasticsearch" % "elasticsearch-spark-20_2.11" % "5.5.1",
+      "org.elasticsearch" %% "elasticsearch-spark-20" % "6.1.1",
       "org.apache.hadoop" % "hadoop-common" % "2.7.2",
       "org.apache.hadoop" % "hadoop-mapreduce-client-core" % "2.7.2"
     ) ++ circe ++ sparkDependencies
