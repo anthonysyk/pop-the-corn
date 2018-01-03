@@ -33,6 +33,7 @@ class QuickRatingComponent extends Component {
     }
 
     onHide() {
+        console.log("close button pressed");
         this.setState({showModal: false})
     }
 

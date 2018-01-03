@@ -19,12 +19,15 @@ const history = createHistory();
 
 const store = createStore(
     reducer,
-    applyMiddleware(routerMiddleware(history), thunk)
+    compose(
+        applyMiddleware(routerMiddleware(history), thunk),
+        window.devToolsExtension ? window.devToolsExtension() : f => f
+    )
 );
 
 render(
-    <Provider store={ store }>
-        <ConnectedRouter history={ history }>
+    <Provider store={store}>
+        <ConnectedRouter history={history}>
             <MainComponent>
                 <Route exact path="/" component={SearchComponent}/>
                 <Route exact path="/details/:id" component={DetailPage}/>
