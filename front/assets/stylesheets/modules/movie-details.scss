@@ -1,16 +1,11 @@
-.movie-details {
-  padding: 3rem;
+.movie-backdrop {
+  opacity: 0.5;
+}
 
-  .movie-backdrop {
-    opacity: 0.5;
-  }
+.movie-poster {
 
-  .movie-poster {
-
-    img {
-      max-width: 100%;
-    }
-
+  img {
+    max-width: 100%;
   }
 
 }

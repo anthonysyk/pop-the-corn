@@ -6,7 +6,7 @@ import thunk from "redux-thunk";
 import {Route} from "react-router";
 import {ConnectedRouter, routerMiddleware} from "react-router-redux";
 import SearchComponent from "./components/search/SearchComponent";
-import DetailComponent from "./components/details/DetailComponent";
+import DetailPage from "./components/pages/DetailPage";
 import RecommendationComponent from "./components/recommendation/RecommendationComponent";
 import UserProfileRecommendationComponent from "./components/recommendation/UserProfileRecommendationComponent";
 import MainComponent from "./components/MainComponent";
@@ -27,7 +27,7 @@ render(
         <ConnectedRouter history={ history }>
             <MainComponent>
                 <Route exact path="/" component={SearchComponent}/>
-                <Route exact path="/details/:id" component={DetailComponent}/>
+                <Route exact path="/details/:id" component={DetailPage}/>
                 <Route exact path="/content-based" component={RecommendationComponent}/>
                 <Route exact path="/recommendations" component={UserProfileRecommendationComponent}/>
             </MainComponent>

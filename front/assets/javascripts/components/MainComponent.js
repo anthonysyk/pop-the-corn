@@ -4,7 +4,7 @@ import {getPopularMovies, getBestRatedMovies, getPopularByGenre} from '../action
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router'
 import HeaderComponent from './HeaderComponent';
-import HomeComponent from './HomeComponent';
+import HomePage from './pages/HomePage';
 import FooterComponent from './FooterComponent';
 
 @withRouter
@@ -38,7 +38,7 @@ class MainComponent extends Component {
                             <SearchBar />
                         </HeaderComponent>
                         { window.location.hash === "#/" && moviesData.movies.length === 0 &&
-                            <HomeComponent data={suggestionsData}/>
+                            <HomePage data={suggestionsData}/>
                         }
                         {children}
                         <FooterComponent />

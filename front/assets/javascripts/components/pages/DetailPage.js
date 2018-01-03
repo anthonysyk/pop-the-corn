@@ -12,7 +12,7 @@ import { withRouter } from 'react-router'
     }),
 )
 
-class DetailComponent extends Component {
+class DetailPage extends Component {
 
     constructor(props) {
         super(props)
@@ -33,8 +33,8 @@ class DetailComponent extends Component {
         const {movieData} = this.props;
 
         return (
-            <div className="movie-details">
-                <Row>
+            <div>
+                <Row className="section">
                     <Col xs={12} md={9}>
                         <Row>
                             <Col xs={12} md={12}>
@@ -67,4 +67,4 @@ class DetailComponent extends Component {
 
 }
 
-export default DetailComponent;
+export default DetailPage;
