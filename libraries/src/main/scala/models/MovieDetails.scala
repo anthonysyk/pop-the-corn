@@ -8,6 +8,7 @@ case class Recommendation(
 case class MovieDetails(
                          id: Option[Int],
                          title: Option[String],
+                         posterHigh: Option[String],
                          poster: Option[String],
                          backdrop: Option[String],
                          adult: Option[Boolean],
@@ -32,12 +33,13 @@ case class MovieDetails(
 
 object MovieDetails {
 
-  def fromTmdbMovie(tmdbMovie: TmdbMovie) = {
+  def fromTmdbMovie(tmdbMovie: TmdbMovie): MovieDetails = {
     import tmdbMovie._
     MovieDetails(
       id = id,
       title = title,
-      poster = poster_url,
+      posterHigh = poster_url_original,
+      poster = poster_url_small,
       backdrop = backdrop_url,
       adult = adult,
       vote_average = vote_average,

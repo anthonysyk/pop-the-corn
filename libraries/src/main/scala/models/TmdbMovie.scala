@@ -30,14 +30,19 @@ case class TmdbMovie(
                       vote_count: Option[Int],
                       tfidfSimilarity: Option[Double] = None
                     ) {
-  lazy val poster_url: Option[String] = poster_path.map(url => "https://image.tmdb.org/t/p/w1280" + url)
+  lazy val poster_url_original: Option[String] = poster_path.map(url => "https://image.tmdb.org/t/p/original" + url)
+  lazy val poster_url_big: Option[String] = poster_path.map(url => "https://image.tmdb.org/t/p/w1280" + url)
+  lazy val poster_url_small: Option[String] = poster_path.map(url => "https://image.tmdb.org/t/p/w342" + url)
+  lazy val poster_url_very_small: Option[String] = poster_path.map(url => "https://image.tmdb.org/t/p/w92" + url)
+
+
   lazy val backdrop_url: Option[String] = backdrop_path.map(url => "https://image.tmdb.org/t/p/w1280" + url)
 
 
   val suggestion = Suggestion(
     id,
     title.getOrElse("No Title"),
-    poster_url,
+    poster_url_very_small,
     vote_average,
     vote_count.getOrElse(0)
   )
