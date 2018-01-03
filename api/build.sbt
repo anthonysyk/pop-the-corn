@@ -45,3 +45,4 @@ val main = Project(id = "api", base = file("."))
   )
   .dependsOn(libraries)
 
+packResourceDir ++= Map(baseDirectory.value / "src/main/bin" -> "bin", baseDirectory.value / "src/main/resources" -> "conf")

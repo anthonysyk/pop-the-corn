@@ -77,7 +77,6 @@ class SliderComponent extends Component {
                                             <div key={index} className="slider-card">
                                                 <Link to={`/details/${card.id}`}>
                                                     <img
-                                                        className={this.state.loading && "loading-image"}
                                                         src={card.poster}
                                                         onLoad={this.handleImageChange.bind(this)}
                                                     />
