@@ -85,7 +85,7 @@ class QuickRatingComponent extends Component {
                             <div>
                                 <div className="quick-rating-image">
                                     <span className="quick-rating-text">Let's know each other ...</span>
-                                    <ProgressBar className="no-margin-bottom" bsStyle="info" now={this.state.position}
+                                    <ProgressBar className="no-margin-bottom md-margin-top" bsStyle="info" now={this.state.position}
                                                  max={movies.length - 1}/>
                                     <Image responsive src={movies[this.state.position].poster}/>
                                     <span className="poster-name">{movies[this.state.position].title}</span>
