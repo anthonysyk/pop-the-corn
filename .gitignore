@@ -5,7 +5,7 @@ target
 /.classpath
 /.settings
 /RUNNING_PID
-node_modules
+front/node_modules
 public/javascripts/
 public/stylesheets/
 package-lock.json

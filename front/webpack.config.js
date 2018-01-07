@@ -10,7 +10,7 @@ const extractSass = new ExtractTextPlugin({
 
 module.exports = {
     entry: {
-        main: './front/assets/javascripts/main.js'
+        main: './assets/javascripts/main.js'
     },
     output: {
         path: path.resolve(__dirname, 'public/javascripts'),
@@ -52,6 +52,8 @@ module.exports = {
     devtool: 'eval',
     devServer: {
         compress: true,
+        host: "0.0.0.0",
+        port: "8080",
         proxy: {
             '*': {
                 target: 'http://192.168.1.26:9000'

@@ -24,6 +24,7 @@ object WebServer {
     val maybeHost = args.sliding(2,2).map(arr => arr(0) -> arr(1)).toMap.get("--host")
     val maybePort = args.sliding(2,2).map(arr => arr(0) -> arr(1)).toMap.get("--port")
 
+    println(s"host: $maybeHost port: $maybePort")
     if (maybeHost.isEmpty || maybePort.isEmpty)
     {
       println("error with params, please specify an --host and a --port")
@@ -40,7 +41,7 @@ object WebServer {
     // needed for the future flatMap/onComplete in the end
     implicit val executionContext: ExecutionContextExecutor = system.dispatcher
 
-    val rootDir: String = new File("..").getCanonicalPath
+    val rootDir: String = new File(".").getCanonicalPath
 
     var recommendations: Vector[Recommendation] = Vector.empty
 
@@ -48,9 +49,11 @@ object WebServer {
 
     val route =
       pathSingleSlash {
-        getFromFile(s"$rootDir/front/index.html")
+        println(rootDir)
+        getFromFile(s"$rootDir/conf/index.html")
       } ~
         path("favicon.ico") {
+          println(rootDir)
           getFromFile(s"$rootDir/front/assets/images/favicon.ico")
         } ~
         path("search") {

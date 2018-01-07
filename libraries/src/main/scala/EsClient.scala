@@ -25,7 +25,7 @@ import scala.util.{Failure, Success, Try}
 trait EsClient extends ElasticDsl with CirceHelper {
 
   val settings: Settings = ImmutableSettings.settingsBuilder().put("cluster.name", "elasticsearch").build()
-  val uri = ElasticsearchClientUri("localhost:9300")
+  val uri = ElasticsearchClientUri("192.168.1.26:9300")
   val client: ElasticClient = ElasticClient.remote(settings, uri)
 
   def upsertIndex(esIndexDefinition: EsIndexDefinition): Future[Boolean] = {

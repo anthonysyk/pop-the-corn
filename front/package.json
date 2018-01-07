@@ -5,8 +5,7 @@
   "description": "Sideproject to apply what I learned",
   "scripts": {
     "start-dev": "npm-run-all --parallel start-dev:*",
-    "start-dev:back": "cd api && sbt pack && ./target/pack/bin/web-server --host 192.168.1.26 --port 9000",
-    "start-dev:front": "npm run clean && NODE_ENV=development webpack-dev-server --host 192.168.1.26 --port 8080 --public anthonysyk.ddns.net:8080",
+    "start-dev:front": "npm run clean && NODE_ENV=development webpack-dev-server --public anthonysyk.ddns.net:8080",
     "build-watch": "webpack --watch",
     "clean": "npm-run-all clean:*",
     "clean:js": "rm -rf public/javascripts/*",
@@ -29,6 +28,7 @@
     "react-loaders": "^2.5.0",
     "react-motion": "^0.5.1",
     "react-redux": "^5.0.5",
+    "react-responsive": "^4.0.3",
     "react-router": "^4.2.0",
     "react-router-bootstrap": "^0.24.2",
     "react-router-dom": "^4.2.0",
@@ -53,7 +53,7 @@
     "resolve-url-loader": "^2.0.2",
     "sass-loader": "^6.0.5",
     "style-loader": "^0.18.1",
-    "webpack": "^2.6.1",
+    "webpack": "^3.5.6",
     "webpack-dev-server": "^2.4.5"
   },
   "main": "main.js",

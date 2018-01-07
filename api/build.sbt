@@ -45,4 +45,13 @@ val main = Project(id = "api", base = file("."))
   )
   .dependsOn(libraries)
 
-packResourceDir ++= Map(baseDirectory.value / "src/main/bin" -> "bin", baseDirectory.value / "src/main/resources" -> "conf")
+packMain := Map(
+  "run-webservice" -> "WebServer"
+)
+
+packResourceDir ++= Map(
+  baseDirectory.value / "src/main/bin" -> "bin",
+  baseDirectory.value / "src/main/resources" -> "conf",
+  baseDirectory.value / "src/main/logs" -> "logs",
+  baseDirectory.value / "Dockerfile" ->  "Dockerfile"
+)
