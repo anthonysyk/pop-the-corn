@@ -39,7 +39,6 @@ class MainComponent extends Component {
                         <HeaderComponent>
                             <SearchBar />
                         </HeaderComponent>
-                        {console.log(location.pathname === "/")}
                         { location.pathname === "/" && moviesData.movies.length === 0 &&
                             <HomePage data={suggestionsData}/>
                         }

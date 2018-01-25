@@ -36,7 +36,7 @@ class HeaderComponent extends Component {
                 <NavbarComponent/>
                 <Row>
                     <div className="main-title__white">
-                        <a href="/"><h1>&nbsp;&nbsp;{variables.site_name}</h1></a>
+                        <a className="link_white" href="/"><h1>&nbsp;&nbsp;{variables.site_name}</h1></a>
                         <p className="lead">{variables.slogan}</p>
                     </div>
                 </Row>
@@ -89,6 +89,12 @@ const templateHeader = style({
     '& .main_title__white': {
         textAlign: 'center',
         color: 'white'
+    },
+    '& .link_white': {
+        color: 'white',
+        '&:hover': {
+            textDecoration: 'none'
+        }
     },
     '& .search_container': {
         textAlign: 'center',

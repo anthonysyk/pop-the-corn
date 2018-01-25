@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import {Navbar, Nav, NavDropdown, MenuItem} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
+import {style} from 'typestyle';
 
 class NavbarComponent extends Component {
 
     render() {
         return (
-            <Navbar inverse collapseOnSelect className="navbar-container">
+            <Navbar inverse collapseOnSelect className={navbar_container}>
                 <Navbar.Header>
                     <Navbar.Brand>
                         <Link to="/#">Pop The Corn </Link>
@@ -28,3 +29,11 @@ class NavbarComponent extends Component {
 }
 
 export default NavbarComponent;
+
+const navbar_container = style({
+    width: '100%',
+    position: 'fixed',
+    zIndex: '15',
+    top: '0',
+    left: '0'
+});
