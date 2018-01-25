@@ -1,6 +1,5 @@
 import React from 'react';
 import {Image, Row, Col} from 'react-bootstrap';
-import no_image from '../../../images/no-image.svg';
 import {Link} from 'react-router-dom'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
@@ -21,7 +20,7 @@ const MovieResult = ({movie}) => (
             <div className="search-result">
                 <Row className="search-row">
                     <Col xs={4} md={2}>
-                        <Image src={movie.poster ? movie.poster : no_image} rounded/>
+                        <Image src={movie.poster ? movie.poster : '/assets/images.no-images.svg'} rounded/>
                     </Col>
                     <Col xs={8} md={10}>
                         <Row>

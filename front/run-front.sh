@@ -3,8 +3,6 @@
 remoteDir=/home/anthony/projects/pop-the-corn/front
 port=8080
 
-npm install
-
 docker rmi popthecorn/front
 
 cd "$remoteDir" && docker build -t popthecorn/front:latest .

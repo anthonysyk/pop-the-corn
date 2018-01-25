@@ -10,11 +10,11 @@ const extractSass = new ExtractTextPlugin({
 
 module.exports = {
     entry: {
-        main: './assets/javascripts/main.js'
+        main: './src/main.js'
     },
     output: {
-        path: path.resolve(__dirname, 'public/javascripts'),
-        publicPath: 'assets/javascripts/',
+        path: path.resolve(__dirname, 'public/'),
+        publicPath: '/',
         filename: '[name].bundle.js'
     },
     module: {

@@ -19,14 +19,13 @@ import scala.util.{Failure, Success}
 object WebServer {
   def main(args: Array[String]) {
 
-    val params = args.sliding(2,2).map(arr => arr(0) -> arr(1)).toMap
+    val params = args.sliding(2, 2).map(arr => arr(0) -> arr(1)).toMap
 
-    val maybeHost = args.sliding(2,2).map(arr => arr(0) -> arr(1)).toMap.get("--host")
-    val maybePort = args.sliding(2,2).map(arr => arr(0) -> arr(1)).toMap.get("--port")
+    val maybeHost = args.sliding(2, 2).map(arr => arr(0) -> arr(1)).toMap.get("--host")
+    val maybePort = args.sliding(2, 2).map(arr => arr(0) -> arr(1)).toMap.get("--port")
 
     println(s"host: $maybeHost port: $maybePort")
-    if (maybeHost.isEmpty || maybePort.isEmpty)
-    {
+    if (maybeHost.isEmpty || maybePort.isEmpty) {
       println("error with params, please specify an --host and a --port")
       System.exit(0)
     }
@@ -50,11 +49,14 @@ object WebServer {
     val route =
       pathSingleSlash {
         println(rootDir)
-        getFromFile(s"$rootDir/conf/index.html")
+        getFromFile(s"$rootDir/assets/index.html")
       } ~
         path("favicon.ico") {
           println(rootDir)
-          getFromFile(s"$rootDir/front/assets/images/favicon.ico")
+          getFromFile(s"$rootDir/assets/images/favicon.ico")
+        } ~
+        pathPrefix("assets") {
+          getFromDirectory(s"$rootDir/assets")
         } ~
         path("search") {
           get {
@@ -152,7 +154,7 @@ object WebServer {
               val quickRatingResults: Seq[MovieDetails] = parse(response).right.toOption.getOrElse(Json.Null).as[Seq[MovieDetails]].right.toOption.getOrElse(Nil)
               val userProfile = GraphQLController.convertQuickResultsIntoUserProfile(quickRatingResults)
               val eventuallyRecommendations: Future[Recommendation] = GraphQLController.getMoviesBasedOnTaste(quickRatingResults, userProfile._2.movieId)
-              eventuallyRecommendations.onSuccess{case result => recommendations = Vector.empty :+ result}
+              eventuallyRecommendations.onSuccess { case result => recommendations = Vector.empty :+ result }
               onComplete(eventuallyRecommendations) {
                 case Success(result) => complete(result.asJson.noSpaces)
                 case Failure(ex) => complete(StatusCodes.InternalServerError, s"$ex")

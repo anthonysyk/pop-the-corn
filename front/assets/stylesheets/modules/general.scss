@@ -20,48 +20,6 @@
   left: 0;
 }
 
-.template-header {
-  border-bottom: 1px solid $lightgrey;
-  background: url(../../images/cover1.jpg) no-repeat center;
-  background-size: cover;
-  position: inherit;
-  z-index: 10;
-  margin: 0;
-  text-align: center;
-  color: #fff;
-  padding: 5rem;
-}
-
-.footer {
-  text-align: center;
-  border-top: 1px solid $lightgrey;
-  padding: 2rem 0;
-  margin-top: 3rem;
-  .logo {
-    background: url(../../images/popcorn.svg) no-repeat center;
-    background-size: contain;
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    vertical-align: middle;
-  }
-  ul {
-    list-style-type:none;
-    color: $darkgrey;
-  }
-
-  .copyright-container {
-    width: 80%;
-    margin: auto;
-    border-top: 1px solid $lightgrey;
-    padding-top: 2rem;
-  }
-  .brand-copyright {
-    padding-left: 1rem;
-    color: $darkgrey;
-  }
-}
-
 a {
   color: $lightergrey;
   text-decoration: none;

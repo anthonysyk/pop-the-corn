@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux'
 import {getMovieDetails} from '../../actions/actions';
 import {Image, Row, Col} from 'react-bootstrap';
-import no_image from '../../../images/no-image.svg';
 import { withRouter } from 'react-router'
 
 @withRouter
@@ -43,7 +42,7 @@ class DetailPage extends Component {
                         </Row>
                         <Row className="movie-poster">
                             <Col xs={4} md={2}>
-                                <Image src={movieData.movie.poster ? movieData.movie.poster : no_image} rounded/>
+                                <Image src={movieData.movie.poster ? movieData.movie.poster : "/assets/images/no-image.svg"} rounded/>
                             </Col>
                             <Col xs={8} md={10}>
                                 {movieData.movie.overview}

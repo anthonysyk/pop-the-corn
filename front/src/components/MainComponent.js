@@ -6,6 +6,8 @@ import {withRouter} from 'react-router'
 import HeaderComponent from './HeaderComponent';
 import HomePage from './pages/HomePage';
 import FooterComponent from './FooterComponent';
+import {mockedKeywords, mockedFooterValues, suggestions} from "../mocked";
+
 
 @withRouter
 @connect(
@@ -28,7 +30,7 @@ class MainComponent extends Component {
     }
 
     render() {
-        const {suggestionsData, moviesData, children} = this.props;
+        const {suggestionsData, moviesData, children, location} = this.props;
 
         return (
             <div id="wrapper">
@@ -37,11 +39,12 @@ class MainComponent extends Component {
                         <HeaderComponent>
                             <SearchBar />
                         </HeaderComponent>
-                        { window.location.hash === "#/" && moviesData.movies.length === 0 &&
+                        {console.log(location.pathname === "/")}
+                        { location.pathname === "/" && moviesData.movies.length === 0 &&
                             <HomePage data={suggestionsData}/>
                         }
                         {children}
-                        <FooterComponent />
+                        <FooterComponent values={mockedFooterValues}/>
                     </div>
                 </div>
             </div>

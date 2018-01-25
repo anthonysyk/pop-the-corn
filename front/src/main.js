@@ -10,10 +10,10 @@ import DetailPage from "./components/pages/DetailPage";
 import RecommendationComponent from "./components/recommendation/RecommendationComponent";
 import UserProfileRecommendationComponent from "./components/recommendation/UserProfileRecommendationComponent";
 import MainComponent from "./components/MainComponent";
-import createHistory from "history/createHashHistory";
+import createHistory from "history/createBrowserHistory";
 import reducer from "./reducers/reducers";
 
-import "../stylesheets/main.scss";
+import "../assets/stylesheets/main.scss";
 
 const history = createHistory();
 
