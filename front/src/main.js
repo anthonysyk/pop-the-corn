@@ -29,10 +29,10 @@ render(
     <Provider store={store}>
         <ConnectedRouter history={history}>
             <MainComponent>
-                <Route exact path="/" component={SearchComponent}/>
                 <Route path="/details/:id" component={DetailPage}/>
                 <Route path="/content-based" component={RecommendationComponent}/>
                 <Route path="/recommendations" component={UserProfileRecommendationComponent}/>
+                <Route exact path="/" component={SearchComponent}/>
             </MainComponent>
         </ConnectedRouter>
     </Provider>

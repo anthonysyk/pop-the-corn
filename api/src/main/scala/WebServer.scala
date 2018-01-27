@@ -12,6 +12,13 @@ import io.circe.parser.parse
 import io.circe.syntax._
 import models.{MovieDetails, Recommendation}
 import org.elasticsearch.index.translog.Translog.Source
+import akka.actor.ActorSystem
+import akka.stream.ActorMaterializer
+import akka.http.scaladsl.Http
+import akka.http.scaladsl.model._
+import akka.http.scaladsl.server._
+import StatusCodes._
+import Directives._
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 import scala.util.{Failure, Success}
@@ -45,6 +52,10 @@ object WebServer {
     var recommendations: Vector[Recommendation] = Vector.empty
 
     ApiController.startService() // To launch actors
+
+    implicit def rejectionHandler = RejectionHandler.newBuilder()
+      .handleNotFound{ getFromFile(s"$rootDir/assets/index.html")}
+      .result
 
     val route =
       pathSingleSlash {
