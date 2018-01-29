@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {Motion, spring} from 'react-motion';
-import {Link} from 'react-router-dom'
+import {Link} from 'react-router-dom';
+import {style} from 'typestyle';
 
 
 // https://www.andrewhfarmer.com/react-image-gallery/
@@ -59,10 +60,10 @@ class SliderComponent extends Component {
                 {/*/>*/}
                 {/*</div>*/}
                 {/*}*/}
-                <div className="slider-container">
+                <div className={slider_container}>
                     <Motion style={{x: spring(translateX)}}>
                         {({x}) =>
-                            <div className="slider-carousel"
+                            <div className={slider_carousel}
                                  ref={(ref) => this.sliderCarouselRef = ref}
                                  style={{transform: `translateX(${x}px)`}}>
                                 <ReactCSSTransitionGroup
@@ -74,7 +75,7 @@ class SliderComponent extends Component {
                                 >
                                     {
                                         cards.map((card, index) =>
-                                            <div key={index} className="slider-card">
+                                            <div key={index} className={slider_card}>
                                                 <Link to={`/details/${card.id}`}>
                                                     <img
                                                         src={card.poster}
@@ -101,3 +102,40 @@ class SliderComponent extends Component {
 }
 
 export default SliderComponent;
+
+// const arrow = style({
+//     '& .right-arrow': {
+//         width: '24px',
+//         position: 'absolute',
+//         display: 'block',
+//         right: '-22px',
+//         top: 'calc(50 % +18px)'
+//     },
+//     '& .left-arrow': {
+//         width: '24px',
+//         position: 'absolute',
+//         display: 'block',
+//         left: '-2px',
+//         top: 'calc(50 % +18px'
+//     }
+// });
+
+const slider_card = style({
+    paddingLeft: '8px',
+    paddingRight: '8px',
+    display: 'inline-block',
+    verticalAlign: 'top',
+    whiteSpace: 'normal',
+    position: 'relative',
+    img: {height: '250px'}
+});
+
+const slider_carousel = style({
+    whiteSpace: 'nowrap',
+    position: 'relative'
+});
+
+const slider_container = style({
+    overflow: 'hidden',
+    overflowX: 'scroll'
+});

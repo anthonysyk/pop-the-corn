@@ -96,26 +96,24 @@ const templateHeader = style({
             textDecoration: 'none'
         }
     },
-    '& .search_container': {
+    '& .search-container': {
         textAlign: 'center',
         float: 'none',
         margin: '1rem auto'
     },
-    '& .horizontal_list': {
-        $nest: {
-            ul: {
-                listStyleType: 'none'
-            },
-            li: {
-                marginLeft: '1rem',
-                display: 'inline-block'
-            }
+    '& .horizontal-list': {
+        ul: {
+            listStyleType: 'none'
+        },
+        li: {
+            marginLeft: '1rem',
+            display: 'inline-block'
         }
     },
     '& .search__tags': {
-    maxWidth: '500px',
-    marginTop: '1.5rem'
-},
+        maxWidth: '500px',
+        marginTop: '1.5rem'
+    },
     '& .search__popular_title': {
         fontWeight: 'normal',
         fontSize: '18px',

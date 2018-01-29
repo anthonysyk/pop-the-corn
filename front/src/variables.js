@@ -1,6 +1,6 @@
-export const site_name = "Site Example";
+export const site_name = "Pop the Corn";
 
-export const slogan = "This is the best website ever !";
+export const slogan = "Get me a movie, I'm making popcorn";
 
 export const logoFile = "assets/images/popcorn.svg";
 

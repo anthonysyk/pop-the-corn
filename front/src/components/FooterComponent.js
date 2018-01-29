@@ -7,7 +7,7 @@ import {style, classes} from 'typestyle';
 
 
 const FooterComponent = ({values}) => <div className={footer}>
-    <Row className={globalstyle.section}>
+    <Row className="section">
         {
             values.map( (category,index)=>
                 <Col key={index} lg={4}>
