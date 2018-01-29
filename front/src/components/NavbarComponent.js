@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Navbar, Nav, NavDropdown, MenuItem} from 'react-bootstrap';
+import {Navbar, Nav, NavDropdown, MenuItem, NavItem} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import {style} from 'typestyle';
 
@@ -21,6 +21,10 @@ class NavbarComponent extends Component {
                             <MenuItem divider/>
                             <MenuItem eventKey={1.2} href="#">Collaborative Recommendation</MenuItem>
                         </NavDropdown>
+                    </Nav>
+                    <Nav pullRight>
+                        <NavItem eventKey={2} href="#">Link Right</NavItem>
+                        <NavItem eventKey={3} href="#"><i className="fa fa-user-circle" aria-hidden="true"/>&nbsp;&nbsp;Sign In</NavItem>
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
