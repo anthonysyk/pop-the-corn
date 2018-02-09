@@ -5,7 +5,7 @@
   "description": "Sideproject to apply what I learned",
   "scripts": {
     "start-dev": "npm-run-all --parallel start-dev:*",
-    "start-dev:front": "NODE_ENV=development webpack-dev-server --public anthonysyk.ddns.net:8080",
+    "start-dev:front": "NODE_ENV=development webpack-dev-server --public totosyk.ddns.net:8080",
     "build-watch": "webpack --watch"
   },
   "repository": "git+https://github.com/anthonysyk/pop-the-corn.git",

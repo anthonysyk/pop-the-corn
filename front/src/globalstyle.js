@@ -12,7 +12,7 @@ export const hover__black = style({
 });
 
 export const hover__underline = style({
-    '&:hover, &:active, &:visited, &:focus': {
+    '&:hover, &:focus': {
         textDecoration: 'underline',
     }
 });
