@@ -3,8 +3,9 @@ import {Button, FormControl, Row, Col} from 'react-bootstrap';
 import {SuggestComponent} from './SuggestComponent';
 import {searchMovies, suggest, getSimilarMoviesTfidf} from '../../actions/actions';
 import ReactDOM from 'react-dom';
-import {withRouter} from 'react-router'
-import {connect} from 'react-redux'
+import {withRouter} from 'react-router';
+import {connect} from 'react-redux';
+import {style} from 'typestyle';
 
 
 @withRouter
@@ -51,9 +52,10 @@ class SearchBar extends Component {
         return (
             <div>
                 <Row>
-                    <Col md={6} xs={6} className="search-container">
+                    <Col md={6} xs={12} className={searchContainer}>
                         <div className="form-group">
-                            <form id="search-form" onSubmit={ event => customHandleSubmit === undefined ? this.handleSubmit(event, this.state.keywords) : customHandleSubmit(event, this.state.id)}>
+                            <form id="search-form"
+                                  onSubmit={event => customHandleSubmit === undefined ? this.handleSubmit(event, this.state.keywords) : customHandleSubmit(event, this.state.id)}>
                                 <div className="search-bar">
                                     <FormControl className="search-input"
                                                  placeholder="Avengers ..."
@@ -64,11 +66,12 @@ class SearchBar extends Component {
                                                  }}
                                                  onFocus={() => this.setState({showSuggestion: true})}
                                     />
-                                    { this.state.showSuggestion &&
-                                    <SuggestComponent input={this.state.keywords} suggestions={suggestionsData.suggestions}
+                                    {this.state.showSuggestion &&
+                                    <SuggestComponent input={this.state.keywords}
+                                                      suggestions={suggestionsData.suggestions}
                                                       showSuggestions={this.state.showSuggestion}
-                                                      hideSuggestions={ this.hideSuggestions.bind(this) }
-                                                      applySuggestion={ this.applySuggestion.bind(this) }
+                                                      hideSuggestions={this.hideSuggestions.bind(this)}
+                                                      applySuggestion={this.applySuggestion.bind(this)}
                                     />
                                     }
                                 </div>
@@ -86,3 +89,37 @@ class SearchBar extends Component {
 }
 
 export default SearchBar;
+
+const searchContainer = style({
+    textAlign: 'center',
+    float: 'none',
+    margin: '1rem auto',
+    '& #search-form': {
+        display: 'inline-flex',
+        width: '100%',
+        '& .search-bar': {
+            width: '100%',
+            height: '34px'
+        },
+        '& .search-input': {
+            borderBottomRightRadius: 0,
+            borderTopRightRadius: 0,
+            outline: 'none !important',
+            borderColor: 'lightgrey',
+            boxShadow: 'none'
+        },
+        '& .search-input__with-suggest': {
+            borderBottomRightRadius: 0,
+            borderTopRightRadius: 0,
+            outline: 'none !important',
+            borderColor: 'lightgrey',
+            boxShadow: 'none',
+            borderBottomLeftRadius: 0
+        },
+        '& .search-button': {
+            width: '17%',
+            borderBottomLeftRadius: 0,
+            borderTopLeftRadius: 0
+        }
+    }
+});

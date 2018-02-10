@@ -10,6 +10,7 @@ class SearchResult extends Component {
     render() {
         const { movies } = this.props;
         return (
+            movies && movies.length > 0 &&
             <div className="search-result-section">
                 {
                     movies.map((movie, key) =>

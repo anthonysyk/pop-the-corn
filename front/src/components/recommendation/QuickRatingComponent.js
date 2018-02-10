@@ -75,65 +75,65 @@ class QuickRatingComponent extends Component {
             <div>
                 {this.state.position !== movies.length - 1 && this.props.machineLearningData.recommendations.length === 0 &&
                 <Button bsSize="large" bsStyle="success" onClick={() => this.onShow()}>Get Me a Movie !</Button>
-
                 }
-                {
-                    this.state.showModal === true &&
-                    <CustomModal onHide={this.onHide.bind(this)}>
-                        <div className="quick-rating">
-                            {movies.length > 0 && this.state.position < movies.length - 1 &&
-                            <div>
-                                <div className="quick-rating-image">
-                                    <span className="quick-rating-text">Let's know each other ...</span>
-                                    <ProgressBar className="no-margin-bottom md-margin-top" bsStyle="info" now={this.state.position}
-                                                 max={movies.length - 1}/>
-                                    <Image responsive src={movies[this.state.position].poster}/>
-                                    <span className="poster-name">{movies[this.state.position].title}</span>
-                                    <div className="button__bad"
-                                         onClick={() => this.onClick(movies[this.state.position], 1)}>Bad
-                                    </div>
-                                    <div className="button__meh"
-                                         onClick={() => this.onClick(movies[this.state.position], 2)}>Meh
-                                    </div>
-                                    <div className="button__okay"
-                                         onClick={() => this.onClick(movies[this.state.position], 3)}>Okay
-                                    </div>
-                                    <div className="button__good"
-                                         onClick={() => this.onClick(movies[this.state.position], 4)}>Good
-                                    </div>
+                {this.state.showModal === true && movies.length > 0 && this.state.position < movies.length - 1 &&
+                <CustomModal onHide={this.onHide.bind(this)} size="full">
+                    <div className="quick-rating">
+                        <div>
+                            <div className="quick-rating-image">
+                                <span className="quick-rating-text">Let's know each other ...</span>
+                                <ProgressBar className="no-margin-bottom md-margin-top" bsStyle="info"
+                                             now={this.state.position}
+                                             max={movies.length - 1}/>
+                                <Image responsive src={movies[this.state.position].poster}/>
+                                <span className="poster-name">{movies[this.state.position].title}</span>
+                                <div className="button__bad"
+                                     onClick={() => this.onClick(movies[this.state.position], 1)}>Bad
+                                </div>
+                                <div className="button__meh"
+                                     onClick={() => this.onClick(movies[this.state.position], 2)}>Meh
+                                </div>
+                                <div className="button__okay"
+                                     onClick={() => this.onClick(movies[this.state.position], 3)}>Okay
+                                </div>
+                                <div className="button__good"
+                                     onClick={() => this.onClick(movies[this.state.position], 4)}>Good
                                 </div>
                             </div>
-                            }
-                            {this.state.position === movies.length - 1 &&
-                            <div>
-                                {
-                                    Object.keys(this.props.machineLearningData.userProfile.genres).length !== 0 &&
-                                    <div className="custom-modal-content__white">
-                                        {console.log(this.props.machineLearningData.userProfile)}
-                                        <p>It looks like you are more of
-                                            a {sortedGenres.reverse().filter(item => item[1] !== 0).slice(0, 3).map(values => values[0]).join(", ")} person</p>
-                                        <p>It seems like we can throw movies
-                                            with {sortedGenres.reverse().filter(item => item[1] !== 0).slice(0, 3).map(values => values[0]).join(", ")} to the garbage</p>
-                                        { this.props.machineLearningData.recommendations.length === 0 &&
-                                        <div>
-                                            <div className="loader-container_small">
-                                                <Loader type="ball-scale-ripple-multiple" active/>
-                                            </div>
-                                        </div>
-                                        }
-                                        <div className="custom-modal-footer">
-                                            <Link to={testFeature !== undefined ? "#" : "/recommendations"} replace>
-                                                <Button bsStyle="primary" onClick={() => this.onHide()}
-                                                        disabled={this.props.machineLearningData.recommendations.length === 0}
-                                                >View Recommendations</Button>
-                                            </Link>
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                            }
                         </div>
-                    </CustomModal>
+                    </div>
+                </CustomModal>
+                }
+                {this.state.showModal === true && this.state.position === movies.length - 1 &&
+                <CustomModal onHide={this.onHide.bind(this)} white size="medium">
+                    <div>
+                        {
+                            Object.keys(this.props.machineLearningData.userProfile.genres).length !== 0 &&
+                            <div>
+                                {console.log(this.props.machineLearningData.userProfile)}
+                                <p>It looks like you are more of
+                                    a {sortedGenres.reverse().filter(item => item[1] !== 0).slice(0, 3).map(values => values[0]).join(", ")} person</p>
+                                <p>It seems like we can throw movies
+                                    with {sortedGenres.reverse().filter(item => item[1] !== 0).slice(0, 3).map(values => values[0]).join(", ")} to
+                                    the garbage</p>
+                                {/*{ this.props.machineLearningData.recommendations.length === 0 &&*/}
+                                {/*<div>*/}
+                                {/*<div className="loader-container_small">*/}
+                                {/*<Loader type="ball-scale-ripple-multiple" active/>*/}
+                                {/*</div>*/}
+                                {/*</div>*/}
+                                {/*}*/}
+                                <div className="custom-modal-footer">
+                                    <Link to={testFeature !== undefined ? "#" : "/recommendations"} replace>
+                                        <Button bsStyle="primary" onClick={() => this.onHide()}
+                                                disabled={this.props.machineLearningData.recommendations.length === 0}
+                                        >View Recommendations</Button>
+                                    </Link>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </CustomModal>
                 }
             </div>
         );

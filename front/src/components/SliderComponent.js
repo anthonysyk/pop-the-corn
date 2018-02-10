@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {Motion, spring} from 'react-motion';
 import {Link} from 'react-router-dom';
-import {style} from 'typestyle';
+import {style, media} from 'typestyle';
+import {desktop, mobile, smallMobile} from "./mediaquery";
 
 
 // https://www.andrewhfarmer.com/react-image-gallery/
@@ -127,8 +128,12 @@ const slider_card = style({
     verticalAlign: 'top',
     whiteSpace: 'normal',
     position: 'relative',
-    img: {height: '250px'}
-});
+    width: '33%',
+    img: {
+        height: 'auto',
+        width: '100%'
+    }
+}, media(desktop, {width: '15%'}));
 
 const slider_carousel = style({
     whiteSpace: 'nowrap',

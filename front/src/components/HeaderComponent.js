@@ -97,9 +97,10 @@ const templateHeader = style({
             }
         },
         '& .search-container': {
-            textAlign: 'center',
+            textAlign: '-webkit-center',
             float: 'none',
-            margin: '1rem auto'
+            margin: '1rem auto',
+            width: '90%'
         },
         '& .horizontal-list': {
             ul: {

@@ -1,7 +1,8 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Row, Col} from 'react-bootstrap';
 import Slider from '../SliderComponent';
-import {style} from 'typestyle';
+import {style, media} from 'typestyle';
+import {desktop, mobile} from "../mediaquery";
 
 const HomePage = ({data}) => {
     const mapping = new Map();
@@ -35,7 +36,8 @@ const HomePage = ({data}) => {
 export default HomePage;
 
 const slider_row = style({
-    width: '100%',
-    padding: '2rem 8rem',
-    margin: '0'
-});
+        width: '100%',
+        padding: '2rem 2rem',
+        margin: '0',
+    }, media(desktop, {padding: '2rem 8rem'})
+);
