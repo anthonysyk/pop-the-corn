@@ -46,7 +46,8 @@ val main = Project(id = "api", base = file("."))
   .dependsOn(libraries)
 
 packMain := Map(
-  "run-webservice" -> "WebServer"
+  "run-webservice" -> "WebServer",
+  "run-test-server" -> "TestWebServer"
 )
 
 packResourceDir ++= Map(

@@ -8,7 +8,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import NavbarComponent from './NavbarComponent';
 import QuickRatingComponent from "./recommendation/QuickRatingComponent";
 import * as variables from '../variables';
-import {style} from 'typestyle';
+import {style, media} from 'typestyle';
 
 @withRouter
 @connect(
@@ -77,46 +77,48 @@ class HeaderComponent extends Component {
 export default HeaderComponent;
 
 const templateHeader = style({
-    borderBottom: `1px solid ${variables.lightgrey}`,
-    background: `url(${variables.coverFile}) no-repeat center`,
-    backgroundSize: 'cover',
-    position: 'inherit',
-    zIndex: 10,
-    margin: 0,
-    textAlign: 'center',
-    color: '#fff',
-    padding: '5rem',
-    '& .main_title__white': {
+        borderBottom: `1px solid ${variables.lightgrey}`,
+        background: `url(${variables.coverFile}) no-repeat center`,
+        backgroundSize: 'cover',
+        position: 'inherit',
+        zIndex: 10,
+        margin: 0,
         textAlign: 'center',
-        color: 'white'
-    },
-    '& .link_white': {
-        color: 'white',
-        '&:hover': {
-            textDecoration: 'none'
-        }
-    },
-    '& .search-container': {
-        textAlign: 'center',
-        float: 'none',
-        margin: '1rem auto'
-    },
-    '& .horizontal-list': {
-        ul: {
-            listStyleType: 'none'
+        color: '#fff',
+        padding: '5rem',
+        '& .main_title__white': {
+            textAlign: 'center',
+            color: 'white'
         },
-        li: {
-            marginLeft: '1rem',
-            display: 'inline-block'
+        '& .link_white': {
+            color: 'white',
+            '&:hover': {
+                textDecoration: 'none'
+            }
+        },
+        '& .search-container': {
+            textAlign: 'center',
+            float: 'none',
+            margin: '1rem auto'
+        },
+        '& .horizontal-list': {
+            ul: {
+                listStyleType: 'none'
+            },
+            li: {
+                marginLeft: '1rem',
+                display: 'inline-block'
+            }
+        },
+        '& .search__tags': {
+            maxWidth: '500px',
+            marginTop: '1.5rem',
+            padding: '.5rem'
+        },
+        '& .search__popular_title': {
+            fontWeight: 'normal',
+            fontSize: '18px',
+            marginBottom: '0'
         }
-    },
-    '& .search__tags': {
-        maxWidth: '500px',
-        marginTop: '1.5rem'
-    },
-    '& .search__popular_title': {
-        fontWeight: 'normal',
-        fontSize: '18px',
-        marginBottom: '0'
     }
-});
+);

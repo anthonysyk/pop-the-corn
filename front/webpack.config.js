@@ -56,7 +56,7 @@ module.exports = {
         port: "8080",
         proxy: {
             '*': {
-                target: 'http://192.168.1.26:9000'
+                target: 'http://0.0.0.0:9000'
             }
         }
     }
