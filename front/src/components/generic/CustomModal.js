@@ -17,16 +17,16 @@ const CustomModal = ({children, onHide, white, title, size}) =>
     <div className={modal}>
         <div className={classes(`custom_modal_container__${size}`, white && font_grey, white && white_bg)}>
             <div className="modal_container">
-                <div className={classes('close_modal', !white && font_white)}><span
-                    onClick={() => onHide()}>&times;</span></div>
+                <div className={classes('close_modal_container', !white && font_white)}>
+                    <span className="close_modal_cross" onClick={() => onHide()}>&times;</span></div>
                 {title ?
                     <Row className="modal_header">
                         <h3 className='modal_title'>title</h3>
                     </Row>
                     : null}
-                <Row className="modal_body">
+                <div className="modal_body">
                     {children}
-                </Row>
+                </div>
             </div>
         </div>
     </div>;
@@ -72,17 +72,19 @@ const modal = style({
             transform: 'translate(0,0)'
         },
         '& .custom_modal_container__full': {
-            margin: '5% auto', /* 15% from the top and centered */
+            margin: 'auto', /* 0% from the top and centered */
             width: '100%', /* Could be more or less, depending on screen size */
             height: '100%',
             overflow: 'hidden',
             borderRadius: '1rem',
             position: 'relative',
-            transform: 'translate(0,0)'
+            transform: 'translate(0,0)',
+            display: 'table'
         },
         '& .modal_container': {
-            padding: '3.5rem 1.5rem',
-            height: '100%'
+            height: '100%',
+            display: 'grid',
+            verticalAlign: 'middle'
         },
         '& .modal_title': {
             padding: '.5rem 0 1.5rem',
@@ -92,26 +94,30 @@ const modal = style({
             margin: 'auto'
         },
         /* The Close Button */
-        '& .close_modal': {
+        '& .close_modal_container': {
             fontSize: '40px',
-            position: 'relative',
-            float: 'right',
-            top: '-4rem',
-            right: '1rem',
-            '&:hover': {
-                textDecoration: 'none',
-                transform: 'scale(1.1)',
-                cursor: 'pointer'
-            },
-            '&:focus': {
-                textDecoration: 'none',
-                transform: 'scale(1.1)',
-                cursor: 'pointer'
+            justifyContent: 'flex-end',
+            display: 'flex',
+            paddingRight: '2rem',
+            '& .close_modal_cross': {
+                height: 'min-content',
+                '&:hover': {
+                    textDecoration: 'none',
+                    transform: 'scale(1.1)',
+                    cursor: 'pointer'
+                },
+                '&:focus': {
+                    textDecoration: 'none',
+                    transform: 'scale(1.1)',
+                    cursor: 'pointer'
+                }
             }
         },
         '& .modal_body': {
-            padding: '1.5rem',
-            textAlign: '-webkit-center'
+            alignItems: 'center',
+            justifyContent: 'center',
+            textAlign: 'center',
+            marginBottom: '10%'
         },
         '& .modal_header': {
             padding: '1.5rem'

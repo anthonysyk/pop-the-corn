@@ -5,6 +5,8 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {Loader} from "react-loaders";
 import CustomModal from "../generic/CustomModal";
+import {style, media, classes} from 'typestyle';
+import {desktop, mobile, smallMobile} from "../mediaquery";
 
 
 @connect(
@@ -78,27 +80,27 @@ class QuickRatingComponent extends Component {
                 }
                 {this.state.showModal === true && movies.length > 0 && this.state.position < movies.length - 1 &&
                 <CustomModal onHide={this.onHide.bind(this)} size="full">
-                    <div className="quick-rating">
-                        <div>
-                            <div className="quick-rating-image">
-                                <span className="quick-rating-text">Let's know each other ...</span>
-                                <ProgressBar className="no-margin-bottom md-margin-top" bsStyle="info"
-                                             now={this.state.position}
-                                             max={movies.length - 1}/>
-                                <Image responsive src={movies[this.state.position].poster}/>
-                                <span className="poster-name">{movies[this.state.position].title}</span>
-                                <div className="button__bad"
-                                     onClick={() => this.onClick(movies[this.state.position], 1)}>Bad
-                                </div>
-                                <div className="button__meh"
-                                     onClick={() => this.onClick(movies[this.state.position], 2)}>Meh
-                                </div>
-                                <div className="button__okay"
-                                     onClick={() => this.onClick(movies[this.state.position], 3)}>Okay
-                                </div>
-                                <div className="button__good"
-                                     onClick={() => this.onClick(movies[this.state.position], 4)}>Good
-                                </div>
+                    <div className={quickRatingContainer}>
+                        <div className={quickRatingImage}>
+                            <span className="quick-rating-text">Let's know each other ...</span>
+                            <ProgressBar className="progress-bar-custom" bsStyle="info"
+                                         now={this.state.position}
+                                         max={movies.length - 1}/>
+                            <img src={movies[this.state.position].poster}/>
+                        </div>
+                        <div className={quickRatingTitle}>{movies[this.state.position].title}</div>
+                        <div className={buttonContainer}>
+                            <div className={classes(quickRatingButton, buttonBad)}
+                                 onClick={() => this.onClick(movies[this.state.position], 1)}>Bad
+                            </div>
+                            <div className={classes(quickRatingButton, buttonMeh)}
+                                 onClick={() => this.onClick(movies[this.state.position], 2)}>Meh
+                            </div>
+                            <div className={classes(quickRatingButton, buttonOkay)}
+                                 onClick={() => this.onClick(movies[this.state.position], 3)}>Okay
+                            </div>
+                            <div className={classes(quickRatingButton, buttonGood)}
+                                 onClick={() => this.onClick(movies[this.state.position], 4)}>Good
                             </div>
                         </div>
                     </div>
@@ -142,3 +144,108 @@ class QuickRatingComponent extends Component {
 }
 
 export default QuickRatingComponent;
+
+const quickRatingTitle = style({
+    position: 'absolute',
+    zIndex: '1',
+    width: '100%',
+    top: '110%'
+});
+
+const buttonContainer = style({
+    width: '100%',
+    position: 'fixed',
+    left: '0',
+    display: 'flex',
+    justifyContent: 'center',
+    background: 'linear-gradient(to bottom, transparent 0, rgba(0, 0, 0, 0.7) 20%, #000 100%)',
+    alignItems: 'center',
+    top: '50%',
+    height: '60%',
+    paddingBottom: '10%'
+});
+
+const quickRatingImage = style({
+    img: {
+        width: '100%'
+    },
+    '& .quick-rating-text': {
+        fontWeight: '400',
+        textAlign: 'center',
+        fontSize: '24px',
+        color: '#ccc',
+        userSelect: 'none',
+        whiteSpace: 'nowrap'
+    }
+});
+
+const quickRatingContainer = style({
+    position: 'relative',
+    fontWeight: '400',
+    textAlign: 'center',
+    fontSize: '24px',
+    color: '#ccc',
+    '& .progress-bar-custom': {overflow: 'initial', marginBottom: '0'},
+    width: 'min-content',
+    margin: 'auto'
+});
+
+const quickRatingButton = style({
+    '&:hover': {
+        zIndex: '2'
+    },
+    textAlign: 'center',
+    position: 'relative',
+    padding: '4rem 0',
+    fontWeight: '500',
+    fontSize: '14px',
+    color: '#fff',
+    border: '3px solid #fff',
+    backfaceVisibility: 'hidden',
+    cursor: 'pointer',
+    zIndex: '1',
+    outline: '0',
+    overflow: 'hidden',
+    borderRadius: '999rem',
+    transition: 'all .2s cubic-bezier(.175,.885,.32,2)',
+    animation: 'animate-controls .2s ease-in-out',
+    transform: 'translatez(0)',
+    transformOrigin: 'center',
+    userSelect: 'none',
+    display: 'table-cell',
+    width: '90px',
+    height: '90px'
+});
+
+const buttonBad = style({
+    backgroundColor: 'indianred',
+    padding: '3.2rem 0',
+    transform: 'scale(1.2)',
+    '&:hover': {
+        transform: 'scale(1.5)'
+    }
+});
+
+const buttonMeh = style({
+    backgroundColor: 'slategrey',
+    '&:hover': {
+        transform: 'scale(1.1)'
+    }
+});
+
+const buttonOkay = style({
+    backgroundColor: 'darkseagreen',
+    '&:hover': {
+        transform: 'scale(1.1)'
+    }
+});
+
+const buttonGood = style({
+    backgroundColor: 'forestgreen',
+    padding: '3.2rem 0',
+    transform: 'scale(1.2)',
+    '&:hover': {
+        transform: 'scale(1.5)'
+    }
+});
+
