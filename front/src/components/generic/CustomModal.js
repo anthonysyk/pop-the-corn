@@ -117,7 +117,8 @@ const modal = style({
             alignItems: 'center',
             justifyContent: 'center',
             textAlign: 'center',
-            marginBottom: '10%'
+            marginBottom: '10%',
+            padding: '3.5rem 3.5rem 0 3.5rem'
         },
         '& .modal_header': {
             padding: '1.5rem'

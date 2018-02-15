@@ -87,8 +87,8 @@ class QuickRatingComponent extends Component {
                                          now={this.state.position}
                                          max={movies.length - 1}/>
                             <img src={movies[this.state.position].poster}/>
+                            {/*<div className={quickRatingTitle}>{movies[this.state.position].title}</div>*/}
                         </div>
-                        <div className={quickRatingTitle}>{movies[this.state.position].title}</div>
                         <div className={buttonContainer}>
                             <div className={classes(quickRatingButton, buttonBad)}
                                  onClick={() => this.onClick(movies[this.state.position], 1)}>Bad
@@ -149,7 +149,6 @@ const quickRatingTitle = style({
     position: 'absolute',
     zIndex: '1',
     width: '100%',
-    top: '110%'
 });
 
 const buttonContainer = style({
@@ -160,7 +159,7 @@ const buttonContainer = style({
     justifyContent: 'center',
     background: 'linear-gradient(to bottom, transparent 0, rgba(0, 0, 0, 0.7) 20%, #000 100%)',
     alignItems: 'center',
-    top: '50%',
+    top: '55%',
     height: '60%',
     paddingBottom: '10%'
 });
@@ -220,9 +219,10 @@ const quickRatingButton = style({
 const buttonBad = style({
     backgroundColor: 'indianred',
     padding: '3.2rem 0',
-    transform: 'scale(1.2)',
+    transform: 'translate(15%, -40%) scale(1.2)',
+    zIndex: '2',
     '&:hover': {
-        transform: 'scale(1.5)'
+        transform: 'translate(15%, -40%) scale(1.3)'
     }
 });
 
@@ -243,9 +243,9 @@ const buttonOkay = style({
 const buttonGood = style({
     backgroundColor: 'forestgreen',
     padding: '3.2rem 0',
-    transform: 'scale(1.2)',
+    transform: 'translate(-20%, -40%) scale(1.2)',
     '&:hover': {
-        transform: 'scale(1.5)'
+        transform: 'translate(-20%, -40%) scale(1.3)'
     }
 });
 
