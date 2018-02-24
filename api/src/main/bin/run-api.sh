@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-remoteDir=/home/anthony/projects/pop-the-corn/api
+remoteDir=/home/anthony/projects/popthecorn/api
 port=9000
 
 docker rmi popthecorn/api
