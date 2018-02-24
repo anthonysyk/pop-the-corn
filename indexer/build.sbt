@@ -37,7 +37,12 @@ val main = Project(id = "indexer", base = file("."))
   )
   .dependsOn(libraries)
 
-packResourceDir ++= Map(baseDirectory.value / "src/main/bin" -> "bin", baseDirectory.value / "src/main/resources" -> "conf")
+packGenerateWindowsBatFile := false
+
+packResourceDir ++= Map(
+  baseDirectory.value / "src/main/bin" -> "bin",
+  baseDirectory.value / "src/main/resources" -> "conf"
+)
 
 //packResourceDir ++= Map(baseDirectory.value / "mlapi/src/main/resources" -> "resources")
 //

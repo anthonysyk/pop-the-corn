@@ -1,9 +1,9 @@
 FROM node
 
-COPY . /home/pop-the-corn
+COPY . /home/popthecorn
 
 # Using a non-privileged user:
-WORKDIR /home/pop-the-corn
+WORKDIR /home/popthecorn
 
 RUN [ "npm", "install" ]
 CMD [ "npm", "run", "start-dev" ]

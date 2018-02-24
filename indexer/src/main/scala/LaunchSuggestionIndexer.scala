@@ -11,7 +11,7 @@ import org.apache.spark.rdd.RDD
 import scala.concurrent.ExecutionContext.Implicits._
 import scala.concurrent.duration._
 
-object SuggestionMovieIndexer extends CirceHelper with EsClient {
+object LaunchSuggestionIndexer extends CirceHelper with EsClient {
 
   val sparkConf: SparkConf = new SparkConf().setMaster("local[*]").setAppName("SuggestionIndexer")
   val ss: SparkSession = SparkSession.builder().config(sparkConf).getOrCreate()

@@ -2,7 +2,7 @@
 
 cd "${0%/*}"
 
-remoteDir=/home/anthony/projects/popthecorn/api
+remoteDir=/home/anthony/projects/popthecorn/indexer
 remoteHost="anthony@192.168.1.26"
 portNumber=222
 
