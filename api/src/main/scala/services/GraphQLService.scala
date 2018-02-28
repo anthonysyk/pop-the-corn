@@ -15,7 +15,6 @@ object GraphQLService {
 
     WebClient.doPost("http://localhost:4242/graphql",  content = content,  headers = Map("Content-Type" -> "application/json", "Accept-Encoding" -> "gzip"))
       .toOption
-
   }
 
   def getMoviesBasedOnTaste(userProfile: UserProfile): Seq[MovieDetails] = {

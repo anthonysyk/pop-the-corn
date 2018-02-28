@@ -1,11 +1,8 @@
-@import "./font-awesome/scss/font-awesome";
 @import "./modules/search";
 @import "./modules/utils";
 @import "./modules/variables";
-@import "./loaders.css/src/animations/ball-scale-ripple-multiple";
 @import "./modules/suggest";
 @import "./modules/font";
-@import "./modules/movie-details";
 @import "./modules/general";
 @import "./modules/animation";
 @import "./modules/recommendation";
@@ -34,14 +31,32 @@ body {
   padding-right: 0 !important;
 }
 
+@font-face {
+  font-family: Mukta;
+  src: url(/fonts/Mukta_Mahee/MuktaMahee-Regular.ttf);
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: Mukta;
+  src: url(/fonts/Mukta_Mahee/MuktaMahee-Bold.ttf);
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: Lato;
+  src: url(/fonts/Lato/Lato-Regular.ttf);
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: Lato;
+  src: url(/fonts/Lato/Lato-Bold.ttf);
+  font-weight: bold;
+}
+
 body {
-  font-family: -apple-system,
-  BlinkMacSystemFont,
-  "Segoe UI",
-  Roboto,
-  Oxygen-Sans,
-  Ubuntu,
-  Cantarell,
-  "Helvetica Neue",
-  sans-serif;
+  font-family: Mukta;
+  font-family: 'Lato', sans-serif;
+  letter-spacing: 0.05rem;
 }

@@ -7,18 +7,18 @@ import {style, classes} from 'typestyle';
 
 
 const FooterComponent = ({values}) => <div className={footer}>
-    <Row className="section">
+    <div className="section">
         {
             values.map( (category,index)=>
-                <Col key={index} lg={4}>
+                <div key={index}>
                     <h3>{category.title}</h3>
                     <ul>
                         {category.pages.map((page, key) => <li key={key}><a className={classes(globalstyle.hover__underline,'link__dark')} href={page.url}>{page.name}</a></li>)}
                     </ul>
-                </Col>
+                </div>
             )
         }
-    </Row>
+    </div>
     <div className={copyright_container}><i className="logo"/><span
         className={brand_copyright}>© {variables.site_name}</span></div>
 </div>;
@@ -30,7 +30,6 @@ const footer = style({
     textAlign: 'center',
     borderTop: `1px solid ${variables.lightgrey}`,
     padding: '2rem 0',
-    marginTop: '3rem',
     $nest: {
         '& .logo' : {
             background: `url(${logoFile}) no-repeat center`,
