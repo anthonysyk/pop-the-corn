@@ -85,7 +85,7 @@ const templateHeader = style({
         margin: 0,
         textAlign: 'center',
         color: '#fff',
-        padding: '5rem',
+        padding: '0 0 5rem 0',
         '& .main_title__white': {
             textAlign: 'center',
             color: 'white'

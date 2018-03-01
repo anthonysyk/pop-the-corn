@@ -82,12 +82,12 @@ class QuickRatingComponent extends Component {
                 <CustomModal onHide={this.onHide.bind(this)} size="full">
                     <div className={quickRatingContainer}>
                         <div className={quickRatingImage}>
-                            <span className="quick-rating-text">Let's know each other ...</span>
+                            <span>Let's know each other ...</span>
                             <ProgressBar className="progress-bar-custom" bsStyle="info"
                                          now={this.state.position}
                                          max={movies.length - 1}/>
                             <img src={movies[this.state.position].poster}/>
-                            {/*<div className={quickRatingTitle}>{movies[this.state.position].title}</div>*/}
+                            <div className={quickRatingTitle}>{movies[this.state.position].title}</div>
                         </div>
                         <div className={buttonContainer}>
                             <div className={classes(quickRatingButton, buttonBad)}
@@ -149,6 +149,8 @@ const quickRatingTitle = style({
     position: 'absolute',
     zIndex: '1',
     width: '100%',
+    top: '30rem',
+    color: 'white'
 });
 
 const buttonContainer = style({
@@ -161,18 +163,19 @@ const buttonContainer = style({
     alignItems: 'center',
     top: '55%',
     height: '60%',
-    paddingBottom: '10%'
+    paddingBottom: '10%',
+    paddingTop: '10rem'
 });
 
 const quickRatingImage = style({
     img: {
         width: '100%'
     },
-    '& .quick-rating-text': {
+    span: {
         fontWeight: '400',
         textAlign: 'center',
         fontSize: '24px',
-        color: '#ccc',
+        color: 'white',
         userSelect: 'none',
         whiteSpace: 'nowrap'
     }
@@ -183,7 +186,7 @@ const quickRatingContainer = style({
     fontWeight: '400',
     textAlign: 'center',
     fontSize: '24px',
-    color: '#ccc',
+    color: 'white',
     '& .progress-bar-custom': {overflow: 'initial', marginBottom: '0'},
     width: 'min-content',
     margin: 'auto'
