@@ -3,14 +3,15 @@ import * as variables from '../variables';
 import {Row, Col} from 'react-bootstrap'
 import {logoFile} from "../variables";
 import * as globalstyle from '../globalstyle';
-import {style, classes} from 'typestyle';
+import {style, classes, media} from 'typestyle';
+import {mobile} from "./mediaquery";
 
 
 const FooterComponent = ({values}) => <div className={footer}>
-    <div className="section">
+    <div className={content}>
         {
             values.map( (category,index)=>
-                <div key={index}>
+                <div key={index} className={category_section}>
                     <h3>{category.title}</h3>
                     <ul>
                         {category.pages.map((page, key) => <li key={key}><a className={classes(globalstyle.hover__underline,'link__dark')} href={page.url}>{page.name}</a></li>)}
@@ -49,6 +50,17 @@ const footer = style({
         }
     }
 });
+
+const content = style({
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+    padding: '0 6.5vw 3rem 6.5vw'
+}, media(mobile, {flexDirection: 'row'}));
+
+const category_section = style({
+}, media(mobile, {padding: '2rem 5rem'}));
 
 const copyright_container = style({
     width: '80%',

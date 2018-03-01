@@ -133,7 +133,7 @@ const slider_card = style({
         height: 'auto',
         width: '100%'
     }
-}, media(desktop, {width: '15%'}));
+}, media(mobile, {width: '15%'}));
 
 const slider_carousel = style({
     whiteSpace: 'nowrap',
