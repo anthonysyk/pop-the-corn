@@ -1,12 +1,20 @@
-Pop The Corn
-===================
+# Pop The Corn
 
-Description
-----------
+## Description
+
 Side-Project to apply what I learned
 
-Data
-----------
+```
+.
+├── api
+├── data
+├── front
+├── indexer
+├── libraries
+└── mlapi
+```
+
+## Data
 
 ### Content-Based Recommendation
 
@@ -23,19 +31,21 @@ Data
  - ... Not enough data yet ...
 
 ----------
-Backend
-----------
+## Backend
 
 ### Enriching and Indexing in ES with Akka Actors And Spark
 
  - Akka Actor System : restriction : 40 queries per second allowed by external API
-	 - ==> System based on a supervisor sending batch of movies to some workers to enrich the movie and indexing it
+	 - System based on a supervisor sending batch of movies to some workers to enrich the movie and indexing it
  - Spark : Creating autocomplete index from movie titles in ES to ES
-	 - ==> Backpressure with ```.coalesce(20)```
+     - Backpressure with ```.coalesce(20)```
  - GraphQL : Use to query the machine learning API with Sangria
 
 ----------
 
-# Front
+## Front
 
 React/Redux
+
+![portfolio-popthecorn](https://user-images.githubusercontent.com/6373950/197738651-bd1807a5-2e3c-448f-a9e8-c2b453df5cc0.jpg)
+

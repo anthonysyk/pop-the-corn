@@ -1,18 +1,14 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 cd "${0%/*}"
 
-remoteHost="usr_trafgar@opendatafr01f.be3.local"
+remoteDir=/home/anthony/projects/popthecorn/mlapi
+remoteHost="anthony@192.168.1.26"
+portNumber=222
 
-remoteDir="/home/usr_trafgar/test"
-
-
-sbt test
-if [ $? == 0 ]
-	then
-		sbt pack
+sbt test pack
 		rsync -avrc --delete \
 		    --exclude tmp \
-			--exclude logs \
-			target/pack/ $remoteHost:$remoteDir
-fi
+		    --exclude-from ./deploy.sh \
+		    -e "ssh -p $portNumber" \
+			target/pack/ "$remoteHost":"$remoteDir"
